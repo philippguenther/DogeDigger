@@ -1,0 +1,9 @@
+# OS files
+.DS_Store
+
+# eclipse files
+.project
+.classpath
+
+# build results
+bin/
