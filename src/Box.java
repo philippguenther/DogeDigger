@@ -16,9 +16,9 @@ public class Box {
 		GL11.glColor4f(this.color.getR(), this.color.getG(), this.color.getB(), this.color.getA());
 		GL11.glBegin(GL11.GL_QUADS);
 			GL11.glVertex2f(this.x, this.y);
-			GL11.glVertex2f(this.x + Config.getBoxSize(), this.y);
-			GL11.glVertex2f(this.x + Config.getBoxSize(), this.y + Config.getBoxSize());
-			GL11.glVertex2f(this.x, this.y + Config.getBoxSize());
+			GL11.glVertex2f(this.x + 1f, this.y);
+			GL11.glVertex2f(this.x + 1f, this.y + 1f);
+			GL11.glVertex2f(this.x, this.y + 1f);
 		GL11.glEnd();
 	}
 }

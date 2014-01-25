@@ -51,7 +51,7 @@ public class SwapBoxes {
 			Display.update();
 			Display.sync(60);
 		}
-		
+		Mouse.destroy();
 		Display.destroy();
 	}
 	
