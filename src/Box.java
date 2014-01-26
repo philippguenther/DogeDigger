@@ -1,4 +1,5 @@
 import org.lwjgl.opengl.GL11;
+import animations.*;
 
 
 public class Box {
@@ -15,15 +16,11 @@ public class Box {
 	}
 	
 	public void swap(Box a) {
-		float d = 0.1f;
-		Align align = this.pos.align(a.pos); 
-		if (align==Align.NORTH || align==Align.NORTH_EAST || align==Align.NORTH_WEST)
+		float d = 0.16667f;
+		if (this.pos.isEast(a.pos) || this.pos.isSouth(a.pos))
 			d = -d;
-		if (align==Align.WEST || align==Align.NORTH_WEST || align==Align.SOUTH_WEST)
-			d = -d;
-
-		this.ani = new Animator(this, Animation.LINEAR, a.pos.copy(), d, d);
-		a.ani = new Animator(a,Animation.LINEAR, this.pos.copy() , -d, -d);
+		this.ani = new Animator(this, new Linear(d), a.pos.copy());
+		a.ani = new Animator(a, new Linear(-d), this.pos.copy());
 	}
 	
 	public boolean isNear(Box a) {
@@ -52,7 +49,7 @@ public class Box {
 			GL11.glVertex2f(this.pos.x, this.pos.y + 1f);
 		GL11.glEnd();
 		
-		if (clicked) {
+		if (this.clicked) {
 			GL11.glColor4f(0f, 0f, 0f, 0.5f);
 			GL11.glBegin(GL11.GL_QUADS);
 				GL11.glVertex2f(this.pos.x, this.pos.y);
