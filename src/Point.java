@@ -12,6 +12,10 @@ public class Point {
 		return new Point(this.x, this.y);
 	}
 	
+	public Point minus(Point p) {
+		return new Point(this.x - p.x, this.y - y);
+	}
+	
 	public boolean equals(Point p) {
 		if (this.xEquals(p.x) && this.yEquals(p.y)) return true;
 		else return false;

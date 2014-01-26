@@ -1,12 +1,11 @@
 import org.lwjgl.opengl.GL11;
-import animations.*;
 
 
 public class Box {
 	public Point pos;
 	private Color color;
 	
-	public Animator ani;
+	public Animation ani;
 	
 	public boolean clicked;
 	
@@ -16,11 +15,11 @@ public class Box {
 	}
 	
 	public void swap(Box a) {
-		float d = 0.16667f;
+		float d = 0.01f;
 		if (this.pos.isEast(a.pos) || this.pos.isSouth(a.pos))
 			d = -d;
-		this.ani = new Animator(this, new Linear(d), a.pos.copy());
-		a.ani = new Animator(a, new Linear(-d), this.pos.copy());
+		this.ani = new AnimationParable(this.pos, a.pos.copy(), d);
+		a.ani = new AnimationParable(a.pos, this.pos.copy(), -d);
 	}
 	
 	public boolean isNear(Box a) {
