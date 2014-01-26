@@ -48,4 +48,23 @@ public class Color {
 		else
 			return _i;
 	}
+	
+	public static Color red() {
+		return new Color(0.8f, 0f, 0f);
+	}
+	public static Color brightRed() {
+		return new Color(1f, 0.5f, 0.5f);
+	}
+	public static Color green() {
+		return new Color(0f, 0.8f, 0f);
+	}
+	public static Color brightGreen() {
+		return new Color(0.5f, 1f, 0.5f);
+	}
+	public static Color blue() {
+		return new Color(0f, 0f, 0.8f);
+	}
+	public static Color brightBlue() {
+		return new Color(0.5f, 0.5f, 1f);
+	}
 }

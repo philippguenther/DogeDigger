@@ -12,6 +12,8 @@ enum State {
 }
 
 public class SwapBoxes {
+	public static SwapBoxes game = new SwapBoxes();
+	
 	private long lastFrame;
 	private Level currentLevel;
 	public State state = State.INPUT;
@@ -36,6 +38,8 @@ public class SwapBoxes {
 		GL11.glLoadIdentity();
 		GL11.glOrtho(0, Config.getWindowWidth() / Config.getBoxSize(), Config.getWindowHeight() / Config.getBoxSize(), 0, 1, -1);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		
 		this.currentLevel = LevelFactory.getRandomLevel();
 		
@@ -73,8 +77,7 @@ public class SwapBoxes {
 	}
 	
 	public static void main(String[] args) {
-		SwapBoxes game = new SwapBoxes();
-		game.start();
+		SwapBoxes.game.start();
 	}
 
 }

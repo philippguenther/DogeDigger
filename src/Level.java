@@ -22,15 +22,6 @@ public class Level {
 		return r;
 	}
 	
-	private void swap(Box a, Box b) {
-		float ax = a.x;
-		float ay = a.y;
-		a.x = b.x;
-		a.y = b.y;
-		b.x = ax;
-		b.y = ay;
-	}
-	
 	public void input() {
 		while(Mouse.next()) {
 			if (Mouse.getEventButtonState()) {
@@ -40,9 +31,11 @@ public class Level {
 				
 				if (b != null) {
 					if (this.lastClick == null) {
+						b.clicked = true;
 						this.lastClick = b;
-					} else {
-						this.swap(this.lastClick, b);
+					} else if (this.lastClick.areSwapable(b)) {
+						this.lastClick.swapPos(b);
+						this.lastClick.clicked = false;
 						this.lastClick = null;
 					}
 				} else {
