@@ -17,9 +17,9 @@ public class Color {
 	}
 
 	public boolean equals(Color c) {
-		if (Math.abs(this.r - c.getR()) <= Config.getColorTolerance())
-			if (Math.abs(this.g - c.getG()) <= Config.getColorTolerance())
-				if (Math.abs(this.b - c.getB()) <= Config.getColorTolerance())
+		if (Math.abs(this.r - c.getR()) <= 0.2f)
+			if (Math.abs(this.g - c.getG()) <= 0.2f)
+				if (Math.abs(this.b - c.getB()) <= 0.2f)
 					return true;
 		return false;
 	}

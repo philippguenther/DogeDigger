@@ -5,8 +5,6 @@ public class Config {
 	
 	private static float boxSize = 100f;
 	
-	private static float colorTolerance = 0.2f;
-	
 	public static int getWindowWidth() {
 		return Config.windowWidth;
 	}
@@ -17,9 +15,5 @@ public class Config {
 	
 	public static float getBoxSize() {
 		return Config.boxSize;
-	}
-	
-	public static float getColorTolerance() {
-		return Config.colorTolerance;
 	}
 }

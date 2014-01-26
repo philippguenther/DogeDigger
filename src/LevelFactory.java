@@ -29,7 +29,7 @@ public class LevelFactory {
 						col = Color.brightBlue();
 						break;
 				}
-				lvl.addBox(new Box(x, y, col));
+				lvl.addBox(new Box(new Point(x, y), col));
 			}
 		}
 		return lvl;

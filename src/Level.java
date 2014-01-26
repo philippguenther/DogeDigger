@@ -11,10 +11,10 @@ public class Level {
 		this.boxes.add(_b);
 	}
 	
-	public Box getBoxByPos(float x, float y) {
+	public Box getBoxByPos(Point pos) {
 		Box r = null;
 		for (Box b : this.boxes) {
-			if (Math.abs(b.x - x) < 0.1f && Math.abs(b.y - y) < 0.1f) {
+			if (b.pos.equals(pos)) {
 				r = b;
 				break;
 			}
@@ -27,14 +27,14 @@ public class Level {
 			if (Mouse.getEventButtonState()) {
 				int x = (int) (Mouse.getX() / Config.getBoxSize());
 				int y = (int) ((Config.getWindowHeight() - Mouse.getEventY()) / Config.getBoxSize());
-				Box b = this.getBoxByPos(x, y);
+				Box b = this.getBoxByPos(new Point(x, y));
 				
 				if (b != null) {
 					if (this.lastClick == null) {
 						b.clicked = true;
 						this.lastClick = b;
-					} else if (this.lastClick.areSwapable(b)) {
-						this.lastClick.swapPos(b);
+					} else if (this.lastClick.isNear(b)) {
+						this.lastClick.swap(b);
 						this.lastClick.clicked = false;
 						this.lastClick = null;
 					}
@@ -45,9 +45,15 @@ public class Level {
 		}
 	}
 	
-	public void render(int _delta) {
+	public void tick(int delta) {
 		for (Box b : this.boxes) {
-			b.render(_delta);
+			b.tick(delta);
+		}
+	}
+	
+	public void render() {
+		for (Box b : this.boxes) {
+			b.render();
 		}
 	}
 }

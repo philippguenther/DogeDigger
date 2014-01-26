@@ -22,6 +22,7 @@ public class SwapBoxes {
 		try {
 			Display.setDisplayMode(new DisplayMode(800, 600));
 			Display.create();
+			Display.setVSyncEnabled(true);
 		} catch(LWJGLException e) {
 			e.printStackTrace();
 			System.exit(1);
@@ -47,10 +48,11 @@ public class SwapBoxes {
 			int delta = this.getDelta();
 			
 			input();
+			this.currentLevel.tick(delta);
 			
 			// Clear the screen and depth buffer
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-			this.currentLevel.render(delta);
+			this.currentLevel.render();
 			
 			Display.update();
 			Display.sync(60);
