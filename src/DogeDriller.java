@@ -1,3 +1,4 @@
+import org.jbox2d.common.Vec2;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
 import org.lwjgl.input.Mouse;
@@ -5,22 +6,22 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 
-
 enum State {
-	INPUT,
-	ANIMATING
+	LOADING,
+	RUNNING
 }
 
 public class DogeDriller {
 	public static DogeDriller game = new DogeDriller();
 	
+	public State state = State.RUNNING;
+	
 	private long lastFrame;
 	private Level currentLevel;
-	public State state = State.INPUT;
 
 	public void start() {
 		try {
-			Display.setDisplayMode(new DisplayMode(800, 600));
+			Display.setDisplayMode(new DisplayMode(Config.getWindowWidth(), Config.getWindowHeight()));
 			Display.create();
 			Display.setVSyncEnabled(true);
 		} catch(LWJGLException e) {
@@ -37,17 +38,25 @@ public class DogeDriller {
 		
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
-		GL11.glOrtho(0, Config.getWindowWidth() / Config.getBoxSize(), Config.getWindowHeight() / Config.getBoxSize(), 0, 1, -1);
+		GL11.glOrtho(0, Config.getBoxesX(), Config.getBoxesY() + 1, 0, 1, -1);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		
 		this.currentLevel = LevelFactory.getRandomLevel();
+		// render grid
+		if (Config.getDebug()) {
+			for (int x = 0; x < Config.getBoxesX(); x++) {
+				for (int y = 0; y < Config.getBoxesY(); y++) {
+					this.currentLevel.addEntity(new EntityBox(new Vec2(x, y), null, new GraphicQuad()));
+				}
+			}
+		}
 		
 		while(!Display.isCloseRequested()) {
 			int delta = this.getDelta();
 			
-			input();
+			this.currentLevel.input();
 			this.currentLevel.tick(delta);
 			
 			// Clear the screen and depth buffer
@@ -60,12 +69,6 @@ public class DogeDriller {
 		Mouse.destroy();
 		Display.destroy();
 	}
-	
-	private void input() {
-		if (this.state == State.INPUT)
-			this.currentLevel.input();
-	}
-
 	
 	private long getTime() {
 		return (Sys.getTime() * 1000) / Sys.getTimerResolution();

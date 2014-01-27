@@ -4,6 +4,7 @@
 # eclipse files
 .project
 .classpath
+.settings/
 
 # build results
 bin/
