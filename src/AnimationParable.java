@@ -15,7 +15,10 @@ public class AnimationParable implements Animation {
 	public void tick(int delta) {
 		if (!this.target.equals(dest)) {
 			this.target.x += d;
-			this.target.y = y();
+			if (d >= 0)
+				this.target.y = y();
+			else
+				this.target.y = -y();
 		}
 	}
 	
@@ -24,6 +27,6 @@ public class AnimationParable implements Animation {
 	}
 	
 	private float y() {
-		return 2f * (float) (Math.pow(this.target.x - (this.start.x + (this.dest.x - this.start.x) / 2), 2)) + this.start.x + 0.5f;
+		return 2f * (float) (Math.pow(this.target.x - (this.start.x + (this.dest.x - this.start.x) / 2), 2)) + this.start.y - 0.5f;
 	}
 }
