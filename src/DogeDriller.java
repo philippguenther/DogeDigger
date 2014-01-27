@@ -11,8 +11,8 @@ enum State {
 	ANIMATING
 }
 
-public class SwapBoxes {
-	public static SwapBoxes game = new SwapBoxes();
+public class DogeDriller {
+	public static DogeDriller game = new DogeDriller();
 	
 	private long lastFrame;
 	private Level currentLevel;
@@ -79,7 +79,7 @@ public class SwapBoxes {
 	}
 	
 	public static void main(String[] args) {
-		SwapBoxes.game.start();
+		DogeDriller.game.start();
 	}
 
 }
