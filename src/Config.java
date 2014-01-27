@@ -1,3 +1,7 @@
+import org.jbox2d.common.Vec2;
+
+import org.lwjgl.input.Keyboard;
+
 
 public class Config {
 	private static int windowWidth = 480;
@@ -5,6 +9,12 @@ public class Config {
 	
 	private static float boxesX = 7;
 	private static float boxesY = 9;
+	
+	private static Vec2 gravity = new Vec2(0f, 10f);
+	
+	public static int keyLeft = Keyboard.KEY_LEFT;
+	public static int keyRight = Keyboard.KEY_RIGHT;
+	public static int keySpace = Keyboard.KEY_SPACE;
 	
 	public static int getWindowWidth() {
 		return Config.windowWidth;
@@ -20,6 +30,10 @@ public class Config {
 	
 	public static float getBoxesY() {
 		return Config.boxesY;
+	}
+	
+	public static Vec2 getGravity() {
+		return Config.gravity;
 	}
 	
 	public static boolean getDebug() {
