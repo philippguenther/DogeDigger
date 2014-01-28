@@ -7,6 +7,7 @@ import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
+import org.jbox2d.dynamics.contacts.Contact;
 import org.lwjgl.opengl.GL11;
 
 
@@ -59,6 +60,18 @@ public class EntityStatic implements Entity {
 				g.render();
 			}
 		GL11.glPopMatrix();
+	}
+
+	@Override
+	public void beginContact(Contact arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void endContact(Contact arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

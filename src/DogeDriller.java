@@ -1,5 +1,6 @@
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
@@ -62,11 +63,10 @@ public class DogeDriller {
 			}
 		}
 		
-		while(!Display.isCloseRequested()) {
+		while(!Display.isCloseRequested() && !Keyboard.isKeyDown(Config.keyQuit)) {
 			int delta = this.getDelta();
 			
 			if (this.state == State.RUNNING) {
-				this.level.input();
 				this.level.tick(delta);
 				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 				this.level.render();

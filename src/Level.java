@@ -1,11 +1,14 @@
 import java.util.HashMap;
 
+import org.jbox2d.callbacks.ContactImpulse;
+import org.jbox2d.callbacks.ContactListener;
+import org.jbox2d.collision.Manifold;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
-import org.lwjgl.input.Keyboard;
+import org.jbox2d.dynamics.contacts.Contact;
 
 
-public class Level {
+public class Level implements ContactListener {
 	private HashMap<Vec2, Entity> entities = new HashMap<Vec2, Entity>();
 	
 	private World world;
@@ -15,6 +18,7 @@ public class Level {
 	
 	public Level() {
 		this.world = new World(Config.getGravity());
+		this.world.setContactListener(this);
 	}
 	
 	public void setDoge(EntityDoge d) {
@@ -38,15 +42,6 @@ public class Level {
 		return this.world;
 	}
 	
-	public void input() {
-		if (Keyboard.isKeyDown(Config.keyReset)) {
-			this.entities.clear();
-			this.world = new World(Config.getGravity());
-			LevelFactory.randomLevel(this);
-		}
-		this.doge.input();
-	}
-	
 	public void tick(int delta) {
 		this.world.step(1f / 60f, 2, 6);
 		
@@ -61,5 +56,34 @@ public class Level {
 			e.render();
 		}
 		this.doge.render();
+	}
+
+	@Override
+	public void beginContact(Contact arg0) {
+		this.doge.beginContact(arg0);
+		for (Entity e : this.entities.values()) {
+			e.beginContact(arg0);
+		}
+		
+	}
+
+	@Override
+	public void endContact(Contact arg0) {
+		this.doge.endContact(arg0);
+		for (Entity e : this.entities.values()) {
+			e.endContact(arg0);
+		}
+	}
+
+	@Override
+	public void postSolve(Contact arg0, ContactImpulse arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void preSolve(Contact arg0, Manifold arg1) {
+		// TODO Auto-generated method stub
+		
 	}
 }
