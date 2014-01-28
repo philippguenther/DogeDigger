@@ -28,6 +28,7 @@ public class EntityStatic implements Entity {
 		shape.setAsBox(w / 2, h / 2);
 		fdef.friction = 0f;
 		fdef.shape = shape;
+		fdef.restitution = 0f;
 		fdef.userData = this;
 		this.body.createFixture(fdef);
 		

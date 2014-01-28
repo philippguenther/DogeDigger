@@ -43,7 +43,7 @@ public class EntityBox implements Entity {
 		sensfdef.density = 0f;
 		sensfdef.friction = 0f;
 		sensfdef.isSensor = true;
-		float d = 0.01f;
+		float d = 0.05f;
 		
 		// top fixture
 		PolygonShape topshape = new PolygonShape();
@@ -104,15 +104,13 @@ public class EntityBox implements Entity {
 		} else {
 			return;
 		}
-		if (sens.getEntity() instanceof EntityBox) {
-			if (ent == this) {
-				if (sens.getDirection() == Direction.TOP) {
-					this.bottom = (EntityBox) sens.getEntity();
-					this.bottom.top = this;
-				} else if (sens.getDirection() == Direction.RIGHT) {
-					this.left = (EntityBox) sens.getEntity();
-					this.left.right = this;
-				}
+		if (sens.getEntity() instanceof EntityBox && sens.getEntity() == this) {
+			if (sens.getDirection() == Direction.TOP) {
+				this.top = ent;
+				this.top.bottom = this;
+			} else if (sens.getDirection() == Direction.RIGHT) {
+				this.right = ent;
+				this.right.left = this;
 			}
 		}
 		
@@ -120,31 +118,29 @@ public class EntityBox implements Entity {
 
 	@Override
 	public void endContact(Contact arg0) {
-		Object a = arg0.getFixtureA().getUserData();
+		/*Object a = arg0.getFixtureA().getUserData();
 		Object b = arg0.getFixtureB().getUserData();
 		
-		EntityBox ent = null;
+		//EntityBox ent = null;
 		SensorIdentity sens = null;
 		if (a instanceof EntityBox && b instanceof SensorIdentity) {
-			ent = (EntityBox) a;
+			//ent = (EntityBox) a;
 			sens = (SensorIdentity) b;
 		} else if (b instanceof EntityBox && a instanceof SensorIdentity) {
-			ent = (EntityBox) b;
+			//ent = (EntityBox) b;
 			sens = (SensorIdentity) a;
 		} else {
 			return;
 		}
-		if (sens.getEntity() instanceof EntityBox) {
-			if (ent == this) {
-				if (sens.getDirection() == Direction.TOP) {
-					this.bottom.top = null;
-					this.top = null;
-				} else if (sens.getDirection() == Direction.RIGHT) {
-					this.left.right = null;
-					this.right = null;
-				}
+		if (sens.getEntity() instanceof EntityBox && sens.getEntity() == this) {
+			if (sens.getDirection() == Direction.TOP) {
+				this.top.bottom = null;
+				this.top = null;
+			} else if (sens.getDirection() == Direction.RIGHT) {
+				this.right.left = null;
+				this.right = null;
 			}
-		}
+		}*/
 	}
 	
 	public void print() {

@@ -15,9 +15,12 @@ import org.lwjgl.opengl.GL11;
 public class EntityDoge implements Entity {
 	private Body body;
 	private ArrayList<Graphic> graphics = new ArrayList<Graphic>();
+	
 	private ArrayList<Entity> footContacts = new ArrayList<Entity>();
 	private Entity leftContact = null;
 	private Entity rightContact = null;
+	
+	private int climbTimer = 0;
 	
 	public EntityDoge(Vec2 _pos) {
 		BodyDef bdef = new BodyDef();
@@ -50,7 +53,7 @@ public class EntityDoge implements Entity {
 		sensfdef.shape = footshape;
 		sensfdef.userData = new SensorIdentity(this, Direction.BOTTOM);
 		this.body.createFixture(sensfdef);
-		this.graphics.add(new GraphicQuad(0.7f, 0.1f, Config.getSensorColor(), new Vec2(0f, 0.4f)));
+		this.graphics.add(new GraphicQuad(0.70f, 0.1f, Config.getSensorColor(), new Vec2(0f, 0.4f)));
 		
 		// head fixture
 		PolygonShape headshape = new PolygonShape();
@@ -62,19 +65,19 @@ public class EntityDoge implements Entity {
 		
 		// left fixture
 		PolygonShape leftshape = new PolygonShape();
-		leftshape.setAsBox(0.05f, 0.05f, new Vec2(-0.4f, 0f), 0);
+		leftshape.setAsBox(0.05f, 0.05f, new Vec2(-0.4f, 0.3f), 0);
 		sensfdef.shape = leftshape;
 		sensfdef.userData = new SensorIdentity(this, Direction.LEFT);
 		this.body.createFixture(sensfdef);
-		this.graphics.add(new GraphicQuad(0.1f, 0.1f, Config.getSensorColor(), new Vec2(-0.4f, 0f)));
+		this.graphics.add(new GraphicQuad(0.1f, 0.1f, Config.getSensorColor(), new Vec2(-0.4f, 0.3f)));
 		
 		// right fixture
 		PolygonShape rightshape = new PolygonShape();
-		rightshape.setAsBox(0.05f, 0.05f, new Vec2(0.4f, 0f), 0);
+		rightshape.setAsBox(0.05f, 0.05f, new Vec2(0.4f, 0.3f), 0);
 		sensfdef.shape = rightshape;
 		sensfdef.userData = new SensorIdentity(this, Direction.RIGHT);;
 		this.body.createFixture(sensfdef);
-		this.graphics.add(new GraphicQuad(0.1f, 0.1f, Config.getSensorColor(), new Vec2(0.4f, 0f)));
+		this.graphics.add(new GraphicQuad(0.1f, 0.1f, Config.getSensorColor(), new Vec2(0.4f, 0.3f)));
 	}
 
 	public ArrayList<Graphic> getGraphics() {
@@ -97,55 +100,40 @@ public class EntityDoge implements Entity {
 		return false;
 	}
 	
-	private void moveLeft() {
-		this.body.setLinearVelocity(new Vec2(-3.5f, 0f));
-	}
-	
-	private void moveRight() {
-		this.body.setLinearVelocity(new Vec2(3.5f, 0f));
-	}
-	
-	private void moveStop() {
-		this.body.setLinearVelocity(new Vec2(0f, 0f));
-	}
-	
-	private void moveJump() {
-		this.body.applyLinearImpulse(new Vec2(0f, -10f), this.body.getPosition());
-	}
-	
 	public void tick(int delta) {
 		if (this.isOnGround()) {
-			
 			//left
 			if (Keyboard.isKeyDown(Config.keyLeft)) {
 				if (this.leftContact == null) {
-					this.moveLeft();
+					this.body.setLinearVelocity(new Vec2(-3.5f, 0f));
 				} else {
-					this.moveStop();
-					if (this.leftContact instanceof EntityBox) {
+					this.body.setLinearVelocity(new Vec2(0f, 0f));
+					this.climbTimer += delta;
+					if (this.climbTimer > 300 && this.leftContact instanceof EntityBox) {
 						EntityBox b = (EntityBox) this.leftContact;
 						b.print();
 						if (b.top == null) {
-							this.moveJump();
+							this.body.setTransform(new Vec2(this.body.getPosition().x -0.2f, b.getPosition().y - 0.86f), 0);
+							this.climbTimer = 0;
 						}
 					}
 				}
-				
 			// right
 			} else if (Keyboard.isKeyDown(Config.keyRight)) {
 				if (this.rightContact == null) {
-					this.moveRight();
+					this.body.setLinearVelocity(new Vec2(3.5f, 0f));
 				} else {
-					this.moveStop();
-					if (this.rightContact instanceof EntityBox) {
+					this.body.setLinearVelocity(new Vec2(0f, 0f));
+					this.climbTimer += delta;
+					if (this.climbTimer > 300 && this.rightContact instanceof EntityBox) {
 						EntityBox b = (EntityBox) this.rightContact;
 						b.print();
 						if (b.top == null) {
-							this.moveJump();
+							this.body.setTransform(new Vec2(this.body.getPosition().x +0.2f, b.getPosition().y - 0.86f), 0);
+							this.climbTimer = 0;
 						}
 					}
 				}
-				
 			// stop
 			} else {
 				this.body.setLinearVelocity(new Vec2(0f, 0f));
