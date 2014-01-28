@@ -11,7 +11,7 @@ public class Level {
 	private HashMap<Vec2, Entity> entities = new HashMap<Vec2, Entity>();
 	
 	private World world;
-	private Doge doge;
+	private EntityDoge doge;
 	
 	private float depth;
 	
@@ -19,7 +19,7 @@ public class Level {
 		this.world = new World(Config.getGravity());
 	}
 	
-	public void setDoge(Doge d) {
+	public void setDoge(EntityDoge d) {
 		this.doge = d;
 	}
 	
@@ -27,7 +27,8 @@ public class Level {
 		this.depth = _h;
 		PolygonShape shape = new PolygonShape();
 		shape.setAsBox(Config.getBoxesX() / 2, 0.5f);
-		this.addEntity(new EntityStatic(new Vec2(Config.getBoxesX() / 2, this.depth + 0.5f), shape, new GraphicQuad(Config.getBoxesX(), 1f, new Color3f(1f, 1f, 1f))));
+		Graphic g = new GraphicQuad(Config.getBoxesX(), 1f, new Color3f(1f, 1f, 1f));
+		this.addEntity(new EntityStatic(new Vec2(Config.getBoxesX() / 2, this.depth + 0.5f), shape, g));
 	}
 	
 	public void addEntity(Entity e) {
@@ -39,28 +40,12 @@ public class Level {
 	}
 	
 	public void input() {
-		while (Keyboard.next()) {
-			
-			//move left
-			if (Keyboard.getEventKey() == Config.keyLeft) {
-				this.doge.getBody().applyLinearImpulse(new Vec2(-1f, 0f), this.doge.getBody().getPosition());
-				
-			//move right
-			} else if (Keyboard.getEventKey() == Config.keyRight) {
-				this.doge.getBody().applyLinearImpulse(new Vec2(1f, 0f), this.doge.getBody().getPosition());
-				
-			//jump
-			} else if (Keyboard.getEventKey() == Config.keySpace && this.doge.onGround) {
-				this.doge.getBody().applyLinearImpulse(new Vec2(0f, -10f), this.doge.getBody().getPosition());
-				
-			//reset
-			} else if (Keyboard.getEventKey() == Keyboard.KEY_RETURN) {
-				this.entities.clear();
-				this.world = new World(Config.getGravity());
-				LevelFactory.randomLevel(this);
-			}
+		if (Keyboard.getEventKey() == Keyboard.KEY_RETURN) {
+			this.entities.clear();
+			this.world = new World(Config.getGravity());
+			LevelFactory.randomLevel(this);
 		}
-		
+		this.doge.input();
 	}
 	
 	public void tick(int delta) {

@@ -3,6 +3,7 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
+import org.jbox2d.dynamics.FixtureDef;
 import org.lwjgl.opengl.GL11;
 
 
@@ -12,10 +13,16 @@ public class EntityStatic implements Entity {
 	
 	public EntityStatic(Vec2 _pos, Shape _shape, Graphic _graphic) {
 		BodyDef bdef = new BodyDef();
-		bdef.type = BodyType.STATIC;
+		bdef.type = BodyType.KINEMATIC;
 		bdef.position = _pos;
+		bdef.allowSleep = true;
 		this.body = DogeDriller.getGame().getLevel().getWorld().createBody(bdef);
-		body.createFixture(_shape, 1f);
+		FixtureDef fdef = new FixtureDef();
+		fdef.shape = _shape;
+		fdef.density = 2f;
+		fdef.friction = 1f;
+		fdef.userData = this;
+		this.body.createFixture(fdef);
 		
 		this.graphic = _graphic;
 	}

@@ -19,9 +19,10 @@ public class EntityBox implements Entity {
 		this.body = DogeDriller.getGame().getLevel().getWorld().createBody(bdef);
 		FixtureDef fdef = new FixtureDef();
 		fdef.shape = _shape;
-		fdef.density = 1.0f;
-		fdef.friction = 0.1f;
-		body.createFixture(fdef);
+		fdef.density = 2f;
+		fdef.friction = 1f;
+		fdef.userData = this;
+		this.body.createFixture(fdef);
 		
 		this.graphic = _graphic;
 	}
