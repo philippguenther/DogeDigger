@@ -1,7 +1,5 @@
 import java.util.HashMap;
 
-import org.jbox2d.collision.shapes.PolygonShape;
-import org.jbox2d.common.Color3f;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
 import org.lwjgl.input.Keyboard;
@@ -23,12 +21,13 @@ public class Level {
 		this.doge = d;
 	}
 	
-	public void setHeight(float _h) {
-		this.depth = _h;
-		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(Config.getBoxesX() / 2, 0.5f);
-		Graphic g = new GraphicQuad(Config.getBoxesX(), 1f, new Color3f(1f, 1f, 1f));
-		this.addEntity(new EntityStatic(new Vec2(Config.getBoxesX() / 2, this.depth + 0.5f), shape, g));
+	public void setDepth(float d) {
+		this.depth = d;
+		
+		this.addEntity(new EntityStatic(new Vec2(Config.getBoxesX() / 2, -0.5f), Config.getBoxesX() + 2f, 1f));
+		this.addEntity(new EntityStatic(new Vec2(Config.getBoxesX() / 2, this.depth + 0.5f), Config.getBoxesX() + 2f, 1f));
+		this.addEntity(new EntityStatic(new Vec2(-0.5f, this.depth / 2), 1f, this.depth));
+		this.addEntity(new EntityStatic(new Vec2(Config.getBoxesX() + 0.5f, this.depth / 2), 1f, this.depth));
 	}
 	
 	public void addEntity(Entity e) {
@@ -40,7 +39,7 @@ public class Level {
 	}
 	
 	public void input() {
-		if (Keyboard.getEventKey() == Keyboard.KEY_RETURN) {
+		if (Keyboard.isKeyDown(Config.keyReset)) {
 			this.entities.clear();
 			this.world = new World(Config.getGravity());
 			LevelFactory.randomLevel(this);

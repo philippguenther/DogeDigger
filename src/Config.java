@@ -15,6 +15,7 @@ public class Config {
 	public static int keyLeft = Keyboard.KEY_LEFT;
 	public static int keyRight = Keyboard.KEY_RIGHT;
 	public static int keySpace = Keyboard.KEY_SPACE;
+	public static int keyReset = Keyboard.KEY_R;
 	
 	public static int getWindowWidth() {
 		return Config.windowWidth;

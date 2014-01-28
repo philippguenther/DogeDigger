@@ -1,4 +1,7 @@
-import org.jbox2d.collision.shapes.Shape;
+import java.util.ArrayList;
+
+import org.jbox2d.collision.shapes.PolygonShape;
+import org.jbox2d.common.Color3f;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
@@ -8,23 +11,29 @@ import org.lwjgl.opengl.GL11;
 
 
 public class EntityStatic implements Entity {
-	public Body body;
-	public Graphic graphic;
+	private Body body;
+	private ArrayList<Graphic> graphics = new ArrayList<Graphic>();
+	private float width;
+	private float height;
 	
-	public EntityStatic(Vec2 _pos, Shape _shape, Graphic _graphic) {
+	public EntityStatic(Vec2 _pos, float w, float h) {
 		BodyDef bdef = new BodyDef();
-		bdef.type = BodyType.KINEMATIC;
+		bdef.type = BodyType.STATIC;
 		bdef.position = _pos;
 		bdef.allowSleep = true;
 		this.body = DogeDriller.getGame().getLevel().getWorld().createBody(bdef);
 		FixtureDef fdef = new FixtureDef();
-		fdef.shape = _shape;
-		fdef.density = 2f;
-		fdef.friction = 1f;
+		PolygonShape shape = new PolygonShape();
+		shape.setAsBox(w / 2, h / 2);
+		fdef.friction = 0f;
+		fdef.shape = shape;
 		fdef.userData = this;
 		this.body.createFixture(fdef);
 		
-		this.graphic = _graphic;
+		this.width = w;
+		this.height = h;
+		
+		this.graphics.add(new GraphicQuad(this.width, this.height, new Color3f(1f, 0f, 0f)));
 	}
 	
 	public Vec2 getPosition() {
@@ -35,8 +44,8 @@ public class EntityStatic implements Entity {
 		return this.body;
 	}
 	
-	public Graphic getGraphic() {
-		return this.graphic;
+	public ArrayList<Graphic> getGraphics() {
+		return this.graphics;
 	}
 
 	public void tick(int delta) {
@@ -46,7 +55,9 @@ public class EntityStatic implements Entity {
 	public void render() {
 		GL11.glPushMatrix();
 			GL11.glTranslatef(this.body.getPosition().x, this.body.getPosition().y, 0f);
-			this.graphic.render();
+			for (Graphic g : this.graphics) {
+				g.render();
+			}
 		GL11.glPopMatrix();
 	}
 
