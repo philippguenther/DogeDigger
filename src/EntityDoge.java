@@ -50,11 +50,11 @@ public class EntityDoge implements Entity {
 		
 		// foot fixture
 		PolygonShape footshape = new PolygonShape();
-		footshape.setAsBox(0.29f, 0.05f, new Vec2(0f, 0.4f), 0);
+		footshape.setAsBox(0.35f, 0.01f, new Vec2(0f, 0.4f), 0);
 		sensfdef.shape = footshape;
 		sensfdef.userData = new SensorIdentity(this, Direction.BOTTOM);
 		this.body.createFixture(sensfdef);
-		this.graphics.add(new GraphicQuad(0.68f, 0.1f, Config.getSensorColor(), new Vec2(0f, 0.4f)));
+		this.graphics.add(new GraphicQuad(0.7f, 0.02f, Config.getSensorColor(), new Vec2(0f, 0.4f)));
 		
 		// head fixture
 		PolygonShape headshape = new PolygonShape();
@@ -66,19 +66,19 @@ public class EntityDoge implements Entity {
 		
 		// left fixture
 		PolygonShape leftshape = new PolygonShape();
-		leftshape.setAsBox(0.05f, 0.05f, new Vec2(-0.4f, 0.3f), 0);
+		leftshape.setAsBox(0.05f, 0.05f, new Vec2(-0.4f, 0f), 0);
 		sensfdef.shape = leftshape;
 		sensfdef.userData = new SensorIdentity(this, Direction.LEFT);
 		this.body.createFixture(sensfdef);
-		this.graphics.add(new GraphicQuad(0.1f, 0.1f, Config.getSensorColor(), new Vec2(-0.4f, 0.3f)));
+		this.graphics.add(new GraphicQuad(0.1f, 0.1f, Config.getSensorColor(), new Vec2(-0.4f, 0f)));
 		
 		// right fixture
 		PolygonShape rightshape = new PolygonShape();
-		rightshape.setAsBox(0.05f, 0.05f, new Vec2(0.4f, 0.3f), 0);
+		rightshape.setAsBox(0.05f, 0.05f, new Vec2(0.4f, 0f), 0);
 		sensfdef.shape = rightshape;
 		sensfdef.userData = new SensorIdentity(this, Direction.RIGHT);;
 		this.body.createFixture(sensfdef);
-		this.graphics.add(new GraphicQuad(0.1f, 0.1f, Config.getSensorColor(), new Vec2(0.4f, 0.3f)));
+		this.graphics.add(new GraphicQuad(0.1f, 0.1f, Config.getSensorColor(), new Vec2(0.4f, 0f)));
 	}
 
 	public ArrayList<Graphic> getGraphics() {
@@ -102,7 +102,10 @@ public class EntityDoge implements Entity {
 	}
 	
 	public void tick(int delta) {
-		if (this.isOnGround()) {
+		if (!this.isOnGround()) {
+			//falling
+			this.body.setLinearVelocity(new Vec2(0, 10f));
+		} else {
 			//left
 			if (Keyboard.isKeyDown(Config.keyLeft)) {
 				if (this.contactL == null) {
@@ -110,40 +113,45 @@ public class EntityDoge implements Entity {
 					this.jumpTimerL = delta;
 				} else {
 					this.body.setLinearVelocity(new Vec2(0f, 0f));
-					this.jumpTimerL += delta;
 					if ((this.jumpTimerL > 300 || delta > 300) && this.contactL instanceof EntityBox) {
 						EntityBox b = (EntityBox) this.contactL;
 						b.print();
 						if (b.top == null) {
-							this.body.setTransform(new Vec2(this.body.getPosition().x -0.12f, b.getPosition().y - 0.95f), 0);
+							this.body.setTransform(new Vec2(this.body.getPosition().x -0.12f, b.getPosition().y - 0.92f), 0);
 							this.jumpTimerL = 0;
+							this.contactL = null;
 						}
+					} else {
+						this.jumpTimerL += delta;
 					}
 				}
-			// right
-			} else if (Keyboard.isKeyDown(Config.keyRight)) {
-				if (this.contactR == null) {
-					this.body.setLinearVelocity(new Vec2(4f, 0.1f));
-					this.jumpTimerR = delta;
-				} else {
-					this.body.setLinearVelocity(new Vec2(0f, 0f));
-					this.jumpTimerR += delta;
-					if ((this.jumpTimerR > 300 || delta > 300) && this.contactR instanceof EntityBox) {
-						EntityBox b = (EntityBox) this.contactR;
-						b.print();
-						if (b.top == null) {
-							this.body.setTransform(new Vec2(this.body.getPosition().x +0.12f, b.getPosition().y - 0.95f), 0);
-							this.jumpTimerR = 0;
-						}
-					}
-				}
-			// stop
 			} else {
-				this.body.setLinearVelocity(new Vec2(0f, 0f));
+				this.jumpTimerL = 0;
+				// right
+				if (Keyboard.isKeyDown(Config.keyRight)) {
+					if (this.contactR == null) {
+						this.body.setLinearVelocity(new Vec2(4f, 0.1f));
+						this.jumpTimerR = delta;
+					} else {
+						this.body.setLinearVelocity(new Vec2(0f, 0f));
+						if ((this.jumpTimerR > 300 || delta > 300) && this.contactR instanceof EntityBox) {
+							EntityBox b = (EntityBox) this.contactR;
+							b.print();
+							if (b.top == null) {
+								this.body.setTransform(new Vec2(this.body.getPosition().x +0.12f, b.getPosition().y - 0.92f), 0);
+								this.jumpTimerR = 0;
+								this.contactR = null;
+							}
+						} else {
+							this.jumpTimerR += delta;
+						}
+					}
+				} else {
+					// stop moving if no key pressed
+					this.body.setLinearVelocity(new Vec2(0f, 0f));
+					this.jumpTimerR = 0;
+				}
 			}
-		// falling
-		} else {
-			this.body.setLinearVelocity(new Vec2(0, 10f));
 		}
 	}
 

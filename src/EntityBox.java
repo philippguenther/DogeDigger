@@ -110,10 +110,10 @@ public class EntityBox implements Entity {
 		if (sens.getEntity() instanceof EntityBox && sens.getEntity() == this) {
 			if (sens.getDirection() == Direction.TOP) {
 				this.top = ent;
-				this.top.bottom = this;
+				ent.bottom = this;
 			} else if (sens.getDirection() == Direction.RIGHT) {
 				this.right = ent;
-				this.right.left = this;
+				ent.left = this;
 			}
 		}	
 	}
@@ -135,12 +135,12 @@ public class EntityBox implements Entity {
 			return;
 		}
 		if (sens.getEntity() instanceof EntityBox && sens.getEntity() == this) {
-			if (sens.getDirection() == Direction.TOP && this.top != null) {
-				this.top.bottom = null;
+			if (sens.getDirection() == Direction.TOP) {
 				this.top = null;
-			} else if (sens.getDirection() == Direction.RIGHT && this.right != null) {
-				this.right.left = null;
+				ent.bottom = null;
+			} else if (sens.getDirection() == Direction.RIGHT) {
 				this.right = null;
+				ent.left = null;
 			}
 		}
 	}
