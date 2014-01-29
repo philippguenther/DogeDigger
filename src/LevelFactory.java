@@ -11,6 +11,7 @@ public class LevelFactory {
 			lvl.addEntity(new EntityBox(new Vec2(i, 9.5f)));
 			lvl.addEntity(new EntityBox(new Vec2(i, 8.5f)));
 			lvl.addEntity(new EntityBox(new Vec2(i, 7.5f)));
+			lvl.addEntity(new EntityBox(new Vec2(i, 6.5f)));
 		}
 		
 		lvl.addEntity(new EntityBox(new Vec2(0.5f, 4f)));

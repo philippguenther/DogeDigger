@@ -45,10 +45,10 @@ public class Level implements ContactListener {
 	public void tick(int delta) {
 		this.world.step(1f / 60f, 10, 20);
 		
+		this.doge.tick(delta);
 		for (Entity e : this.entities.values()) {
 			e.tick(delta);
 		}
-		this.doge.tick(delta);
 	}
 	
 	public void render() {

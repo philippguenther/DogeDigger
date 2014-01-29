@@ -16,11 +16,12 @@ public class EntityDoge implements Entity {
 	private Body body;
 	private ArrayList<Graphic> graphics = new ArrayList<Graphic>();
 	
-	private ArrayList<Entity> footContacts = new ArrayList<Entity>();
-	private Entity leftContact = null;
-	private Entity rightContact = null;
+	private ArrayList<Entity> contactsFoot = new ArrayList<Entity>();
+	private Entity contactL = null;
+	private Entity contactR = null;
 	
-	private int climbTimer = 0;
+	private int jumpTimerL = 0;
+	private int jumpTimerR = 0;
 	
 	public EntityDoge(Vec2 _pos) {
 		BodyDef bdef = new BodyDef();
@@ -49,11 +50,11 @@ public class EntityDoge implements Entity {
 		
 		// foot fixture
 		PolygonShape footshape = new PolygonShape();
-		footshape.setAsBox(0.3f, 0.05f, new Vec2(0f, 0.4f), 0);
+		footshape.setAsBox(0.29f, 0.05f, new Vec2(0f, 0.4f), 0);
 		sensfdef.shape = footshape;
 		sensfdef.userData = new SensorIdentity(this, Direction.BOTTOM);
 		this.body.createFixture(sensfdef);
-		this.graphics.add(new GraphicQuad(0.6f, 0.1f, Config.getSensorColor(), new Vec2(0f, 0.4f)));
+		this.graphics.add(new GraphicQuad(0.68f, 0.1f, Config.getSensorColor(), new Vec2(0f, 0.4f)));
 		
 		// head fixture
 		PolygonShape headshape = new PolygonShape();
@@ -93,7 +94,7 @@ public class EntityDoge implements Entity {
 	}
 	
 	public boolean isOnGround() {
-		for (Entity e : this.footContacts) {
+		for (Entity e : this.contactsFoot) {
 			if (!(e instanceof EntityDoge))
 				return true;
 		}
@@ -104,33 +105,35 @@ public class EntityDoge implements Entity {
 		if (this.isOnGround()) {
 			//left
 			if (Keyboard.isKeyDown(Config.keyLeft)) {
-				if (this.leftContact == null) {
-					this.body.setLinearVelocity(new Vec2(-3.5f, 0.1f));
+				if (this.contactL == null) {
+					this.body.setLinearVelocity(new Vec2(-4f, 0.1f));
+					this.jumpTimerL = delta;
 				} else {
 					this.body.setLinearVelocity(new Vec2(0f, 0f));
-					this.climbTimer += delta;
-					if (this.climbTimer > 300 && this.leftContact instanceof EntityBox) {
-						EntityBox b = (EntityBox) this.leftContact;
+					this.jumpTimerL += delta;
+					if ((this.jumpTimerL > 300 || delta > 300) && this.contactL instanceof EntityBox) {
+						EntityBox b = (EntityBox) this.contactL;
 						b.print();
 						if (b.top == null) {
-							this.body.setTransform(new Vec2(this.body.getPosition().x -0.2f, b.getPosition().y - 0.86f), 0);
-							this.climbTimer = 0;
+							this.body.setTransform(new Vec2(this.body.getPosition().x -0.12f, b.getPosition().y - 0.95f), 0);
+							this.jumpTimerL = 0;
 						}
 					}
 				}
 			// right
 			} else if (Keyboard.isKeyDown(Config.keyRight)) {
-				if (this.rightContact == null) {
-					this.body.setLinearVelocity(new Vec2(3.5f, 0.1f));
+				if (this.contactR == null) {
+					this.body.setLinearVelocity(new Vec2(4f, 0.1f));
+					this.jumpTimerR = delta;
 				} else {
 					this.body.setLinearVelocity(new Vec2(0f, 0f));
-					this.climbTimer += delta;
-					if (this.climbTimer > 300 && this.rightContact instanceof EntityBox) {
-						EntityBox b = (EntityBox) this.rightContact;
+					this.jumpTimerR += delta;
+					if ((this.jumpTimerR > 300 || delta > 300) && this.contactR instanceof EntityBox) {
+						EntityBox b = (EntityBox) this.contactR;
 						b.print();
 						if (b.top == null) {
-							this.body.setTransform(new Vec2(this.body.getPosition().x +0.2f, b.getPosition().y - 0.86f), 0);
-							this.climbTimer = 0;
+							this.body.setTransform(new Vec2(this.body.getPosition().x +0.12f, b.getPosition().y - 0.95f), 0);
+							this.jumpTimerR = 0;
 						}
 					}
 				}
@@ -179,16 +182,16 @@ public class EntityDoge implements Entity {
 			System.out.println("HEAD hit");
 		
 		// add to footContacts
-		} else if (sens.getDirection() == Direction.BOTTOM && !this.footContacts.contains(ent)) {
-			this.footContacts.add(ent);
+		} else if (sens.getDirection() == Direction.BOTTOM && !this.contactsFoot.contains(ent)) {
+			this.contactsFoot.add(ent);
 		
 		// set leftContact
 		} else if (sens.getDirection() == Direction.LEFT) {
-			this.leftContact = ent;
+			this.contactL = ent;
 		
 		// set rightContact
 		} else if (sens.getDirection() == Direction.RIGHT) {
-			this.rightContact = ent;
+			this.contactR = ent;
 		}
 	}
 
@@ -213,15 +216,15 @@ public class EntityDoge implements Entity {
 		
 		// add to footContacts
 		if (sens.getDirection() == Direction.BOTTOM) {
-			this.footContacts.remove(ent);
+			this.contactsFoot.remove(ent);
 		
 		// set leftContact
 		} else if (sens.getDirection() == Direction.LEFT) {
-			this.leftContact = null;
+			this.contactL = null;
 		
 		// set rightContact
 		} else if (sens.getDirection() == Direction.RIGHT) {
-			this.rightContact = null;
+			this.contactR = null;
 		}
 	}
 	
