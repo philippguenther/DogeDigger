@@ -75,7 +75,10 @@ public class EntityBox implements Entity {
 	}
 
 	public void tick(int delta) {
-		
+		if (this.body.getLinearVelocity().y < 0.1f)
+			this.body.setType(BodyType.STATIC);
+		else
+			this.body.setType(BodyType.DYNAMIC);
 	}
 
 	public void render() {
@@ -112,35 +115,34 @@ public class EntityBox implements Entity {
 				this.right = ent;
 				this.right.left = this;
 			}
-		}
-		
+		}	
 	}
 
 	@Override
 	public void endContact(Contact arg0) {
-		/*Object a = arg0.getFixtureA().getUserData();
+		Object a = arg0.getFixtureA().getUserData();
 		Object b = arg0.getFixtureB().getUserData();
 		
-		//EntityBox ent = null;
+		EntityBox ent = null;
 		SensorIdentity sens = null;
 		if (a instanceof EntityBox && b instanceof SensorIdentity) {
-			//ent = (EntityBox) a;
+			ent = (EntityBox) a;
 			sens = (SensorIdentity) b;
 		} else if (b instanceof EntityBox && a instanceof SensorIdentity) {
-			//ent = (EntityBox) b;
+			ent = (EntityBox) b;
 			sens = (SensorIdentity) a;
 		} else {
 			return;
 		}
 		if (sens.getEntity() instanceof EntityBox && sens.getEntity() == this) {
-			if (sens.getDirection() == Direction.TOP) {
+			if (sens.getDirection() == Direction.TOP && this.top != null) {
 				this.top.bottom = null;
 				this.top = null;
-			} else if (sens.getDirection() == Direction.RIGHT) {
+			} else if (sens.getDirection() == Direction.RIGHT && this.right != null) {
 				this.right.left = null;
 				this.right = null;
 			}
-		}*/
+		}
 	}
 	
 	public void print() {

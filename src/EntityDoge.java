@@ -49,19 +49,19 @@ public class EntityDoge implements Entity {
 		
 		// foot fixture
 		PolygonShape footshape = new PolygonShape();
-		footshape.setAsBox(0.35f, 0.05f, new Vec2(0f, 0.4f), 0);
+		footshape.setAsBox(0.3f, 0.05f, new Vec2(0f, 0.4f), 0);
 		sensfdef.shape = footshape;
 		sensfdef.userData = new SensorIdentity(this, Direction.BOTTOM);
 		this.body.createFixture(sensfdef);
-		this.graphics.add(new GraphicQuad(0.70f, 0.1f, Config.getSensorColor(), new Vec2(0f, 0.4f)));
+		this.graphics.add(new GraphicQuad(0.6f, 0.1f, Config.getSensorColor(), new Vec2(0f, 0.4f)));
 		
 		// head fixture
 		PolygonShape headshape = new PolygonShape();
-		headshape.setAsBox(0.35f, 0.05f, new Vec2(0f, -0.4f), 0);
+		headshape.setAsBox(0.3f, 0.05f, new Vec2(0f, -0.4f), 0);
 		sensfdef.shape = headshape;
 		sensfdef.userData = new SensorIdentity(this, Direction.TOP);
 		this.body.createFixture(sensfdef);
-		this.graphics.add(new GraphicQuad(0.7f, 0.1f, Config.getSensorColor(), new Vec2(0f, -0.4f)));
+		this.graphics.add(new GraphicQuad(0.6f, 0.1f, Config.getSensorColor(), new Vec2(0f, -0.4f)));
 		
 		// left fixture
 		PolygonShape leftshape = new PolygonShape();
@@ -105,7 +105,7 @@ public class EntityDoge implements Entity {
 			//left
 			if (Keyboard.isKeyDown(Config.keyLeft)) {
 				if (this.leftContact == null) {
-					this.body.setLinearVelocity(new Vec2(-3.5f, 0f));
+					this.body.setLinearVelocity(new Vec2(-3.5f, 0.1f));
 				} else {
 					this.body.setLinearVelocity(new Vec2(0f, 0f));
 					this.climbTimer += delta;
@@ -121,7 +121,7 @@ public class EntityDoge implements Entity {
 			// right
 			} else if (Keyboard.isKeyDown(Config.keyRight)) {
 				if (this.rightContact == null) {
-					this.body.setLinearVelocity(new Vec2(3.5f, 0f));
+					this.body.setLinearVelocity(new Vec2(3.5f, 0.1f));
 				} else {
 					this.body.setLinearVelocity(new Vec2(0f, 0f));
 					this.climbTimer += delta;
@@ -174,8 +174,12 @@ public class EntityDoge implements Entity {
 		else if (!(sens.getEntity() == this))
 			return;
 		
+		// check head contact
+		if (sens.getDirection() == Direction.TOP) {
+			System.out.println("HEAD hit");
+		
 		// add to footContacts
-		if (sens.getDirection() == Direction.BOTTOM && !this.footContacts.contains(ent)) {
+		} else if (sens.getDirection() == Direction.BOTTOM && !this.footContacts.contains(ent)) {
 			this.footContacts.add(ent);
 		
 		// set leftContact
