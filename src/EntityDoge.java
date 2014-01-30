@@ -58,27 +58,31 @@ public class EntityDoge implements Entity {
 		
 		// head fixture
 		PolygonShape headshape = new PolygonShape();
-		headshape.setAsBox(0.3f, 0.05f, new Vec2(0f, -0.4f), 0);
+		headshape.setAsBox(0.3f, 0.01f, new Vec2(0f, -0.4f), 0);
 		sensfdef.shape = headshape;
 		sensfdef.userData = new SensorIdentity(this, Direction.TOP);
 		this.body.createFixture(sensfdef);
-		this.graphics.add(new GraphicQuad(0.6f, 0.1f, Config.getSensorColor(), new Vec2(0f, -0.4f)));
+		this.graphics.add(new GraphicQuad(0.6f, 0.02f, Config.getSensorColor(), new Vec2(0f, -0.4f)));
 		
 		// left fixture
 		PolygonShape leftshape = new PolygonShape();
-		leftshape.setAsBox(0.05f, 0.05f, new Vec2(-0.4f, 0f), 0);
+		leftshape.setAsBox(0.01f, 0.05f, new Vec2(-0.36f, 0f), 0);
 		sensfdef.shape = leftshape;
 		sensfdef.userData = new SensorIdentity(this, Direction.LEFT);
 		this.body.createFixture(sensfdef);
-		this.graphics.add(new GraphicQuad(0.1f, 0.1f, Config.getSensorColor(), new Vec2(-0.4f, 0f)));
+		this.graphics.add(new GraphicQuad(0.02f, 0.1f, Config.getSensorColor(), new Vec2(-0.36f, 0f)));
 		
 		// right fixture
 		PolygonShape rightshape = new PolygonShape();
-		rightshape.setAsBox(0.05f, 0.05f, new Vec2(0.4f, 0f), 0);
+		rightshape.setAsBox(0.01f, 0.05f, new Vec2(0.36f, 0f), 0);
 		sensfdef.shape = rightshape;
 		sensfdef.userData = new SensorIdentity(this, Direction.RIGHT);;
 		this.body.createFixture(sensfdef);
-		this.graphics.add(new GraphicQuad(0.1f, 0.1f, Config.getSensorColor(), new Vec2(0.4f, 0f)));
+		this.graphics.add(new GraphicQuad(0.02f, 0.1f, Config.getSensorColor(), new Vec2(0.36f, 0f)));
+	}
+	
+	public void die(Entity e) {
+		System.out.println("DOGE DIED");
 	}
 
 	public ArrayList<Graphic> getGraphics() {
@@ -125,7 +129,7 @@ public class EntityDoge implements Entity {
 						this.jumpTimerL += delta;
 					}
 				}
-			} else {
+			} else{
 				this.jumpTimerL = 0;
 				// right
 				if (Keyboard.isKeyDown(Config.keyRight)) {
@@ -147,9 +151,21 @@ public class EntityDoge implements Entity {
 						}
 					}
 				} else {
-					// stop moving if no key pressed
-					this.body.setLinearVelocity(new Vec2(0f, 0f));
-					this.jumpTimerR = 0;
+					this.jumpTimerR = 0;	
+					if (Keyboard.isKeyDown(Config.keyDig)) {
+						//destroy box under my feet
+						if (this.contactL != null && this.contactR == null) {
+							this.contactL.destroy();
+						} else if (this.contactL == null && this.contactR != null) {
+							this.contactR.destroy();
+						}else if (this.contactsFoot.size() == 1) {
+							this.contactsFoot.get(0).destroy();
+						}
+						this.body.setLinearVelocity(new Vec2(0f, 10f));
+					} else {
+						// stop moving if no key pressed
+						this.body.setLinearVelocity(new Vec2(0f, 0f));
+					}
 				}
 			}
 		}
@@ -162,6 +178,11 @@ public class EntityDoge implements Entity {
 				g.render();
 			}
 		GL11.glPopMatrix();
+	}
+	
+	public void destroy() {
+		this.graphics.clear();
+		this.body.destroyFixture(this.body.getFixtureList());
 	}
 
 	@Override
@@ -187,7 +208,7 @@ public class EntityDoge implements Entity {
 		
 		// check head contact
 		if (sens.getDirection() == Direction.TOP) {
-			System.out.println("HEAD hit");
+			this.die(ent);
 		
 		// add to footContacts
 		} else if (sens.getDirection() == Direction.BOTTOM && !this.contactsFoot.contains(ent)) {
@@ -234,6 +255,14 @@ public class EntityDoge implements Entity {
 		} else if (sens.getDirection() == Direction.RIGHT) {
 			this.contactR = null;
 		}
+	}
+	
+	public void print() {
+		System.out.print("r:" + this.contactR + ", f: [");
+		for (Entity e : this.contactsFoot) {
+			System.out.print(e + ", ");
+		}
+		System.out.println("], l:" + this.contactL);
 	}
 	
 }

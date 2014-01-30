@@ -12,6 +12,8 @@ public interface Entity {
 	
 	public void tick(int delta);
 	public void render();
+	public void destroy();
+	public void print();
 	public void beginContact(Contact arg0);
 	public void endContact(Contact arg0);
 }

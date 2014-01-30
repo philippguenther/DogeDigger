@@ -62,6 +62,11 @@ public class EntityStatic implements Entity {
 			}
 		GL11.glPopMatrix();
 	}
+	
+	public void destroy() {
+		this.graphics.clear();
+		this.body.destroyFixture(this.body.getFixtureList());
+	}
 
 	@Override
 	public void beginContact(Contact arg0) {
@@ -74,5 +79,9 @@ public class EntityStatic implements Entity {
 		// TODO Auto-generated method stub
 		
 	}
-
+	
+	public void print() {
+		System.out.print(this);
+	}
+	
 }

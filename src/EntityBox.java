@@ -43,23 +43,38 @@ public class EntityBox implements Entity {
 		sensfdef.density = 0f;
 		sensfdef.friction = 0f;
 		sensfdef.isSensor = true;
-		float d = 0.05f;
 		
-		// top fixture
+		// top outter sensor
 		PolygonShape topshape = new PolygonShape();
-		topshape.setAsBox(d, d, new Vec2(0f, -0.5f), 0);
+		topshape.setAsBox(0.4f, 0.01f, new Vec2(0f, -0.52f), 0);
 		sensfdef.shape = topshape;
 		sensfdef.userData = new SensorIdentity(this, Direction.TOP);
 		this.body.createFixture(sensfdef);
-		this.graphics.add(new GraphicQuad(2 * d, 2 * d, Config.getSensorColor(), new Vec2(0f, -0.5f)));
+		this.graphics.add(new GraphicQuad(0.8f, 0.01f, Config.getSensorColor(), new Vec2(0f, -0.52f)));
 		
-		// right fixture
+		// bottom inner sensor
+		PolygonShape botshape = new PolygonShape();
+		botshape.setAsBox(0.4f, 0.01f, new Vec2(0f, 0.48f), 0);
+		sensfdef.shape = botshape;
+		sensfdef.userData = new SensorIdentity(this, Direction.BOTTOM);
+		this.body.createFixture(sensfdef);
+		this.graphics.add(new GraphicQuad(0.8f, 0.02f, Config.getSensorColor(), new Vec2(0f, 0.48f)));
+		
+		// right outer sensor
 		PolygonShape rightshape = new PolygonShape();
-		rightshape.setAsBox(d, d, new Vec2(0.5f, 0f), 0);
+		rightshape.setAsBox(0.01f, 0.4f, new Vec2(0.52f, 0f), 0);
 		sensfdef.shape = rightshape;
 		sensfdef.userData = new SensorIdentity(this, Direction.RIGHT);
 		this.body.createFixture(sensfdef);
-		this.graphics.add(new GraphicQuad(2 * d, 2 * d, Config.getSensorColor(), new Vec2(0.5f, 0f)));
+		this.graphics.add(new GraphicQuad(0.02f, 0.8f, Config.getSensorColor(), new Vec2(0.52f, 0f)));
+		
+		// right outer sensor
+		PolygonShape leftshape = new PolygonShape();
+		leftshape.setAsBox(0.01f, 0.4f, new Vec2(-0.48f, 0f), 0);
+		sensfdef.shape = leftshape;
+		sensfdef.userData = new SensorIdentity(this, Direction.LEFT);
+		this.body.createFixture(sensfdef);
+		this.graphics.add(new GraphicQuad(0.02f, 0.8f, Config.getSensorColor(), new Vec2(-0.48f, 0f)));
 	}
 	
 	public Vec2 getPosition() {
@@ -75,10 +90,21 @@ public class EntityBox implements Entity {
 	}
 
 	public void tick(int delta) {
-		if (this.body.getLinearVelocity().y < 0.1f)
-			this.body.setType(BodyType.STATIC);
-		else
-			this.body.setType(BodyType.DYNAMIC);
+		if (this.body.getType() == BodyType.DYNAMIC) {
+			if (this.bottom != null) {
+				this.body.setType(BodyType.STATIC);
+			}
+		} else {
+			if (this.bottom == null) {
+				this.body.setType(BodyType.DYNAMIC);
+			}
+		}
+		
+		// check if neighbours are still there
+		if (this.bottom != null && this.bottom.getBody().getLinearVelocity().y > 0.01f) {
+			this.bottom = null;
+		}
+		
 	}
 
 	public void render() {
@@ -90,59 +116,64 @@ public class EntityBox implements Entity {
 			}
 		GL11.glPopMatrix();
 	}
+	
+	public void destroy() {
+		this.graphics.clear();
+		if (this.top != null)
+			this.top.bottom = null;
+		if (this.right != null)
+			this.right.left = null;
+		if (this.bottom != null)
+			this.bottom.top = null;
+		if (this.left != null)
+			this.left.right = null;
+		this.body.destroyFixture(this.body.getFixtureList());
+	}
 
 	@Override
 	public void beginContact(Contact arg0) {
 		Object a = arg0.getFixtureA().getUserData();
 		Object b = arg0.getFixtureB().getUserData();
 		
-		EntityBox ent = null;
-		SensorIdentity sens = null;
-		if (a instanceof EntityBox && b instanceof SensorIdentity) {
-			ent = (EntityBox) a;
-			sens = (SensorIdentity) b;
-		} else if (b instanceof EntityBox && a instanceof SensorIdentity) {
-			ent = (EntityBox) b;
-			sens = (SensorIdentity) a;
+		SensorIdentity s0 = null;
+		SensorIdentity s1 = null;
+		EntityBox e0 = null;
+		EntityBox e1 = null;
+		if (a instanceof SensorIdentity && b instanceof SensorIdentity) {
+			s0 = (SensorIdentity) a;
+			s1 = (SensorIdentity) b;
+			if (s0.getEntity() instanceof EntityBox && s1.getEntity() instanceof EntityBox) {
+				e0 = (EntityBox) s0.getEntity();
+				e1 = (EntityBox) s1.getEntity();
+			} else {
+				return;
+			}
 		} else {
 			return;
 		}
-		if (sens.getEntity() instanceof EntityBox && sens.getEntity() == this) {
-			if (sens.getDirection() == Direction.TOP) {
-				this.top = ent;
-				ent.bottom = this;
-			} else if (sens.getDirection() == Direction.RIGHT) {
-				this.right = ent;
-				ent.left = this;
-			}
-		}	
+		
+		if (e0 == this && s1.getDirection() == Direction.TOP) {
+			this.bottom = e1;
+		} else if (e0 == this && s1.getDirection() == Direction.RIGHT) {
+			this.left = e1;
+		} else if (e0 == this && s1.getDirection() == Direction.BOTTOM) {
+			this.top = e1;
+		} else if (e0 == this && s1.getDirection() == Direction.LEFT) {
+			this.right = e1;
+		} else if (e1 == this && s0.getDirection() == Direction.TOP) {
+			this.bottom = e0;
+		} else if (e1 == this && s0.getDirection() == Direction.RIGHT) {
+			this.left = e0;
+		} else if (e1 == this && s0.getDirection() == Direction.BOTTOM) {
+			this.top = e0;
+		} else if (e1 == this && s0.getDirection() == Direction.LEFT) {
+			this.right = e0;
+		}
 	}
 
 	@Override
 	public void endContact(Contact arg0) {
-		Object a = arg0.getFixtureA().getUserData();
-		Object b = arg0.getFixtureB().getUserData();
 		
-		EntityBox ent = null;
-		SensorIdentity sens = null;
-		if (a instanceof EntityBox && b instanceof SensorIdentity) {
-			ent = (EntityBox) a;
-			sens = (SensorIdentity) b;
-		} else if (b instanceof EntityBox && a instanceof SensorIdentity) {
-			ent = (EntityBox) b;
-			sens = (SensorIdentity) a;
-		} else {
-			return;
-		}
-		if (sens.getEntity() instanceof EntityBox && sens.getEntity() == this) {
-			if (sens.getDirection() == Direction.TOP) {
-				this.top = null;
-				ent.bottom = null;
-			} else if (sens.getDirection() == Direction.RIGHT) {
-				this.right = null;
-				ent.left = null;
-			}
-		}
 	}
 	
 	public void print() {
