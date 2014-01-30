@@ -118,7 +118,6 @@ public class EntityBox implements Entity {
 	}
 	
 	public void destroy() {
-		this.graphics.clear();
 		if (this.top != null)
 			this.top.bottom = null;
 		if (this.right != null)
@@ -128,6 +127,8 @@ public class EntityBox implements Entity {
 		if (this.left != null)
 			this.left.right = null;
 		this.body.destroyFixture(this.body.getFixtureList());
+		DogeDriller.getGame().getLevel().getWorld().destroyBody(this.body);
+		this.graphics.clear();
 	}
 
 	@Override

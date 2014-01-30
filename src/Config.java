@@ -17,7 +17,7 @@ public class Config {
 	public static int keyLeft = Keyboard.KEY_LEFT;
 	public static int keyRight = Keyboard.KEY_RIGHT;
 	public static int keyJump = Keyboard.KEY_SPACE;
-	public static int keyDig = Keyboard.KEY_DOWN;
+	public static int keyDig = Keyboard.KEY_D;
 	
 	public static int keyReset = Keyboard.KEY_R;
 	public static int keyQuit = Keyboard.KEY_Q;

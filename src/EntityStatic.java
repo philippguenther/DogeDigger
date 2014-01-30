@@ -64,8 +64,8 @@ public class EntityStatic implements Entity {
 	}
 	
 	public void destroy() {
-		this.graphics.clear();
-		this.body.destroyFixture(this.body.getFixtureList());
+		//this.graphics.clear();
+		//this.body.destroyFixture(this.body.getFixtureList());
 	}
 
 	@Override

@@ -58,11 +58,11 @@ public class EntityDoge implements Entity {
 		
 		// head fixture
 		PolygonShape headshape = new PolygonShape();
-		headshape.setAsBox(0.3f, 0.01f, new Vec2(0f, -0.4f), 0);
+		headshape.setAsBox(0.349f, 0.01f, new Vec2(0f, -0.4f), 0);
 		sensfdef.shape = headshape;
 		sensfdef.userData = new SensorIdentity(this, Direction.TOP);
 		this.body.createFixture(sensfdef);
-		this.graphics.add(new GraphicQuad(0.6f, 0.02f, Config.getSensorColor(), new Vec2(0f, -0.4f)));
+		this.graphics.add(new GraphicQuad(0.692f, 0.02f, Config.getSensorColor(), new Vec2(0f, -0.4f)));
 		
 		// left fixture
 		PolygonShape leftshape = new PolygonShape();
@@ -113,7 +113,7 @@ public class EntityDoge implements Entity {
 			//left
 			if (Keyboard.isKeyDown(Config.keyLeft)) {
 				if (this.contactL == null) {
-					this.body.setLinearVelocity(new Vec2(-4f, 0.1f));
+					this.body.setLinearVelocity(new Vec2(-4f, this.body.getLinearVelocity().y));
 					this.jumpTimerL = delta;
 				} else {
 					this.body.setLinearVelocity(new Vec2(0f, 0f));
@@ -134,7 +134,7 @@ public class EntityDoge implements Entity {
 				// right
 				if (Keyboard.isKeyDown(Config.keyRight)) {
 					if (this.contactR == null) {
-						this.body.setLinearVelocity(new Vec2(4f, 0.1f));
+						this.body.setLinearVelocity(new Vec2(4f, this.body.getLinearVelocity().y));
 						this.jumpTimerR = delta;
 					} else {
 						this.body.setLinearVelocity(new Vec2(0f, 0f));
@@ -160,8 +160,8 @@ public class EntityDoge implements Entity {
 							this.contactR.destroy();
 						}else if (this.contactsFoot.size() == 1) {
 							this.contactsFoot.get(0).destroy();
+							this.body.setLinearVelocity(new Vec2(0f, 10f));
 						}
-						this.body.setLinearVelocity(new Vec2(0f, 10f));
 					} else {
 						// stop moving if no key pressed
 						this.body.setLinearVelocity(new Vec2(0f, 0f));
