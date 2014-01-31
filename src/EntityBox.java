@@ -12,11 +12,14 @@ import org.lwjgl.opengl.GL11;
 
 public class EntityBox implements Entity {
 	private Body body;
+	private ArrayList<Graphic> graphics = new ArrayList<Graphic>();
+	
+	private int timerDecay = 0;
+	
 	public EntityBox top = null;
 	public EntityBox right = null;
 	public EntityBox bottom = null;
 	public EntityBox left = null;
-	private ArrayList<Graphic> graphics = new ArrayList<Graphic>();
 	
 	public EntityBox(Vec2 _pos) {
 		BodyDef bdef = new BodyDef();
@@ -31,12 +34,12 @@ public class EntityBox implements Entity {
 		PolygonShape mainshape = new PolygonShape();
 		mainshape.setAsBox(0.49f, 0.49f);
 		fdef.shape = mainshape;
-		fdef.density = 5f;
-		fdef.friction = 1000f;
+		fdef.density = 10f;
+		fdef.friction = 100f;
 		fdef.restitution = 0f;
 		fdef.userData = this;
 		this.body.createFixture(fdef);
-		this.graphics.add(new GraphicQuad(1, 1));
+		this.graphics.add(new GraphicQuad(0.98f, 0.98f));
 		
 		// sensor fdef
 		FixtureDef sensfdef = new FixtureDef();
@@ -44,37 +47,37 @@ public class EntityBox implements Entity {
 		sensfdef.friction = 0f;
 		sensfdef.isSensor = true;
 		
-		// top outter sensor
+		// top sensor
 		PolygonShape topshape = new PolygonShape();
-		topshape.setAsBox(0.4f, 0.01f, new Vec2(0f, -0.52f), 0);
+		topshape.setAsBox(0.05f, 0.001f, new Vec2(0f, -0.5f), 0);
 		sensfdef.shape = topshape;
 		sensfdef.userData = new SensorIdentity(this, Direction.TOP);
 		this.body.createFixture(sensfdef);
-		this.graphics.add(new GraphicQuad(0.8f, 0.01f, Config.getSensorColor(), new Vec2(0f, -0.52f)));
+		this.graphics.add(new GraphicQuad(0.1f, 0.002f, Config.getSensorColor(), new Vec2(0f, -0.50f)));
 		
-		// bottom inner sensor
-		PolygonShape botshape = new PolygonShape();
-		botshape.setAsBox(0.4f, 0.01f, new Vec2(0f, 0.48f), 0);
-		sensfdef.shape = botshape;
-		sensfdef.userData = new SensorIdentity(this, Direction.BOTTOM);
-		this.body.createFixture(sensfdef);
-		this.graphics.add(new GraphicQuad(0.8f, 0.02f, Config.getSensorColor(), new Vec2(0f, 0.48f)));
-		
-		// right outer sensor
+		// right sensor
 		PolygonShape rightshape = new PolygonShape();
-		rightshape.setAsBox(0.01f, 0.4f, new Vec2(0.52f, 0f), 0);
+		rightshape.setAsBox(0.001f, 0.05f, new Vec2(0.5f, 0f), 0);
 		sensfdef.shape = rightshape;
 		sensfdef.userData = new SensorIdentity(this, Direction.RIGHT);
 		this.body.createFixture(sensfdef);
-		this.graphics.add(new GraphicQuad(0.02f, 0.8f, Config.getSensorColor(), new Vec2(0.52f, 0f)));
+		this.graphics.add(new GraphicQuad(0.002f, 0.1f, Config.getSensorColor(), new Vec2(0.52f, 0f)));
 		
-		// right outer sensor
+		// bottom sensor
+		PolygonShape botshape = new PolygonShape();
+		botshape.setAsBox(0.05f, 0.001f, new Vec2(0f, 0.5f), 0);
+		sensfdef.shape = botshape;
+		sensfdef.userData = new SensorIdentity(this, Direction.BOTTOM);
+		this.body.createFixture(sensfdef);
+		this.graphics.add(new GraphicQuad(0.1f, 0.002f, Config.getSensorColor(), new Vec2(0f, 0.5f)));
+		
+		// right sensor
 		PolygonShape leftshape = new PolygonShape();
-		leftshape.setAsBox(0.01f, 0.4f, new Vec2(-0.48f, 0f), 0);
+		leftshape.setAsBox(0.001f, 0.05f, new Vec2(-0.5f, 0f), 0);
 		sensfdef.shape = leftshape;
 		sensfdef.userData = new SensorIdentity(this, Direction.LEFT);
 		this.body.createFixture(sensfdef);
-		this.graphics.add(new GraphicQuad(0.02f, 0.8f, Config.getSensorColor(), new Vec2(-0.48f, 0f)));
+		this.graphics.add(new GraphicQuad(0.002f, 0.1f, Config.getSensorColor(), new Vec2(-0.5f, 0f)));
 	}
 	
 	public Vec2 getPosition() {
@@ -91,18 +94,30 @@ public class EntityBox implements Entity {
 
 	public void tick(int delta) {
 		if (this.body.getType() == BodyType.DYNAMIC) {
-			if (this.bottom != null) {
+			if (this.bottom != null && this.bottom.getBody().getLinearVelocity().y < 0.01f) {
 				this.body.setType(BodyType.STATIC);
 			}
 		} else {
 			if (this.bottom == null) {
-				this.body.setType(BodyType.DYNAMIC);
+				if (this.timerDecay > 1000) {
+					// let the box fall
+					this.body.setType(BodyType.DYNAMIC);
+					this.timerDecay = 0;
+				} else {
+					this.timerDecay += delta;
+				}
 			}
 		}
 		
 		// check if neighbours are still there
 		if (this.bottom != null && this.bottom.getBody().getLinearVelocity().y > 0.01f) {
 			this.bottom = null;
+		}
+		if (this.right != null && Math.abs(this.getPosition().y - this.right.getPosition().y) > 0.1f) {
+			this.right = null;
+		}
+		if (this.left != null && Math.abs(this.getPosition().y - this.left.getPosition().y) > 0.1f) {
+			this.left = null;
 		}
 		
 	}

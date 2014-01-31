@@ -20,8 +20,9 @@ public class EntityDoge implements Entity {
 	private Entity contactL = null;
 	private Entity contactR = null;
 	
-	private int jumpTimerL = 0;
-	private int jumpTimerR = 0;
+	private int timerJumpL = 0;
+	private int timerJumpR = 0;
+	private int timerDig = 0;
 	
 	public EntityDoge(Vec2 _pos) {
 		BodyDef bdef = new BodyDef();
@@ -58,27 +59,27 @@ public class EntityDoge implements Entity {
 		
 		// head fixture
 		PolygonShape headshape = new PolygonShape();
-		headshape.setAsBox(0.349f, 0.01f, new Vec2(0f, -0.4f), 0);
+		headshape.setAsBox(0.32f, 0.01f, new Vec2(0f, -0.4f), 0);
 		sensfdef.shape = headshape;
 		sensfdef.userData = new SensorIdentity(this, Direction.TOP);
 		this.body.createFixture(sensfdef);
-		this.graphics.add(new GraphicQuad(0.692f, 0.02f, Config.getSensorColor(), new Vec2(0f, -0.4f)));
+		this.graphics.add(new GraphicQuad(0.64f, 0.02f, Config.getSensorColor(), new Vec2(0f, -0.4f)));
 		
 		// left fixture
 		PolygonShape leftshape = new PolygonShape();
-		leftshape.setAsBox(0.01f, 0.05f, new Vec2(-0.36f, 0f), 0);
+		leftshape.setAsBox(0.01f, 0.15f, new Vec2(-0.36f, 0f), 0);
 		sensfdef.shape = leftshape;
 		sensfdef.userData = new SensorIdentity(this, Direction.LEFT);
 		this.body.createFixture(sensfdef);
-		this.graphics.add(new GraphicQuad(0.02f, 0.1f, Config.getSensorColor(), new Vec2(-0.36f, 0f)));
+		this.graphics.add(new GraphicQuad(0.02f, 0.3f, Config.getSensorColor(), new Vec2(-0.36f, 0f)));
 		
 		// right fixture
 		PolygonShape rightshape = new PolygonShape();
-		rightshape.setAsBox(0.01f, 0.05f, new Vec2(0.36f, 0f), 0);
+		rightshape.setAsBox(0.01f, 0.15f, new Vec2(0.36f, 0f), 0);
 		sensfdef.shape = rightshape;
 		sensfdef.userData = new SensorIdentity(this, Direction.RIGHT);;
 		this.body.createFixture(sensfdef);
-		this.graphics.add(new GraphicQuad(0.02f, 0.1f, Config.getSensorColor(), new Vec2(0.36f, 0f)));
+		this.graphics.add(new GraphicQuad(0.02f, 0.3f, Config.getSensorColor(), new Vec2(0.36f, 0f)));
 	}
 	
 	public void die(Entity e) {
@@ -109,65 +110,64 @@ public class EntityDoge implements Entity {
 		if (!this.isOnGround()) {
 			//falling
 			this.body.setLinearVelocity(new Vec2(0, 10f));
-		} else {
+		} else if (Keyboard.isKeyDown(Config.keyLeft)) {
 			//left
-			if (Keyboard.isKeyDown(Config.keyLeft)) {
-				if (this.contactL == null) {
-					this.body.setLinearVelocity(new Vec2(-4f, this.body.getLinearVelocity().y));
-					this.jumpTimerL = delta;
-				} else {
-					this.body.setLinearVelocity(new Vec2(0f, 0f));
-					if ((this.jumpTimerL > 300 || delta > 300) && this.contactL instanceof EntityBox) {
-						EntityBox b = (EntityBox) this.contactL;
-						b.print();
-						if (b.top == null) {
-							this.body.setTransform(new Vec2(this.body.getPosition().x -0.12f, b.getPosition().y - 0.92f), 0);
-							this.jumpTimerL = 0;
-							this.contactL = null;
-						}
-					} else {
-						this.jumpTimerL += delta;
-					}
-				}
-			} else{
-				this.jumpTimerL = 0;
-				// right
-				if (Keyboard.isKeyDown(Config.keyRight)) {
-					if (this.contactR == null) {
-						this.body.setLinearVelocity(new Vec2(4f, this.body.getLinearVelocity().y));
-						this.jumpTimerR = delta;
-					} else {
-						this.body.setLinearVelocity(new Vec2(0f, 0f));
-						if ((this.jumpTimerR > 300 || delta > 300) && this.contactR instanceof EntityBox) {
-							EntityBox b = (EntityBox) this.contactR;
-							b.print();
-							if (b.top == null) {
-								this.body.setTransform(new Vec2(this.body.getPosition().x +0.12f, b.getPosition().y - 0.92f), 0);
-								this.jumpTimerR = 0;
-								this.contactR = null;
-							}
-						} else {
-							this.jumpTimerR += delta;
-						}
+			if (this.contactL == null) {
+				this.body.setLinearVelocity(new Vec2(-4f, this.body.getLinearVelocity().y));
+				this.timerJumpL = delta;
+			} else {
+				this.body.setLinearVelocity(new Vec2(0f, 0f));
+				if ((this.timerJumpL > 300 || delta > 300) && this.contactL instanceof EntityBox) {
+					EntityBox b = (EntityBox) this.contactL;
+					if (b.top == null) {
+						this.body.setTransform(new Vec2(this.body.getPosition().x -0.12f, b.getPosition().y - 0.92f), 0);
+						this.timerJumpL = 0;
+						this.contactL = null;
 					}
 				} else {
-					this.jumpTimerR = 0;	
-					if (Keyboard.isKeyDown(Config.keyDig)) {
-						//destroy box under my feet
-						if (this.contactL != null && this.contactR == null) {
-							this.contactL.destroy();
-						} else if (this.contactL == null && this.contactR != null) {
-							this.contactR.destroy();
-						}else if (this.contactsFoot.size() == 1) {
-							this.contactsFoot.get(0).destroy();
-							this.body.setLinearVelocity(new Vec2(0f, 10f));
-						}
-					} else {
-						// stop moving if no key pressed
-						this.body.setLinearVelocity(new Vec2(0f, 0f));
-					}
+					this.timerJumpL += delta;
 				}
 			}
+		} else if (Keyboard.isKeyDown(Config.keyRight)) {
+			// right
+			if (this.contactR == null) {
+				this.body.setLinearVelocity(new Vec2(4f, this.body.getLinearVelocity().y));
+				this.timerJumpR = delta;
+			} else {
+				this.body.setLinearVelocity(new Vec2(0f, 0f));
+				if ((this.timerJumpR > 300 || delta > 300) && this.contactR instanceof EntityBox) {
+					EntityBox b = (EntityBox) this.contactR;
+					if (b.top == null) {
+						this.body.setTransform(new Vec2(this.body.getPosition().x +0.12f, b.getPosition().y - 0.92f), 0);
+						this.timerJumpR = 0;
+						this.contactR = null;
+					}
+				} else {
+					this.timerJumpR += delta;
+				}
+			}
+		} else if (Keyboard.isKeyDown(Config.keyDig)) {
+			this.timerDig += delta;
+			if (this.timerDig > 500) {
+				// dig
+				this.print();
+				this.timerDig = 0;
+				if (this.contactL != null && this.contactR == null) {
+					this.contactL.destroy();
+				} else if (this.contactL == null && this.contactR != null) {
+					this.contactR.destroy();
+				} else if (this.contactsFoot.size() == 1) {
+					//destroy box under my feet
+					this.contactsFoot.get(0).destroy();
+					this.body.setLinearVelocity(new Vec2(0f, 10f));
+				}
+			}
+		} else {
+			this.timerJumpL = 0;
+			this.timerJumpR = 0;
+			this.timerDig = 0;
+			// stop moving if no key pressed
+			this.body.setLinearVelocity(new Vec2(0f, 0f));
 		}
 	}
 
