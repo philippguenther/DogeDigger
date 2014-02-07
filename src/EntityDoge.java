@@ -34,14 +34,14 @@ public class EntityDoge implements Entity {
 		
 		// main fixture
 		PolygonShape mainshape = new PolygonShape();
-		mainshape.setAsBox(0.35f, 0.4f);
+		mainshape.setAsBox(0.4f, 0.4f);
 		FixtureDef mainfdef = new FixtureDef();
 		mainfdef.shape = mainshape;
 		mainfdef.density = 5f;
 		mainfdef.friction = 0f;
 		mainfdef.userData = this;
 		this.body.createFixture(mainfdef);
-		this.graphics.add(new GraphicQuad(0.7f, 0.8f, new Color3f(0f, 1f, 0f)));
+		this.graphics.add(new GraphicQuad(0.8f, 0.8f, new Color3f(0f, 1f, 0f)));
 		
 		// sensor fdef
 		FixtureDef sensfdef = new FixtureDef();
@@ -51,35 +51,35 @@ public class EntityDoge implements Entity {
 		
 		// foot fixture
 		PolygonShape footshape = new PolygonShape();
-		footshape.setAsBox(0.35f, 0.01f, new Vec2(0f, 0.4f), 0);
+		footshape.setAsBox(0.4f, 0.01f, new Vec2(0f, 0.4f), 0);
 		sensfdef.shape = footshape;
 		sensfdef.userData = new SensorIdentity(this, Direction.BOTTOM);
 		this.body.createFixture(sensfdef);
-		this.graphics.add(new GraphicQuad(0.7f, 0.02f, Config.getSensorColor(), new Vec2(0f, 0.4f)));
+		this.graphics.add(new GraphicQuad(0.8f, 0.02f, Config.getSensorColor(), new Vec2(0f, 0.4f)));
 		
 		// head fixture
 		PolygonShape headshape = new PolygonShape();
-		headshape.setAsBox(0.32f, 0.01f, new Vec2(0f, -0.4f), 0);
+		headshape.setAsBox(0.37f, 0.01f, new Vec2(0f, -0.4f), 0);
 		sensfdef.shape = headshape;
 		sensfdef.userData = new SensorIdentity(this, Direction.TOP);
 		this.body.createFixture(sensfdef);
-		this.graphics.add(new GraphicQuad(0.64f, 0.02f, Config.getSensorColor(), new Vec2(0f, -0.4f)));
+		this.graphics.add(new GraphicQuad(0.74f, 0.02f, Config.getSensorColor(), new Vec2(0f, -0.4f)));
 		
 		// left fixture
 		PolygonShape leftshape = new PolygonShape();
-		leftshape.setAsBox(0.01f, 0.15f, new Vec2(-0.36f, 0f), 0);
+		leftshape.setAsBox(0.01f, 0.2f, new Vec2(-0.4f, 0f), 0);
 		sensfdef.shape = leftshape;
 		sensfdef.userData = new SensorIdentity(this, Direction.LEFT);
 		this.body.createFixture(sensfdef);
-		this.graphics.add(new GraphicQuad(0.02f, 0.3f, Config.getSensorColor(), new Vec2(-0.36f, 0f)));
+		this.graphics.add(new GraphicQuad(0.02f, 0.4f, Config.getSensorColor(), new Vec2(-0.4f, 0f)));
 		
 		// right fixture
 		PolygonShape rightshape = new PolygonShape();
-		rightshape.setAsBox(0.01f, 0.15f, new Vec2(0.36f, 0f), 0);
+		rightshape.setAsBox(0.01f, 0.2f, new Vec2(0.4f, 0f), 0);
 		sensfdef.shape = rightshape;
 		sensfdef.userData = new SensorIdentity(this, Direction.RIGHT);;
 		this.body.createFixture(sensfdef);
-		this.graphics.add(new GraphicQuad(0.02f, 0.3f, Config.getSensorColor(), new Vec2(0.36f, 0f)));
+		this.graphics.add(new GraphicQuad(0.02f, 0.4f, Config.getSensorColor(), new Vec2(0.4f, 0f)));
 	}
 	
 	public void die(Entity e) {
@@ -117,7 +117,7 @@ public class EntityDoge implements Entity {
 				this.timerJumpL = delta;
 			} else {
 				this.body.setLinearVelocity(new Vec2(0f, 0f));
-				if ((this.timerJumpL > 300 || delta > 300) && this.contactL instanceof EntityBox) {
+				if ((this.timerJumpL > Config.delayJump || delta > Config.delayJump) && this.contactL instanceof EntityBox) {
 					EntityBox b = (EntityBox) this.contactL;
 					if (b.top == null) {
 						this.body.setTransform(new Vec2(this.body.getPosition().x -0.12f, b.getPosition().y - 0.92f), 0);
@@ -135,7 +135,7 @@ public class EntityDoge implements Entity {
 				this.timerJumpR = delta;
 			} else {
 				this.body.setLinearVelocity(new Vec2(0f, 0f));
-				if ((this.timerJumpR > 300 || delta > 300) && this.contactR instanceof EntityBox) {
+				if ((this.timerJumpR > Config.delayJump || delta > Config.delayJump) && this.contactR instanceof EntityBox) {
 					EntityBox b = (EntityBox) this.contactR;
 					if (b.top == null) {
 						this.body.setTransform(new Vec2(this.body.getPosition().x +0.12f, b.getPosition().y - 0.92f), 0);
@@ -148,7 +148,7 @@ public class EntityDoge implements Entity {
 			}
 		} else if (Keyboard.isKeyDown(Config.keyDig)) {
 			this.timerDig += delta;
-			if (this.timerDig > 500) {
+			if (this.timerDig > Config.delayDig) {
 				// dig
 				this.print();
 				this.timerDig = 0;
@@ -190,37 +190,32 @@ public class EntityDoge implements Entity {
 		Object a = arg0.getFixtureA().getUserData();
 		Object b = arg0.getFixtureB().getUserData();
 		
-		Entity ent = null;
-		SensorIdentity sens = null;
-		if (a instanceof Entity && b instanceof SensorIdentity) {
-			ent = (Entity) a;
-			sens = (SensorIdentity) b;
-		} else if (b instanceof Entity && a instanceof SensorIdentity) {
-			ent = (Entity) b;
-			sens = (SensorIdentity) a;
+		EntityBox e0;
+		SensorIdentity s;
+		if (a instanceof SensorIdentity && b instanceof EntityBox) {
+			e0 = (EntityBox) b;
+			s = (SensorIdentity) a;
+		} else if (b instanceof SensorIdentity && a instanceof EntityBox) {
+			e0 = (EntityBox) a;
+			s = (SensorIdentity) b;
 		} else {
 			return;
 		}
-		if (ent instanceof EntityDoge) 
-			return;
-		else if (!(sens.getEntity() == this))
-			return;
 		
-		// check head contact
-		if (sens.getDirection() == Direction.TOP) {
-			this.die(ent);
-		
-		// add to footContacts
-		} else if (sens.getDirection() == Direction.BOTTOM && !this.contactsFoot.contains(ent)) {
-			this.contactsFoot.add(ent);
-		
-		// set leftContact
-		} else if (sens.getDirection() == Direction.LEFT) {
-			this.contactL = ent;
-		
-		// set rightContact
-		} else if (sens.getDirection() == Direction.RIGHT) {
-			this.contactR = ent;
+		if (s.getEntity() == this) {
+			switch(s.getDirection()) {
+			case TOP:
+				this.die(e0);
+				break;
+			case RIGHT:
+				this.contactR = e0;
+				break;
+			case BOTTOM:
+				this.contactsFoot.add(e0);
+				break;
+			case LEFT:
+				this.contactL = e0;
+			}
 		}
 	}
 

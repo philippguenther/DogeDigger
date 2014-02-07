@@ -9,12 +9,6 @@ public class GraphicQuad implements Graphic {
 	private float width;
 	private float height;
 	
-	public GraphicQuad(float w, float h) {
-		this.width = w;
-		this.height = h;
-		this.color = new Color3f(0.5f, 0.5f, 0.5f);
-	}
-	
 	public GraphicQuad(float w, float h, Color3f _col) {
 		this.width = w;
 		this.height = h;

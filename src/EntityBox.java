@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 
+import org.jbox2d.collision.Manifold;
 import org.jbox2d.collision.shapes.PolygonShape;
+import org.jbox2d.common.Color3f;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
@@ -29,55 +31,28 @@ public class EntityBox implements Entity {
 		bdef.fixedRotation = true;
 		this.body = DogeDriller.getGame().getLevel().getWorld().createBody(bdef);
 		
-		// main fixture
 		FixtureDef fdef = new FixtureDef();
-		PolygonShape mainshape = new PolygonShape();
-		mainshape.setAsBox(0.49f, 0.49f);
-		fdef.shape = mainshape;
-		fdef.density = 10f;
+		fdef.density = 2.5f;
 		fdef.friction = 100f;
 		fdef.restitution = 0f;
+		
+		Vec2[] v = new Vec2[4];
+		v[0] = new Vec2(-0.5f, -0.5f);
+		v[1] = new Vec2(0.5f, -0.5f);
+		v[2] = new Vec2(0.5f, 0.5f);
+		v[3] = new Vec2(-0.5f, 0.5f);
+		PolygonShape s = new PolygonShape();
+		s.set(v, v.length);
+		fdef.shape = s;
 		fdef.userData = this;
 		this.body.createFixture(fdef);
-		this.graphics.add(new GraphicQuad(0.98f, 0.98f));
-		
-		// sensor fdef
-		FixtureDef sensfdef = new FixtureDef();
-		sensfdef.density = 0f;
-		sensfdef.friction = 0f;
-		sensfdef.isSensor = true;
-		
-		// top sensor
-		PolygonShape topshape = new PolygonShape();
-		topshape.setAsBox(0.05f, 0.001f, new Vec2(0f, -0.5f), 0);
-		sensfdef.shape = topshape;
-		sensfdef.userData = new SensorIdentity(this, Direction.TOP);
-		this.body.createFixture(sensfdef);
-		this.graphics.add(new GraphicQuad(0.1f, 0.002f, Config.getSensorColor(), new Vec2(0f, -0.50f)));
-		
-		// right sensor
-		PolygonShape rightshape = new PolygonShape();
-		rightshape.setAsBox(0.001f, 0.05f, new Vec2(0.5f, 0f), 0);
-		sensfdef.shape = rightshape;
-		sensfdef.userData = new SensorIdentity(this, Direction.RIGHT);
-		this.body.createFixture(sensfdef);
-		this.graphics.add(new GraphicQuad(0.002f, 0.1f, Config.getSensorColor(), new Vec2(0.52f, 0f)));
-		
-		// bottom sensor
-		PolygonShape botshape = new PolygonShape();
-		botshape.setAsBox(0.05f, 0.001f, new Vec2(0f, 0.5f), 0);
-		sensfdef.shape = botshape;
-		sensfdef.userData = new SensorIdentity(this, Direction.BOTTOM);
-		this.body.createFixture(sensfdef);
-		this.graphics.add(new GraphicQuad(0.1f, 0.002f, Config.getSensorColor(), new Vec2(0f, 0.5f)));
-		
-		// right sensor
-		PolygonShape leftshape = new PolygonShape();
-		leftshape.setAsBox(0.001f, 0.05f, new Vec2(-0.5f, 0f), 0);
-		sensfdef.shape = leftshape;
-		sensfdef.userData = new SensorIdentity(this, Direction.LEFT);
-		this.body.createFixture(sensfdef);
-		this.graphics.add(new GraphicQuad(0.002f, 0.1f, Config.getSensorColor(), new Vec2(-0.5f, 0f)));
+		this.graphics.add(new GraphicPolygon(v, new Color3f(1f, 1f, 0)));
+	}
+	
+	public void fall() {
+		this.body.setType(BodyType.DYNAMIC);
+		if (this.top != null)
+			this.top.fall();
 	}
 	
 	public Vec2 getPosition() {
@@ -94,30 +69,19 @@ public class EntityBox implements Entity {
 
 	public void tick(int delta) {
 		if (this.body.getType() == BodyType.DYNAMIC) {
-			if (this.bottom != null && this.bottom.getBody().getLinearVelocity().y < 0.01f) {
+			if (this.bottom != null) {
 				this.body.setType(BodyType.STATIC);
 			}
 		} else {
 			if (this.bottom == null) {
 				if (this.timerDecay > 1000) {
 					// let the box fall
-					this.body.setType(BodyType.DYNAMIC);
+					this.fall();
 					this.timerDecay = 0;
 				} else {
 					this.timerDecay += delta;
 				}
 			}
-		}
-		
-		// check if neighbours are still there
-		if (this.bottom != null && this.bottom.getBody().getLinearVelocity().y > 0.01f) {
-			this.bottom = null;
-		}
-		if (this.right != null && Math.abs(this.getPosition().y - this.right.getPosition().y) > 0.1f) {
-			this.right = null;
-		}
-		if (this.left != null && Math.abs(this.getPosition().y - this.left.getPosition().y) > 0.1f) {
-			this.left = null;
 		}
 		
 	}
@@ -151,39 +115,14 @@ public class EntityBox implements Entity {
 		Object a = arg0.getFixtureA().getUserData();
 		Object b = arg0.getFixtureB().getUserData();
 		
-		SensorIdentity s0 = null;
-		SensorIdentity s1 = null;
-		EntityBox e0 = null;
-		EntityBox e1 = null;
-		if (a instanceof SensorIdentity && b instanceof SensorIdentity) {
-			s0 = (SensorIdentity) a;
-			s1 = (SensorIdentity) b;
-			if (s0.getEntity() instanceof EntityBox && s1.getEntity() instanceof EntityBox) {
-				e0 = (EntityBox) s0.getEntity();
-				e1 = (EntityBox) s1.getEntity();
-			} else {
-				return;
-			}
-		} else {
-			return;
-		}
-		
-		if (e0 == this && s1.getDirection() == Direction.TOP) {
-			this.bottom = e1;
-		} else if (e0 == this && s1.getDirection() == Direction.RIGHT) {
-			this.left = e1;
-		} else if (e0 == this && s1.getDirection() == Direction.BOTTOM) {
-			this.top = e1;
-		} else if (e0 == this && s1.getDirection() == Direction.LEFT) {
-			this.right = e1;
-		} else if (e1 == this && s0.getDirection() == Direction.TOP) {
-			this.bottom = e0;
-		} else if (e1 == this && s0.getDirection() == Direction.RIGHT) {
-			this.left = e0;
-		} else if (e1 == this && s0.getDirection() == Direction.BOTTOM) {
-			this.top = e0;
-		} else if (e1 == this && s0.getDirection() == Direction.LEFT) {
-			this.right = e0;
+		if (a instanceof EntityBox && b instanceof EntityBox) {
+			EntityBox e0 = (EntityBox) a;
+			EntityBox e1 = (EntityBox) b;
+			Manifold m = arg0.getManifold();
+			
+			Vec2 vel1 = e0.body.getLinearVelocityFromWorldPoint( m.points[0].localPoint );
+			Vec2 vel2 = e1.body.getLinearVelocityFromWorldPoint( m.points[0].localPoint );
+			Vec2 impact = vel1.subLocal(vel2);
 		}
 	}
 

@@ -22,6 +22,9 @@ public class Config {
 	public static int keyReset = Keyboard.KEY_R;
 	public static int keyQuit = Keyboard.KEY_Q;
 	
+	public static int delayJump = 200;
+	public static int delayDig = 300;
+	
 	public static int getWindowWidth() {
 		return Config.windowWidth;
 	}
