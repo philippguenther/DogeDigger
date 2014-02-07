@@ -25,7 +25,7 @@ public class EntityBox implements Entity {
 	
 	public EntityBox(Vec2 _pos) {
 		BodyDef bdef = new BodyDef();
-		bdef.type = BodyType.DYNAMIC;
+		bdef.type = BodyType.STATIC;
 		bdef.position = _pos;
 		bdef.allowSleep = true;
 		bdef.fixedRotation = true;
@@ -68,19 +68,16 @@ public class EntityBox implements Entity {
 	}
 
 	public void tick(int delta) {
-		if (this.body.getType() == BodyType.DYNAMIC) {
-			if (this.bottom != null) {
-				this.body.setType(BodyType.STATIC);
-			}
+		if (this.body.getType() == BodyType.DYNAMIC && this.bottom != null) {
+			this.body.setType(BodyType.STATIC);
+			//Vec2 d = new Vec2(0, 0);
+			//this.body.setTransform(d, 0);
 		} else {
-			if (this.bottom == null) {
-				if (this.timerDecay > 1000) {
-					// let the box fall
-					this.fall();
-					this.timerDecay = 0;
-				} else {
-					this.timerDecay += delta;
-				}
+			if (this.timerDecay > 1000) {
+				this.fall();
+				this.timerDecay = 0;
+			} else {
+				this.timerDecay += delta;
 			}
 		}
 		
@@ -89,7 +86,7 @@ public class EntityBox implements Entity {
 	public void render() {
 		GL11.glPushMatrix();
 			GL11.glTranslatef(this.body.getPosition().x, this.body.getPosition().y, 0f);
-			GL11.glRotatef((float) (this.body.getAngle() * (360 / (2 * Math.PI))), 0f, 0f, 1f);
+			//GL11.glRotatef((float) (this.body.getAngle() * (360 / (2 * Math.PI))), 0f, 0f, 1f);
 			for (Graphic g : this.graphics) {
 				g.render();
 			}
@@ -105,7 +102,6 @@ public class EntityBox implements Entity {
 			this.bottom.top = null;
 		if (this.left != null)
 			this.left.right = null;
-		this.body.destroyFixture(this.body.getFixtureList());
 		DogeDriller.getGame().getLevel().getWorld().destroyBody(this.body);
 		this.graphics.clear();
 	}
@@ -120,9 +116,11 @@ public class EntityBox implements Entity {
 			EntityBox e1 = (EntityBox) b;
 			Manifold m = arg0.getManifold();
 			
-			Vec2 vel1 = e0.body.getLinearVelocityFromWorldPoint( m.points[0].localPoint );
-			Vec2 vel2 = e1.body.getLinearVelocityFromWorldPoint( m.points[0].localPoint );
-			Vec2 impact = vel1.subLocal(vel2);
+			Vec2 v1 = e0.body.getLinearVelocityFromWorldPoint( m.points[0].localPoint );
+			Vec2 v2 = e1.body.getLinearVelocityFromWorldPoint( m.points[0].localPoint );
+			Vec2 impact = v1.subLocal(v2);
+			
+			System.out.println(impact.x + "|" + impact.y);
 		}
 	}
 

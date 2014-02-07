@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.jbox2d.callbacks.ContactImpulse;
@@ -10,6 +11,7 @@ import org.jbox2d.dynamics.contacts.Contact;
 
 public class Level implements ContactListener {
 	private HashMap<Vec2, Entity> entities = new HashMap<Vec2, Entity>();
+	private ArrayList<Entity> destroy = new ArrayList<Entity>();
 	
 	private World world;
 	private EntityDoge doge;
@@ -19,6 +21,10 @@ public class Level implements ContactListener {
 	public Level() {
 		this.world = new World(Config.getGravity());
 		this.world.setContactListener(this);
+	}
+	
+	public void destroy(Entity e) {
+		this.destroy.add(e);
 	}
 	
 	public void setDoge(EntityDoge d) {
@@ -43,6 +49,10 @@ public class Level implements ContactListener {
 	}
 	
 	public void tick(int delta) {
+		for (Entity d : this.destroy) {
+			d.destroy();
+		}
+		
 		this.world.step(1f / 60f, 10, 20);
 		
 		this.doge.tick(delta);

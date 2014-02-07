@@ -158,7 +158,7 @@ public class EntityDoge implements Entity {
 					this.contactR.destroy();
 				} else if (this.contactsFoot.size() == 1) {
 					//destroy box under my feet
-					this.contactsFoot.get(0).destroy();
+					DogeDriller.getGame().getLevel().destroy(this.contactsFoot.get(0));
 					this.body.setLinearVelocity(new Vec2(0f, 10f));
 				}
 			}
