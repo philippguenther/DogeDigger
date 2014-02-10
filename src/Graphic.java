@@ -1,5 +1,4 @@
-
 public interface Graphic {
 	public void tick(int delta);
-	public void render();
+	public void render(int delta);
 }

@@ -1,99 +1,48 @@
-import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.jbox2d.callbacks.ContactImpulse;
-import org.jbox2d.callbacks.ContactListener;
-import org.jbox2d.collision.Manifold;
-import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.World;
-import org.jbox2d.dynamics.contacts.Contact;
 
-
-public class Level implements ContactListener {
-	private HashMap<Vec2, Entity> entities = new HashMap<Vec2, Entity>();
-	private ArrayList<Entity> destroy = new ArrayList<Entity>();
+public class Level {
+	public Doge doge;
+	private HashMap<String,Box> boxes = new HashMap<String,Box>();
 	
-	private World world;
-	private EntityDoge doge;
+	private Vec2f gravity = new Vec2f(0f, 1f);
 	
-	private float depth;
-	
-	public Level() {
-		this.world = new World(Config.getGravity());
-		this.world.setContactListener(this);
-	}
-	
-	public void destroy(Entity e) {
-		this.destroy.add(e);
-	}
-	
-	public void setDoge(EntityDoge d) {
-		this.doge = d;
-	}
-	
-	public void setDepth(float d) {
-		this.depth = d;
+	public Level () {
 		
-		this.addEntity(new EntityStatic(new Vec2(Config.getBoxesX() / 2, -0.5f), Config.getBoxesX() + 2f, 1f));
-		this.addEntity(new EntityStatic(new Vec2(Config.getBoxesX() / 2, this.depth + 0.5f), Config.getBoxesX() + 2f, 1f));
-		this.addEntity(new EntityStatic(new Vec2(-0.5f, this.depth / 2), 1f, this.depth));
-		this.addEntity(new EntityStatic(new Vec2(Config.getBoxesX() + 0.5f, this.depth / 2), 1f, this.depth));
 	}
 	
-	public void addEntity(Entity e) {
-		this.entities.put(e.getPosition(), e);
+	public void setGravity (Vec2f _gravity) {
+		this.gravity = _gravity;
 	}
 	
-	public World getWorld() {
-		return this.world;
+	public Vec2f getGravity () {
+		return this.gravity;
 	}
 	
-	public void tick(int delta) {
-		for (Entity d : this.destroy) {
-			d.destroy();
+	public void put (Box box) {
+		String key = (int)box.getPosition().x + "|" + (int)box.getPosition().y;
+		this.boxes.put(key, box);
+	}
+	
+	public Box get (String key) {
+		return this.boxes.get(key);
+	}
+	
+	public void remove (String key) {
+		this.boxes.remove(key);
+	}
+	
+	public void tick (int delta) {
+		for (Box b : this.boxes.values()) {
+			b.tick(delta);
 		}
-		
-		this.world.step(1f / 60f, 10, 20);
-		
 		this.doge.tick(delta);
-		for (Entity e : this.entities.values()) {
-			e.tick(delta);
-		}
 	}
 	
-	public void render() {
-		for (Entity e : this.entities.values()) {
-			e.render();
+	public void render (int delta) {
+		for (Box b : this.boxes.values()) {
+			b.render(delta);
 		}
-		this.doge.render();
-	}
-
-	@Override
-	public void beginContact(Contact arg0) {
-		this.doge.beginContact(arg0);
-		for (Entity e : this.entities.values()) {
-			e.beginContact(arg0);
-		}
-		
-	}
-
-	@Override
-	public void endContact(Contact arg0) {
-		this.doge.endContact(arg0);
-		for (Entity e : this.entities.values()) {
-			e.endContact(arg0);
-		}
-	}
-
-	@Override
-	public void postSolve(Contact arg0, ContactImpulse arg1) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void preSolve(Contact arg0, Manifold arg1) {
-		// TODO Auto-generated method stub
-		
+		this.doge.render(delta);
 	}
 }

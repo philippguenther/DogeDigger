@@ -1,32 +1,30 @@
-import org.jbox2d.common.Color3f;
-import org.jbox2d.common.Vec2;
 import org.lwjgl.opengl.GL11;
 
 
 public class GraphicPolygon implements Graphic {
-	private Color3f color;
-	private Vec2 offset = new Vec2(0, 0);
-	private Vec2[] vertices;
-	
-	public GraphicPolygon(Vec2[] _vertices, Color3f _color) {
+	private Color4f color;
+	private Vec2f offset = new Vec2f(0f, 0f);
+	private Vec2f[] vertices;
+
+	public GraphicPolygon(Vec2f[] _vertices, Color4f _color) {
 		this.vertices = _vertices;
 		this.color = _color;
 	}
-	
-	public GraphicPolygon(Vec2[] _vertices, Vec2 _offset, Color3f _color) {
+
+	public GraphicPolygon(Vec2f[] _vertices, Vec2f _offset, Color4f _color) {
 		this.vertices = _vertices;
 		this.offset = _offset;
 		this.color = _color;
 	}
-	
+
 	public void tick(int delta) {
-		
+
 	}
 
-	public void render() {
-		GL11.glColor3f(this.color.x, this.color.y, this.color.z);
+	public void render(int delta) {
+		GL11.glColor4f(this.color.r, this.color.g, this.color.b, this.color.a);
 		GL11.glBegin(GL11.GL_LINE_LOOP);
-			for (Vec2 v : this.vertices) {
+			for (Vec2f v : this.vertices) {
 				GL11.glVertex2f(v.x + this.offset.x, v.y + this.offset.y);
 			}
 		GL11.glEnd();
