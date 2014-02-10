@@ -11,7 +11,7 @@ public class GraphicPolygon implements Graphic {
 		this.color = _color;
 	}
 
-	public GraphicPolygon(Vec2f[] _vertices, Vec2f _offset, Color4f _color) {
+	public GraphicPolygon(Vec2f[] _vertices, Color4f _color, Vec2f _offset) {
 		this.vertices = _vertices;
 		this.offset = _offset;
 		this.color = _color;
@@ -23,6 +23,7 @@ public class GraphicPolygon implements Graphic {
 
 	public void render(int delta) {
 		GL11.glColor4f(this.color.r, this.color.g, this.color.b, this.color.a);
+		GL11.glTranslatef(this.offset.x, this.offset.y, 0f);
 		GL11.glBegin(GL11.GL_LINE_LOOP);
 			for (Vec2f v : this.vertices) {
 				GL11.glVertex2f(v.x + this.offset.x, v.y + this.offset.y);

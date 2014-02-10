@@ -17,7 +17,7 @@ public class EntityBox implements Entity {
 		v[1] = new Vec2f(1f, 0f);
 		v[2] = new Vec2f(1f, 1f);
 		v[3] = new Vec2f(0f, 1f);
-		this.graphics.add(new GraphicPolygon(v, new Color4f(1f, 1f, 0f)));
+		this.graphics.add(GraphicFactory.BOX);
 		this.level.put(this);
 	}
 	
@@ -41,6 +41,8 @@ public class EntityBox implements Entity {
 	}
 	
 	public void tick (int delta) {
+		
+		//FALLING
 		Entity bot = this.level.get(new Vec2f(this.position.x, this.position.y + 1f));
 		if (bot == null) {
 			float dy = this.level.getGravity() * 0.005f * delta;
