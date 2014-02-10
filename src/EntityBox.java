@@ -3,13 +3,13 @@ import java.util.ArrayList;
 import org.lwjgl.opengl.GL11;
 
 
-public class Box {
+public class EntityBox implements Entity {
 	private Level level;
 	
 	private Vec2f position;
 	private ArrayList<Graphic> graphics = new ArrayList<Graphic>();
 	
-	public Box (Level _level, Vec2f _position) {
+	public EntityBox (Level _level, Vec2f _position) {
 		this.level = _level;
 		this.position = _position;
 		Vec2f[] v = new Vec2f[4];
@@ -23,7 +23,7 @@ public class Box {
 	
 	public void destroy () {
 		this.graphics.clear();
-		this.level.remove(this);
+		this.level.remove(this.position);
 	}
 	
 	public void addGraphic (Graphic _graphic) {
@@ -34,8 +34,23 @@ public class Box {
 		return this.position;
 	}
 	
+	public void setPosition (Vec2f _position) {
+		this.position = _position;
+		this.level.remove(this.position);
+		this.level.put(this);
+	}
+	
 	public void tick (int delta) {
-		
+		Entity bot = this.level.get(new Vec2f(this.position.x, this.position.y + 1f));
+		if (bot == null) {
+			float dy = this.level.getGravity() * 0.005f * delta;
+			this.level.remove(this.position);
+			this.position.y += dy;
+			this.level.put(this);
+			return;
+		} else {
+			this.position.y = bot.getPosition().y - 1f;
+		}
 	}
 	
 	public void render (int delta) {

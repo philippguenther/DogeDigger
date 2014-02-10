@@ -25,7 +25,7 @@ public class Doge {
 	
 	public void tick (int delta) {
 		
-		Box bot = this.level.get(new Vec2f(this.position.x, this.position.y + 1f));
+		Entity bot = this.level.get(new Vec2f(this.position.x, this.position.y + 1f));
 		if (bot == null) {
 			float dy = this.level.getGravity() * 0.005f * delta;
 			this.position.y += dy;
@@ -37,38 +37,36 @@ public class Doge {
 		deltaMove += delta;
 		if (this.deltaMove > Config.delayMove) {
 			if (Keyboard.isKeyDown(Config.keyLeft)) {
-				Box left = this.level.get(new Vec2f(this.position.x - 1, this.position.y));
+				Entity left = this.level.get(new Vec2f(this.position.x - 1, this.position.y));
 				if (left == null) {
 					this.position.x -= 1;
 					this.deltaMove = 0;
 					return;
 				} else {
-					Box up = this.level.get(new Vec2f(this.position.x, this.position.y - 1));
+					Entity up = this.level.get(new Vec2f(this.position.x, this.position.y - 1));
 					if (up == null) {
-						Box leftup = this.level.get(new Vec2f(this.position.x - 1, this.position.y - 1));
+						Entity leftup = this.level.get(new Vec2f(this.position.x - 1, this.position.y - 1));
 						if (leftup == null) {
 							this.position.x -= 1f;
 							this.position.y -= 1f;
 							this.deltaMove = 0;
-							return;
 						}
 					}
 				}
 			} else if (Keyboard.isKeyDown(Config.keyRight)) {
-				Box right = this.level.get(new Vec2f(this.position.x + 1, Math.round(this.position.y)));
+				Entity right = this.level.get(new Vec2f(this.position.x + 1, Math.round(this.position.y)));
 				if (right == null) {
 					this.position.x += 1f;
 					this.deltaMove = 0;
 					return;
 				} else {
-					Box up = this.level.get(new Vec2f(this.position.x, this.position.y - 1));
+					Entity up = this.level.get(new Vec2f(this.position.x, this.position.y - 1));
 					if (up == null) {
-						Box rightup = this.level.get(new Vec2f(this.position.x + 1, this.position.y - 1));
+						Entity rightup = this.level.get(new Vec2f(this.position.x + 1, this.position.y - 1));
 						if (rightup == null) {
 							this.position.x += 1f;
 							this.position.y -= 1f;
 							this.deltaMove = 0;
-							return;
 						}
 					}
 				}
@@ -76,11 +74,27 @@ public class Doge {
 		}
 		deltaDig += delta;
 		if (this.deltaDig > Config.delayDig && Keyboard.isKeyDown(Config.keyDig)) {
-			Box bottom = this.level.get(new Vec2f(this.position.x, this.position.y + 1));
-			if (bottom != null) {
-				bottom.destroy();
-				this.position.y += 1;
-				this.deltaDig = 0;
+			if (Keyboard.isKeyDown(Config.keyLeft)) {
+				Entity left = this.level.get(new Vec2f(this.position.x - 1, this.position.y));
+				if (left != null) {
+					left.destroy();
+					this.deltaDig = 0;
+					this.deltaMove = 0;
+				}
+			} else if (Keyboard.isKeyDown(Config.keyRight)) {
+				Entity right = this.level.get(new Vec2f(this.position.x + 1, this.position.y));
+				if (right != null) {
+					right.destroy();
+					this.deltaDig = 0;
+					this.deltaMove = 0;
+				}
+			} else {
+				Entity bottom = this.level.get(new Vec2f(this.position.x, this.position.y + 1));
+				if (bottom != null) {
+					bottom.destroy();
+					this.position.y += 1;
+					this.deltaDig = 0;
+				}
 			}
 		}
 	}

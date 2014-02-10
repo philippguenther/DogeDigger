@@ -4,13 +4,9 @@ import org.lwjgl.opengl.GL11;
 public class Level {
 	public Doge doge;
 	private float gravity = 1f;
-	private Box[][] boxes = new Box[Config.levelMaxX][Config.levelMaxY];
+	private Entity[][] entities = new Entity[Config.levelMaxX][Config.levelMaxY];
 	
 	public Vec2f view = new Vec2f(0f, 0f);
-	
-	public Level () {
-		
-	}
 	
 	public void setGravity (float _gravity) {
 		this.gravity = _gravity;
@@ -20,23 +16,26 @@ public class Level {
 		return this.gravity;
 	}
 	
-	public void put (Box box) {
-		this.boxes[Math.round(box.getPosition().x)][Math.round(box.getPosition().y)] = box;
+	public void put (Entity box) {
+		this.entities[Math.round(box.getPosition().x)][Math.round(box.getPosition().y)] = box;
 	}
 	
-	public Box get (Vec2f v) {
-		return this.boxes[Math.round(v.x)][Math.round(v.y)];
+	public Entity get (Vec2f v) {
+		if (v.x > -1 && v.x < Config.levelMaxX && v.y > -1 && v.y < Config.levelMaxY)
+			return this.entities[Math.round(v.x)][Math.round(v.y)];
+		else
+			return new EntityStatic(v.clone());
 	}
 	
-	public void remove (Box box) {
-		this.boxes[Math.round(box.getPosition().x)][Math.round(box.getPosition().y)] = null;
+	public void remove (Vec2f v) {
+		this.entities[Math.round(v.x)][Math.round(v.y)] = null;
 	}
 	
 	public void tick (int delta) {
 		//this.view.y -= 0.0005 * delta;
 		
-		for (Box[] bv : this.boxes) {
-			for (Box bi : bv) {
+		for (Entity[] bv : this.entities) {
+			for (Entity bi : bv) {
 				if (bi != null)
 					bi.tick(delta);
 			}
@@ -55,8 +54,8 @@ public class Level {
 			
 			for (int x = x0; x < x1 && x < Config.levelMaxX; x++) {
 				for (int y = x0; y < y1 && y < Config.levelMaxY; y++) {
-					if (this.boxes[x][y] != null)
-						this.boxes[x][y].render(delta);
+					if (this.entities[x][y] != null)
+						this.entities[x][y].render(delta);
 				}
 			}
 			

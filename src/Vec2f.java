@@ -7,4 +7,8 @@ public class Vec2f {
 		this.x = _x;
 		this.y = _y;
 	}
+	
+	public Vec2f clone ()  {
+		return new Vec2f(this.x, this.y);
+	}
 }
