@@ -1,48 +1,66 @@
-import java.util.HashMap;
+import org.lwjgl.opengl.GL11;
 
 
 public class Level {
 	public Doge doge;
-	private HashMap<String,Box> boxes = new HashMap<String,Box>();
+	private float gravity = 1f;
+	private Box[][] boxes = new Box[Config.levelMaxX][Config.levelMaxY];
 	
-	private Vec2f gravity = new Vec2f(0f, 1f);
+	public Vec2f view = new Vec2f(0f, 0f);
 	
 	public Level () {
 		
 	}
 	
-	public void setGravity (Vec2f _gravity) {
+	public void setGravity (float _gravity) {
 		this.gravity = _gravity;
 	}
 	
-	public Vec2f getGravity () {
+	public float getGravity () {
 		return this.gravity;
 	}
 	
 	public void put (Box box) {
-		String key = (int)box.getPosition().x + "|" + (int)box.getPosition().y;
-		this.boxes.put(key, box);
+		this.boxes[Math.round(box.getPosition().x)][Math.round(box.getPosition().y)] = box;
 	}
 	
-	public Box get (String key) {
-		return this.boxes.get(key);
+	public Box get (Vec2f v) {
+		return this.boxes[Math.round(v.x)][Math.round(v.y)];
 	}
 	
-	public void remove (String key) {
-		this.boxes.remove(key);
+	public void remove (Box box) {
+		this.boxes[Math.round(box.getPosition().x)][Math.round(box.getPosition().y)] = null;
 	}
 	
 	public void tick (int delta) {
-		for (Box b : this.boxes.values()) {
-			b.tick(delta);
+		//this.view.y -= 0.0005 * delta;
+		
+		for (Box[] bv : this.boxes) {
+			for (Box bi : bv) {
+				if (bi != null)
+					bi.tick(delta);
+			}
 		}
 		this.doge.tick(delta);
 	}
 	
 	public void render (int delta) {
-		for (Box b : this.boxes.values()) {
-			b.render(delta);
-		}
-		this.doge.render(delta);
+		GL11.glPushMatrix();
+			GL11.glTranslatef(this.view.x, this.view.y, 0f);
+			
+			int x0 = (int) Math.floor(this.view.x);
+			int x1 = x0 + Config.boxesX + 1;
+			int y0 = (int) Math.floor(this.view.y);
+			int y1 = y0 + Config.boxesY + 1;
+			
+			for (int x = x0; x < x1 && x < Config.levelMaxX; x++) {
+				for (int y = x0; y < y1 && y < Config.levelMaxY; y++) {
+					if (this.boxes[x][y] != null)
+						this.boxes[x][y].render(delta);
+				}
+			}
+			
+			this.doge.render(delta);
+		GL11.glPopMatrix();
 	}
 }

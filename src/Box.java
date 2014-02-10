@@ -18,11 +18,12 @@ public class Box {
 		v[2] = new Vec2f(1f, 1f);
 		v[3] = new Vec2f(0f, 1f);
 		this.graphics.add(new GraphicPolygon(v, new Color4f(1f, 1f, 0f)));
+		this.level.put(this);
 	}
 	
 	public void destroy () {
 		this.graphics.clear();
-		this.level.remove(this.position.x + "|" + this.position.y);
+		this.level.remove(this);
 	}
 	
 	public void addGraphic (Graphic _graphic) {
@@ -39,10 +40,10 @@ public class Box {
 	
 	public void render (int delta) {
 		GL11.glPushMatrix();
-		GL11.glTranslatef(this.position.x, this.position.y, 0f);
-		for (Graphic g : this.graphics) {
-			g.render(delta);
-		}
+			GL11.glTranslatef(this.position.x, this.position.y, 0f);
+			for (Graphic g : this.graphics) {
+				g.render(delta);
+			}
 		GL11.glPopMatrix();
 	}
 }

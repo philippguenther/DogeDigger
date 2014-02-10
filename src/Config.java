@@ -5,10 +5,12 @@ public class Config {
 	public static int windowWidth = 480;
 	public static int windowHeight = 640;
 
-	public static float boxesX = 7;
-	public static float boxesY = 9;
-
-
+	public static int boxesX = 7;
+	public static int boxesY = 9;
+	
+	public static int levelMaxX = boxesX;
+	public static int levelMaxY = 64;
+	
 	public static int keyLeft = Keyboard.KEY_LEFT;
 	public static int keyRight = Keyboard.KEY_RIGHT;
 	public static int keyDig = Keyboard.KEY_D;

@@ -45,7 +45,8 @@ public class Game {
 
 		this.level = new Level();
 		LevelFactory.random(this.level);
-
+		
+		this.lastFrame = getTime();
 		while(!Display.isCloseRequested() && !Keyboard.isKeyDown(Config.keyQuit)) {
 			int delta = this.getDelta();
 
