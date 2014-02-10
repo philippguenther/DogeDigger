@@ -32,25 +32,44 @@ public class Doge {
 		
 		deltaMove += delta;
 		if (this.deltaMove > Config.delayMove) {
-			if (
-				Keyboard.isKeyDown(Config.keyLeft) && 
-				this.level.get(((int)this.position.x - 1) + "|" + (int)this.position.y) == null
-			) {
-				this.position.x -= 1;
-				this.deltaMove = 0;
-			} else if (
-					Keyboard.isKeyDown(Config.keyRight) && 
-					this.level.get(((int)this.position.x + 1) + "|" + (int)this.position.y) == null
-			) {
-				this.position.x += 1;
-				this.deltaMove = 0;
+			if (Keyboard.isKeyDown(Config.keyLeft)) {
+				Box left = this.level.get(((int)this.position.x - 1) + "|" + (int)this.position.y);
+				if (left == null) {
+					this.position.x -= 1;
+					this.deltaMove = 0;
+				} else {
+					Box up = this.level.get((int)this.position.x + "|" + ((int)this.position.y - 1));
+					if (up == null) {
+						Box leftup = this.level.get(((int)this.position.x - 1) + "|" + ((int)this.position.y - 1));
+						if (leftup == null) {
+							this.position.x -= 1f;
+							this.position.y -= 1f;
+							this.deltaMove = 0;
+						}
+					}
+				}
+			} else if (Keyboard.isKeyDown(Config.keyRight)) {
+				Box right = this.level.get(((int)this.position.x + 1) + "|" + (int)this.position.y);
+				if (right == null) {
+					this.position.x += 1f;
+					this.deltaMove = 0;
+				} else {
+					Box up = this.level.get((int)this.position.x + "|" + ((int)this.position.y - 1));
+					if (up == null) {
+						Box rightup = this.level.get(((int)this.position.x + 1) + "|" + ((int)this.position.y - 1));
+						if (rightup == null) {
+							this.position.x += 1f;
+							this.position.y -= 1f;
+							this.deltaMove = 0;
+						}
+					}
+				}
 			}
 		}
 		deltaDig += delta;
 		if (this.deltaDig > Config.delayDig && Keyboard.isKeyDown(Config.keyDig)) {
 			Box bot = this.level.get((int)this.position.x + "|" + ((int)this.position.y + 1));
 			if (bot != null) {
-				System.out.println("dig");
 				bot.destroy();
 				this.position.y += 1;
 				this.deltaDig = 0;
