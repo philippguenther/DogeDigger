@@ -15,7 +15,7 @@ public class Doge {
 	public Doge (Level _level, Vec2f _position) {
 		this.level = _level;
 		this.position = _position;
-		this.graphics.add(GraphicFactory.DOGE);
+		this.graphics.add(GraphicFactory.newDogeGraphic());
 	}
 	
 	public void tick (int delta) {

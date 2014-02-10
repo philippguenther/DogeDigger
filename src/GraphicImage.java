@@ -1,36 +1,42 @@
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 import javax.imageio.ImageIO;
+
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
 public class GraphicImage implements Graphic {
 	
 	private GLImage img;
-	private int[] clipping;
-	private Vec2f offset;
+	private float[] clipping = new float[] {
+			0f,	// xStart
+			0f,	// yStart
+			0.5f,	// xEnd
+			1f	// yEnd
+	};
+	private Vec2f offset = new Vec2f(0f, 0f);
 	
 	public GraphicImage (String _filename) {
-		this(_filename, new Vec2f(0f, 0f));
+		this.img = new GLImage(_filename);
+	}
+	
+	public GraphicImage (String _filename, float[] _clipping) {
+		this.img = new GLImage(_filename);
+		this.clipping = Arrays.copyOf(_clipping, 4);
 	}
 	
 	public GraphicImage (String _filename, Vec2f _offset) {
 		this.img = new GLImage(_filename);
-		this.clipping = new int[] {
-				0,	// xStart
-				0,	// yStart
-				1,	// xEnd
-				1	// yEnd
-		};
 		this.offset = _offset;
 	}
-
-	@Override
-	public void tick(int delta) {
-		// TODO Auto-generated method stub
-		
+	
+	public GraphicImage (String _filename, Vec2f _offset, float[] _clipping) {
+		this.img = new GLImage(_filename);
+		this.offset = _offset;
+		this.clipping = Arrays.copyOf(_clipping, 4);
 	}
 
 	@Override
