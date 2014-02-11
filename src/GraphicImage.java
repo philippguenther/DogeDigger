@@ -14,7 +14,7 @@ public class GraphicImage implements Graphic {
 	private float[] clipping = new float[] {
 			0f,	// xStart
 			0f,	// yStart
-			0.5f,	// xEnd
+			1f,	// xEnd
 			1f	// yEnd
 	};
 	private Vec2f offset = new Vec2f(0f, 0f);

@@ -10,7 +10,7 @@ public class GraphicFactory {
 	};
 	
 	public static Graphic newBoxGraphic () {
-		return new GraphicPolygon(GraphicFactory.box, new Color4f(1f, 1f, 0f));
+		return new GraphicImage("Box.png");
 	}
 	
 	public static Graphic newBoxStaticGraphic () {
