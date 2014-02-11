@@ -64,7 +64,7 @@ public class Doge {
 					if (up == null) {
 						Entity rightup = this.level.get(new Vec2f(this.position.x + 1, this.position.y - 1));
 						if (rightup == null) {
-							this.mover = new MoverLinear(new Vec2f(1f, -1f), 100);
+							this.mover = new MoverLinear(new Vec2f(1f, -1f), 200);
 							this.deltaMove = 0;
 						}
 					}
@@ -87,7 +87,7 @@ public class Doge {
 					if (up == null) {
 						Entity leftup = this.level.get(new Vec2f(this.position.x - 1, this.position.y - 1));
 						if (leftup == null) {
-							this.mover = new MoverLinear(new Vec2f(-1f, -1f), 100);
+							this.mover = new MoverLinear(new Vec2f(-1f, -1f), 200);
 							this.deltaMove = 0;
 						}
 					}
@@ -112,7 +112,7 @@ public class Doge {
 				if (right != null) {
 					right.destroy();
 					this.deltaDig = 0;
-					this.deltaMove = 0;
+					this.deltaMove = -Config.delayMove;
 				}
 				
 			} else if (this.moveDirection == 2) {
@@ -130,7 +130,7 @@ public class Doge {
 				if (left != null) {
 					left.destroy();
 					this.deltaDig = 0;
-					this.deltaMove = 0;
+					this.deltaMove = -Config.delayMove;
 				}
 			}
 		}
