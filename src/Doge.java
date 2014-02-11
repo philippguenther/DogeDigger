@@ -9,9 +9,11 @@ public class Doge {
 	private Vec2f position;
 	private ArrayList<Graphic> graphics = new ArrayList<Graphic>();
 	
+	private Mover mover;
+	
 	private int deltaMove = Config.delayMove;
 	private int deltaDig = Config.delayDig;
-	private int moveDirection = 0;
+	private int moveDirection = 2;
 	
 	public Doge (Level _level, Vec2f _position) {
 		this.level = _level;
@@ -20,18 +22,26 @@ public class Doge {
 	}
 	
 	public void tick (int delta) {
+		// check for mover
+		if (this.mover != null) {
+			if (this.mover.ready()) {
+				this.mover = null;
+			} else {
+				this.position.add(this.mover.getVecDelta(delta));
+			}
+		}
 		
 		//FALLING
-		Entity bot = this.level.get(new Vec2f(this.position.x, this.position.y + 0.5f));
-		if (bot == null) {
-			this.position.y += this.level.getGravity() * 0.005f * delta;
-		} else {
-			this.position.y = bot.getPosition().y -1f;
+		if (this.mover == null) {
+			Entity bot = this.level.get(new Vec2f(this.position.x, this.position.y + 1f));
+			if (bot == null) {
+				this.mover = new MoverLinear(new Vec2f(0f, 1f), Math.round(100 * (1 / this.level.getGravity())) );
+			}
 		}
 		
 		//MOVING
 		deltaMove += delta;
-		if (this.deltaMove > Config.delayMove) {
+		if (this.deltaMove > Config.delayMove && this.mover == null) {
 			if (Keyboard.isKeyDown(Config.keyUp)) {
 				// top
 				this.moveDirection = 0;
@@ -41,7 +51,7 @@ public class Doge {
 				this.moveDirection = 1;
 				Entity right = this.level.get(new Vec2f(this.position.x + 1, Math.round(this.position.y)));
 				if (right == null) {
-					this.position.x += 1f;
+					this.mover = new MoverLinear(new Vec2f(1f, 0f), 100);
 					this.deltaMove = 0;
 					return;
 				} else {
@@ -65,7 +75,7 @@ public class Doge {
 				this.moveDirection = 3;
 				Entity left = this.level.get(new Vec2f(this.position.x - 1, this.position.y));
 				if (left == null) {
-					this.position.x -= 1;
+					this.mover = new MoverLinear(new Vec2f(-1f, 0f), 100);
 					this.deltaMove = 0;
 					return;
 				} else {
@@ -84,7 +94,7 @@ public class Doge {
 		
 		// DIGGING
 		deltaDig += delta;
-		if (this.deltaDig > Config.delayDig && Keyboard.isKeyDown(Config.keyDig)) {
+		if (this.deltaDig > Config.delayDig && Keyboard.isKeyDown(Config.keyDig) && this.mover == null) {
 			if (this.moveDirection == 0) {
 				// up
 				Entity top = this.level.get(new Vec2f(this.position.x, this.position.y - 1));

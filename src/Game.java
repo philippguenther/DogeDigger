@@ -48,6 +48,12 @@ public class Game {
 		
 		this.lastFrame = getTime();
 		while(!Display.isCloseRequested() && !Keyboard.isKeyDown(Config.keyQuit)) {
+			
+			if (Keyboard.isKeyDown(Keyboard.KEY_R)) {
+				this.level = new Level();
+				LevelFactory.random(this.level);
+			}
+			
 			int delta = this.getDelta();
 
 			if (this.state == State.RUNNING) {

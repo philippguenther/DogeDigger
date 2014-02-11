@@ -8,6 +8,7 @@ public class EntityBox implements Entity {
 	
 	private Vec2f position;
 	private ArrayList<Graphic> graphics = new ArrayList<Graphic>();
+	private Mover mover;
 	
 	public EntityBox (Level _level, Vec2f _position) {
 		this.level = _level;
@@ -41,17 +42,23 @@ public class EntityBox implements Entity {
 	}
 	
 	public void tick (int delta) {
+		// check for mover
+		if (this.mover != null) {
+			if (this.mover.ready()) {
+				this.mover = null;
+			} else {
+				this.level.remove(this);
+				this.position.add(this.mover.getVecDelta(delta));
+				this.level.put(this);
+			}
+		}
 		
 		//FALLING
-		Entity bot = this.level.get(new Vec2f(this.position.x, this.position.y + 0.5f));
-		if (bot == null || bot == this) {
-			this.level.remove(this);
-			this.position.y += this.level.getGravity() * 0.005f * delta;
-			this.level.put(this);
-		} else if (bot != this) {
-			this.level.remove(this);
-			this.position.y = bot.getPosition().y -1f;
-			this.level.put(this);
+		if (this.mover == null) {
+			Entity bot = this.level.get(new Vec2f(this.position.x, this.position.y + 1f));
+			if (bot == null) {
+				this.mover = new MoverLinear(new Vec2f(0f, 1f), Math.round(100 * (1 / this.level.getGravity())) );
+			}
 		}
 	}
 	
