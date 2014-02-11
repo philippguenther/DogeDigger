@@ -35,23 +35,23 @@ public class EntityBox implements Entity {
 	}
 	
 	public void setPosition (Vec2f _position) {
+		this.level.remove(this);
 		this.position = _position;
-		this.level.remove(this.position);
 		this.level.put(this);
 	}
 	
 	public void tick (int delta) {
 		
 		//FALLING
-		Entity bot = this.level.get(new Vec2f(this.position.x, this.position.y + 1f));
-		if (bot == null) {
-			float dy = this.level.getGravity() * 0.005f * delta;
-			this.level.remove(this.position);
-			this.position.y += dy;
+		Entity bot = this.level.get(new Vec2f(this.position.x, this.position.y + 0.5f));
+		if (bot == null || bot == this) {
+			this.level.remove(this);
+			this.position.y += this.level.getGravity() * 0.005f * delta;
 			this.level.put(this);
-			return;
-		} else {
-			this.position.y = bot.getPosition().y - 1f;
+		} else if (bot != this) {
+			this.level.remove(this);
+			this.position.y = bot.getPosition().y -1f;
+			this.level.put(this);
 		}
 	}
 	

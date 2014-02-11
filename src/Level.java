@@ -28,7 +28,12 @@ public class Level {
 	}
 	
 	public void remove (Vec2f v) {
-		this.entities[Math.round(v.x)][Math.round(v.y)] = null;
+		if (v.x > -1 && v.x < Config.levelMaxX && v.y > -1 && v.y < Config.levelMaxY)
+			this.entities[Math.round(v.x)][Math.round(v.y)] = null;
+	}
+	
+	public void remove (Entity box) {
+		this.remove(box.getPosition());
 	}
 	
 	public void tick (int delta) {
