@@ -53,6 +53,11 @@ public class EntityBox implements Entity {
 			}
 		}
 		
+		// make sure position is integer
+		if (this.mover == null) {
+			this.position.round();
+		}
+		
 		//FALLING
 		if (this.mover == null) {
 			Entity bot = this.level.get(new Vec2f(this.position.x, this.position.y + 1f));

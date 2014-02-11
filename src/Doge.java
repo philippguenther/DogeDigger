@@ -31,6 +31,11 @@ public class Doge {
 			}
 		}
 		
+		// make sure position is integer
+		if (this.mover == null) {
+			this.position.round();
+		}
+		
 		//FALLING
 		if (this.mover == null) {
 			Entity bot = this.level.get(new Vec2f(this.position.x, this.position.y + 1f));
@@ -41,7 +46,7 @@ public class Doge {
 		
 		//MOVING
 		deltaMove += delta;
-		if (this.deltaMove > Config.delayMove && this.mover == null) {
+		if (this.mover == null && this.deltaMove > Config.delayMove) {
 			if (Keyboard.isKeyDown(Config.keyUp)) {
 				// top
 				this.moveDirection = 0;
@@ -59,8 +64,7 @@ public class Doge {
 					if (up == null) {
 						Entity rightup = this.level.get(new Vec2f(this.position.x + 1, this.position.y - 1));
 						if (rightup == null) {
-							this.position.x += 1f;
-							this.position.y -= 1f;
+							this.mover = new MoverLinear(new Vec2f(1f, -1f), 100);
 							this.deltaMove = 0;
 						}
 					}
@@ -83,8 +87,7 @@ public class Doge {
 					if (up == null) {
 						Entity leftup = this.level.get(new Vec2f(this.position.x - 1, this.position.y - 1));
 						if (leftup == null) {
-							this.position.x -= 1f;
-							this.position.y -= 1f;
+							this.mover = new MoverLinear(new Vec2f(-1f, -1f), 100);
 							this.deltaMove = 0;
 						}
 					}
@@ -94,7 +97,7 @@ public class Doge {
 		
 		// DIGGING
 		deltaDig += delta;
-		if (this.deltaDig > Config.delayDig && Keyboard.isKeyDown(Config.keyDig) && this.mover == null) {
+		if (this.mover == null && this.deltaDig > Config.delayDig && Keyboard.isKeyDown(Config.keyDig)) {
 			if (this.moveDirection == 0) {
 				// up
 				Entity top = this.level.get(new Vec2f(this.position.x, this.position.y - 1));
@@ -117,8 +120,8 @@ public class Doge {
 				Entity bottom = this.level.get(new Vec2f(this.position.x, this.position.y + 1));
 				if (bottom != null) {
 					bottom.destroy();
-					this.position.y += 1;
 					this.deltaDig = 0;
+					this.deltaMove = 0;
 				}
 				
 			} else if (this.moveDirection == 3) {

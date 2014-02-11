@@ -13,6 +13,10 @@ public class GraphicFactory {
 		return new GraphicPolygon(GraphicFactory.box, new Color4f(1f, 1f, 0f));
 	}
 	
+	public static Graphic newBoxStaticGraphic () {
+		return new GraphicPolygon(GraphicFactory.box, new Color4f(1f, 1f, 1f));
+	}
+	
 	public static Graphic newDogeGraphic () {
 		return new GraphicAnimation(imagesWithEvenClipping("BoxGlow.png", 7), evenDelays(75, 7));
 	}

@@ -26,6 +26,11 @@ public class Vec2f {
 		return (float) Math.sqrt(Math.pow(this.x - a.x, 2) + Math.pow(this.y - a.y, 2));
 	}
 	
+	public void round () {
+		this.x = Math.round(this.x);
+		this.y = Math.round(this.y);
+	}
+	
 	public Vec2f clone ()  {
 		return new Vec2f(this.x, this.y);
 	}
