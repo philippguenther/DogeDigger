@@ -55,7 +55,7 @@ public class EntityBox implements Entity {
 	public void activate() {
 		if (!this.active) {
 			this.active = true;
-			this.graphics.add(1, new GraphicPolygon(GraphicFactory.box, new Color4f(1f, 0f, 0f, 0.5f)));
+			this.graphics.add(1, new GraphicPolygon(GraphicFactory.box, new Color4f(1f, 1f, 1f, 0.5f)));
 		}	
 	}
 	

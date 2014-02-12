@@ -17,6 +17,7 @@ public class GraphicImage implements Graphic {
 			1f,	// xEnd
 			1f	// yEnd
 	};
+	private boolean flipped = false;
 	private Vec2f offset = new Vec2f(0f, 0f);
 	
 	public GraphicImage (String _filename) {
@@ -37,6 +38,28 @@ public class GraphicImage implements Graphic {
 		this.img = new GLImage(_filename);
 		this.offset = _offset;
 		this.clipping = Arrays.copyOf(_clipping, 4);
+	}
+	
+	@Override
+	public void flip() {
+		if (!this.flipped) {
+			this.flipped = true;
+			float xStart = this.clipping[0];
+			float xEnd = this.clipping[2];
+			this.clipping[0] = xEnd;
+			this.clipping[2] = xStart;
+		}
+	}
+	
+	@Override
+	public void unflip() {
+		if (this.flipped) {
+			this.flipped = false;
+			float xStart = this.clipping[0];
+			float xEnd = this.clipping[2];
+			this.clipping[0] = xEnd;
+			this.clipping[2] = xStart;
+		}
 	}
 
 	@Override

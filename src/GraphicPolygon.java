@@ -17,6 +17,16 @@ public class GraphicPolygon implements Graphic {
 		this.color = _color;
 	}
 
+	@Override
+	public void flip() {
+		
+	}
+	
+	@Override
+	public void unflip() {
+		
+	}
+	
 	public void render(int delta) {
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_DST_ALPHA);

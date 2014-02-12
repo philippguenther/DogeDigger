@@ -17,12 +17,23 @@ public class GraphicFactory {
 		return new GraphicLineLoop(GraphicFactory.box, new Color4f(1f, 1f, 1f));
 	}
 	
-	public static Graphic newDogeLeftGraphic () {
+	public static Graphic newDogeGraphic () {
 		return new GraphicAnimation(imagesWithEvenClipping("[intensifies].png", 4), evenDelays(1, 4));
 	}
 	
-	public static Graphic newDogeRightGraphic () {
-		return new GraphicImage("Doge.png", new float[]{1, 0, 0, 1});
+	public static Graphic newColorBox(int type) {
+		Color4f color = new Color4f(0f, 0f, 0f, 0.5f);
+		switch(type % 3) {
+		case 0:
+			color.r = 1f;
+			break;
+		case 1:
+			color.g = 1f;
+			break;
+		case 2:
+			color.b = 1f;
+		}
+		return new GraphicPolygon(GraphicFactory.box, color);
 	}
 	
 			

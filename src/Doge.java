@@ -15,13 +15,10 @@ public class Doge {
 	private int deltaDig = Config.dogeDelayDig;
 	private int moveDirection = 2;
 	
-	private Graphic graphicLeft = GraphicFactory.newDogeLeftGraphic();
-	private Graphic graphicRight = GraphicFactory.newDogeRightGraphic();
-	
 	public Doge (Level _level, Vec2f _position) {
 		this.level = _level;
 		this.position = _position;
-		this.graphics.add(GraphicFactory.newDogeLeftGraphic());
+		this.graphics.add(GraphicFactory.newDogeGraphic());
 	}
 	
 	public Vec2f getPosition() {
@@ -33,10 +30,10 @@ public class Doge {
 		// set graphic according to moveDirection
 		switch (this.moveDirection) {
 		case 1:
-			this.graphics.set(0, this.graphicRight);
+			this.graphics.get(0).flip();
 			break;
 		default:
-			this.graphics.set(0, this.graphicLeft);
+			this.graphics.get(0).unflip();
 		}
 		
 		//MOVER

@@ -10,7 +10,9 @@ public class LevelFactory {
 		for (int x = 0; x < Config.levelMaxX; x++) {
 			for (int y = 0; y < Config.levelMaxY; y++) {
 				if (rand.nextBoolean()) {
-					lvl.put(new EntityBox(lvl, new Vec2f(x, y)));
+					EntityBox box = new EntityBox(lvl, new Vec2f(x, y));
+					box.addGraphic(GraphicFactory.newColorBox(rand.nextInt(3)));
+					lvl.put(box);
 				}
 			}
 		}

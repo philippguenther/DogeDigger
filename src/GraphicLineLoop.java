@@ -16,7 +16,18 @@ public class GraphicLineLoop implements Graphic {
 		this.offset = _offset;
 		this.color = _color;
 	}
+	
+	@Override
+	public void flip() {
+		
+	}
+	
+	@Override
+	public void unflip() {
+		
+	}
 
+	@Override
 	public void render(int delta) {
 		GL11.glColor4f(this.color.r, this.color.g, this.color.b, this.color.a);
 		GL11.glTranslatef(this.offset.x, this.offset.y, 0f);

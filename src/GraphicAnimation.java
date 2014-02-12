@@ -8,9 +8,25 @@ public class GraphicAnimation implements Graphic {
 	private int current = 0;
 	private int delta = 0;
 	
+	private boolean flipped = false;
+	
 	public GraphicAnimation (Graphic[] _frames, int[] _delays) {
 		this.frames = _frames;
 		this.delays = Arrays.copyOf(_delays, _frames.length);
+	}
+	
+	@Override
+	public void flip() {
+		for (Graphic g : this.frames) {
+			g.flip();
+		}
+	}
+
+	@Override
+	public void unflip() {
+		for (Graphic g : this.frames) {
+			g.unflip();
+		}
 	}
 
 	@Override
