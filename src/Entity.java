@@ -4,6 +4,9 @@ public interface Entity {
 	public void setPosition(Vec2f _position);
 	public void destroy();
 	public void addGraphic(Graphic g);
+	
+	public void activate();
+	
 	public void tick(int delta);
 	public void render(int delta);
 }

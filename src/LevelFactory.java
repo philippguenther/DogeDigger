@@ -1,10 +1,25 @@
+import java.util.Random;
+
 
 public class LevelFactory {
 	
-	public static void random (Level lvl) {
-		lvl.doge = new Doge(lvl, new Vec2f(3, 2));
+	public static void random (Level lvl, long seed) {
+		lvl.doge = new Doge(lvl, new Vec2f(3, 0));
 		
-		for (int i = 0; i < 7; i++) {
+		Random rand = new Random(seed);
+		for (int x = 0; x < Config.levelMaxX; x++) {
+			for (int y = 0; y < Config.levelMaxY; y++) {
+				if (rand.nextBoolean()) {
+					lvl.put(new EntityBox(lvl, new Vec2f(x, y)));
+				}
+			}
+		}
+	}
+	
+	public static void test (Level lvl) {
+		lvl.doge = new Doge(lvl, new Vec2f(3, 0));
+		
+		for (int i = 0; i < Config.gameBoxesX; i++) {
 			lvl.put(new EntityStatic(new Vec2f(i, 9)));
 			lvl.put(new EntityBox(lvl, new Vec2f(i, 8)));
 			lvl.put(new EntityBox(lvl, new Vec2f(i, 7)));

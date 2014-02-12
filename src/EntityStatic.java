@@ -31,6 +31,11 @@ public class EntityStatic implements Entity {
 	public void addGraphic(Graphic g) {
 		this.graphics.add(g);
 	}
+	
+	@Override
+	public void activate() {
+		// yeah, do nothing
+	}
 
 	@Override
 	public void tick(int delta) {

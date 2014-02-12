@@ -11,14 +11,18 @@ public class Doge {
 	
 	private Mover mover;
 	
-	private int deltaMove = Config.delayMove;
-	private int deltaDig = Config.delayDig;
+	private int deltaMove = Config.dogeDelayMove;
+	private int deltaDig = Config.dogeDelayDig;
 	private int moveDirection = 2;
 	
 	public Doge (Level _level, Vec2f _position) {
 		this.level = _level;
 		this.position = _position;
 		this.graphics.add(GraphicFactory.newDogeGraphic());
+	}
+	
+	public Vec2f getPosition() {
+		return this.position;
 	}
 	
 	public void tick (int delta) {
@@ -36,6 +40,17 @@ public class Doge {
 			this.position.round();
 		}
 		
+		// activate everything around me
+		if (this.mover == null) {
+			for (int x = Math.round(this.position.x) - 1; x < Math.round(this.position.x) + 1; x++) {
+				for (int y = Math.round(this.position.y) - 1; y < Math.round(this.position.y) + 1; y++) {
+					Entity e = this.level.get(new Vec2f(x, y));
+					if (e != null)
+						e.activate();
+				}
+			}
+		}
+		
 		//FALLING
 		if (this.mover == null) {
 			Entity bot = this.level.get(new Vec2f(this.position.x, this.position.y + 1f));
@@ -46,7 +61,7 @@ public class Doge {
 		
 		//MOVING
 		deltaMove += delta;
-		if (this.mover == null && this.deltaMove > Config.delayMove) {
+		if (this.mover == null && this.deltaMove > Config.dogeDelayMove) {
 			if (Keyboard.isKeyDown(Config.keyUp)) {
 				// top
 				this.moveDirection = 0;
@@ -97,7 +112,7 @@ public class Doge {
 		
 		// DIGGING
 		deltaDig += delta;
-		if (this.mover == null && this.deltaDig > Config.delayDig && Keyboard.isKeyDown(Config.keyDig)) {
+		if (this.mover == null && this.deltaDig > Config.dogeDelayDig && Keyboard.isKeyDown(Config.keyDig)) {
 			if (this.moveDirection == 0) {
 				// up
 				Entity top = this.level.get(new Vec2f(this.position.x, this.position.y - 1));
@@ -112,7 +127,7 @@ public class Doge {
 				if (right != null) {
 					right.destroy();
 					this.deltaDig = 0;
-					this.deltaMove = -Config.delayMove;
+					this.deltaMove = -Config.dogeDelayMove;
 				}
 				
 			} else if (this.moveDirection == 2) {
@@ -130,7 +145,7 @@ public class Doge {
 				if (left != null) {
 					left.destroy();
 					this.deltaDig = 0;
-					this.deltaMove = -Config.delayMove;
+					this.deltaMove = -Config.dogeDelayMove;
 				}
 			}
 		}

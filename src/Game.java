@@ -38,20 +38,20 @@ public class Game {
 
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
-		GL11.glOrtho(0, Config.boxesX, Config.boxesY + 1, 0, 1, -1);
+		GL11.glOrtho(0, Config.gameBoxesX, Config.gameBoxesY + 1, 0, 1, -1);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
 		this.level = new Level();
-		LevelFactory.random(this.level);
+		LevelFactory.random(this.level, Config.levelSeed);
 		
 		this.lastFrame = getTime();
 		while(!Display.isCloseRequested() && !Keyboard.isKeyDown(Config.keyQuit)) {
 			
 			if (Keyboard.isKeyDown(Keyboard.KEY_R)) {
 				this.level = new Level();
-				LevelFactory.random(this.level);
+				LevelFactory.random(this.level, Config.levelSeed);
 			}
 			
 			int delta = this.getDelta();

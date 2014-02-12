@@ -37,7 +37,7 @@ public class Level {
 	}
 	
 	public void tick (int delta) {
-		//this.scroll += 0.0002 * delta;
+		this.scroll = this.doge.getPosition().y - Config.gameBoxesY / 2;
 		
 		for (Entity[] bv : this.entities) {
 			for (Entity bi : bv) {
@@ -53,10 +53,10 @@ public class Level {
 			GL11.glTranslatef(0f, -this.scroll, 0f);
 			
 			int y0 = (int) this.scroll;
-			int y1 = y0 + Config.boxesY + 1;
+			int y1 = y0 + Config.gameBoxesY + 2;
 			
-			for (int x = 0; x < Config.boxesX; x++) {
-				for (int y = y0; y < y1; y++) {
+			for (int x = 0; x < Config.gameBoxesX && x < Config.levelMaxX; x++) {
+				for (int y = Math.max(y0, 0); y < y1 && y < Config.levelMaxY; y++) {
 					if (this.entities[x][y] != null)
 						this.entities[x][y].render(delta);
 				}

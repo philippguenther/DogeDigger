@@ -8,7 +8,10 @@ public class EntityBox implements Entity {
 	
 	private Vec2f position;
 	private ArrayList<Graphic> graphics = new ArrayList<Graphic>();
+	private boolean active = false;
 	private Mover mover;
+	
+	private int deltaDecay = 0;
 	
 	public EntityBox (Level _level, Vec2f _position) {
 		this.level = _level;
@@ -22,26 +25,37 @@ public class EntityBox implements Entity {
 		this.level.put(this);
 	}
 	
+	@Override
 	public void destroy () {
 		this.graphics.clear();
 		this.level.remove(this.position);
 	}
 	
+	@Override
 	public void addGraphic (Graphic _graphic) {
 		this.graphics.add(_graphic);
 	}
 	
-	public Vec2f getPosition () {
+	@Override
+	public Vec2f getPosition() {
 		return this.position;
 	}
 	
-	public void setPosition (Vec2f _position) {
+	@Override
+	public void setPosition(Vec2f _position) {
 		this.level.remove(this);
 		this.position = _position;
 		this.level.put(this);
 	}
 	
-	public void tick (int delta) {
+	@Override
+	public void activate() {
+		this.active = true;
+	}
+	
+	@Override
+	public void tick(int delta) {
+		
 		// check for mover
 		if (this.mover != null) {
 			if (this.mover.ready()) {
@@ -53,13 +67,17 @@ public class EntityBox implements Entity {
 			}
 		}
 		
+		if (!this.active)
+			return;
+		
 		// make sure position is integer
 		if (this.mover == null) {
 			this.position.round();
 		}
 		
 		//FALLING
-		if (this.mover == null) {
+		this.deltaDecay += delta;
+		if (this.mover == null && this.deltaDecay > Config.boxDecay) {
 			Entity bot = this.level.get(new Vec2f(this.position.x, this.position.y + 1f));
 			if (bot == null) {
 				this.mover = new MoverLinear(new Vec2f(0f, 1f), Math.round(100 * (1 / this.level.getGravity())) );
@@ -67,6 +85,7 @@ public class EntityBox implements Entity {
 		}
 	}
 	
+	@Override
 	public void render (int delta) {
 		GL11.glPushMatrix();
 			GL11.glTranslatef(this.position.x, this.position.y, 0f);
