@@ -18,7 +18,7 @@ public class GraphicFactory {
 	}
 	
 	public static Graphic newDogeLeftGraphic () {
-		return new GraphicImage("Doge.png");
+		return new GraphicAnimation(imagesWithEvenClipping("[intensifies].png", 4), evenDelays(1, 4));
 	}
 	
 	public static Graphic newDogeRightGraphic () {
