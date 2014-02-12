@@ -13,6 +13,11 @@ public class EntityStatic implements Entity {
 	}
 	
 	@Override
+	public Type getType() {
+		return Type.STATIC;
+	}
+	
+	@Override
 	public Vec2f getPosition() {
 		return this.position;
 	}

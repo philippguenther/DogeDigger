@@ -8,20 +8,29 @@ public class EntityBox implements Entity {
 	
 	private Vec2f position;
 	private ArrayList<Graphic> graphics = new ArrayList<Graphic>();
+	private Type type;
 	private boolean active = false;
 	private Mover mover;
 	
 	private int deltaDecay = 0;
 	
-	public EntityBox (Level _level, Vec2f _position) {
+	public EntityBox (Level _level, Vec2f _position, int _type) {
 		this.level = _level;
 		this.position = _position;
-		Vec2f[] v = new Vec2f[4];
-		v[0] = new Vec2f(0f, 0f);
-		v[1] = new Vec2f(1f, 0f);
-		v[2] = new Vec2f(1f, 1f);
-		v[3] = new Vec2f(0f, 1f);
+		
+		switch(_type % 3) {
+		case 0:
+			this.type = Type.RED;
+			break;
+		case 1:
+			this.type = Type.GREEN;
+			break;
+		default:
+			this.type = Type.BLUE;
+		}
+		
 		this.graphics.add(GraphicFactory.newBoxGraphic());
+		this.graphics.add(GraphicFactory.newBoxColorGraphic(this.type));
 		this.level.put(this);
 	}
 	
@@ -32,6 +41,17 @@ public class EntityBox implements Entity {
 		Entity top = this.level.get(new Vec2f(this.position.x, this.position.y - 1));
 		if (top != null)
 			top.fall();
+		
+		ArrayList<Entity> list = this.level.getSurrounding(this.position);
+		for (Entity e : list) {
+			if (e.getType() == this.type)
+				e.destroy();
+		}
+	}
+	
+	@Override
+	public Type getType() {
+		return this.type;
 	}
 	
 	@Override

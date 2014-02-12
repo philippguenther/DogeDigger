@@ -32,7 +32,7 @@ public class Doge {
 		case 1:
 			this.graphics.get(0).flip();
 			break;
-		default:
+		case 3:
 			this.graphics.get(0).unflip();
 		}
 		
@@ -52,12 +52,9 @@ public class Doge {
 		
 		//ACTIVATE everything around me
 		if (this.mover == null) {
-			for (int x = Math.round(this.position.x) - 1; x < Math.round(this.position.x) + 2; x++) {
-				for (int y = Math.round(this.position.y) - 1; y < Math.round(this.position.y) + 2; y++) {
-					Entity e = this.level.get(new Vec2f(x, y));
-					if (e != null)
-						e.activate();
-				}
+			ArrayList<Entity> list = this.level.getSurrounding(this.position);
+			for (Entity e : list) {
+				e.activate();
 			}
 		}
 		

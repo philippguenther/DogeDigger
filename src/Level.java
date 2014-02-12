@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 import org.lwjgl.opengl.GL11;
 
 
@@ -34,6 +36,20 @@ public class Level {
 	
 	public void remove (Entity box) {
 		this.remove(box.getPosition());
+	}
+	
+	public ArrayList<Entity> getSurrounding(Vec2f p) {
+		ArrayList<Entity> list = new ArrayList<Entity>();
+		
+		for (int x = Math.round(p.x) - 1; x < Math.round(p.x) + 2; x++) {
+			for (int y = Math.round(p.y) - 1; y < Math.round(p.y) + 2; y++) {
+				Entity e = this.get(new Vec2f(x, y));
+				if (e != null)
+					list.add(e);
+			}
+		}
+		
+		return list;
 	}
 	
 	public void tick (int delta) {
