@@ -18,7 +18,7 @@ public class GraphicFactory {
 	}
 	
 	public static Graphic newDogeGraphic () {
-		return new GraphicAnimation(imagesWithEvenClipping("BoxGlow.png", 7), evenDelays(75, 7));
+		return new GraphicImage("Doge.png");
 	}
 	
 			
