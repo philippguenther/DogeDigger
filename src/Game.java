@@ -44,7 +44,8 @@ public class Game {
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
 		this.level = new Level();
-		LevelFactory.random(this.level, Config.levelSeed);
+		//LevelFactory.random(this.level, Config.levelSeed);
+		LevelFactory.full(this.level);
 		
 		this.lastFrame = getTime();
 		while(!Display.isCloseRequested() && !Keyboard.isKeyDown(Config.keyQuit)) {

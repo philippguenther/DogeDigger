@@ -26,7 +26,7 @@ public class Doge {
 	}
 	
 	public void tick (int delta) {
-		// check for mover
+		//MOVER
 		if (this.mover != null) {
 			if (this.mover.ready()) {
 				this.mover = null;
@@ -40,10 +40,10 @@ public class Doge {
 			this.position.round();
 		}
 		
-		// activate everything around me
+		//ACTIVATE everything around me
 		if (this.mover == null) {
-			for (int x = Math.round(this.position.x) - 1; x < Math.round(this.position.x) + 1; x++) {
-				for (int y = Math.round(this.position.y) - 1; y < Math.round(this.position.y) + 1; y++) {
+			for (int x = Math.round(this.position.x) - 1; x < Math.round(this.position.x) + 2; x++) {
+				for (int y = Math.round(this.position.y) - 1; y < Math.round(this.position.y) + 2; y++) {
 					Entity e = this.level.get(new Vec2f(x, y));
 					if (e != null)
 						e.activate();

@@ -16,6 +16,16 @@ public class LevelFactory {
 		}
 	}
 	
+	public static void full (Level lvl) {
+		lvl.doge = new Doge(lvl, new Vec2f(3, 0));
+		
+		for (int x = 0; x < Config.levelMaxX; x++) {
+			for (int y = 2; y < Config.levelMaxY; y++) {
+				lvl.put(new EntityBox(lvl, new Vec2f(x, y)));
+			}
+		}
+	}
+	
 	public static void test (Level lvl) {
 		lvl.doge = new Doge(lvl, new Vec2f(3, 0));
 		
