@@ -71,10 +71,10 @@ public class EntityBox implements Entity {
 	@Override
 	public void fall() {
 		this.mover = new MoverLinear(new Vec2f(0f, 1f), Math.round(100 * (1 / this.level.getGravity())) );
-		Entity top = this.level.get(new Vec2f(this.position.x, this.position.y - 1));
+		/*Entity top = this.level.get(new Vec2f(this.position.x, this.position.y - 1));
 		if (top != null) {
 			top.fall();
-		}
+		}*/
 	}
 	
 	@Override
