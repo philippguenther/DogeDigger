@@ -29,6 +29,9 @@ public class EntityBox implements Entity {
 	public void destroy () {
 		this.graphics.clear();
 		this.level.remove(this.position);
+		Entity top = this.level.get(new Vec2f(this.position.x, this.position.y - 1));
+		if (top != null)
+			top.fall();
 	}
 	
 	@Override
@@ -54,6 +57,20 @@ public class EntityBox implements Entity {
 	}
 	
 	@Override
+	public void fall() {
+		if (this.mover == null) {
+			Entity bot = this.level.get(new Vec2f(this.position.x, this.position.y + 1f));
+			if (bot == null) {
+				this.mover = new MoverLinear(new Vec2f(0f, 1f), Math.round(100 * (1 / this.level.getGravity())) );
+				Entity top = this.level.get(new Vec2f(this.position.x, this.position.y - 1));
+				if (top != null) {
+					top.fall();
+				}
+			}
+		}
+	}
+	
+	@Override
 	public void tick(int delta) {
 		
 		// check for mover
@@ -67,21 +84,18 @@ public class EntityBox implements Entity {
 			}
 		}
 		
-		if (!this.active)
-			return;
-		
 		// make sure position is integer
 		if (this.mover == null) {
 			this.position.round();
 		}
 		
+		if (!this.active)
+			return;
+		
 		//FALLING
 		this.deltaDecay += delta;
 		if (this.mover == null && this.deltaDecay > Config.boxDecay) {
-			Entity bot = this.level.get(new Vec2f(this.position.x, this.position.y + 1f));
-			if (bot == null) {
-				this.mover = new MoverLinear(new Vec2f(0f, 1f), Math.round(100 * (1 / this.level.getGravity())) );
-			}
+			this.fall();
 		}
 	}
 	

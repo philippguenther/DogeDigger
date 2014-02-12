@@ -15,14 +15,21 @@ public class Doge {
 	private int deltaDig = Config.dogeDelayDig;
 	private int moveDirection = 2;
 	
+	private Graphic graphicLeft = GraphicFactory.newDogeLeftGraphic();
+	private Graphic graphicRight = GraphicFactory.newDogeRightGraphic();
+	
 	public Doge (Level _level, Vec2f _position) {
 		this.level = _level;
 		this.position = _position;
-		this.graphics.add(GraphicFactory.newDogeGraphic());
+		this.graphics.add(GraphicFactory.newDogeLeftGraphic());
 	}
 	
 	public Vec2f getPosition() {
 		return this.position;
+	}
+	
+	public void fall() {
+		
 	}
 	
 	public void tick (int delta) {
@@ -33,6 +40,16 @@ public class Doge {
 			} else {
 				this.position.add(this.mover.getVecDelta(delta));
 			}
+		}
+		
+		switch (this.moveDirection) {
+		case 1:
+			this.graphics.set(0, this.graphicRight);
+			break;
+		case 3:
+			this.graphics.set(0, this.graphicLeft);
+		default:
+			this.graphics.set(0, this.graphicLeft);
 		}
 		
 		// make sure position is integer

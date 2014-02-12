@@ -17,8 +17,12 @@ public class GraphicFactory {
 		return new GraphicPolygon(GraphicFactory.box, new Color4f(1f, 1f, 1f));
 	}
 	
-	public static Graphic newDogeGraphic () {
+	public static Graphic newDogeLeftGraphic () {
 		return new GraphicImage("Doge.png");
+	}
+	
+	public static Graphic newDogeRightGraphic () {
+		return new GraphicImage("Doge.png", new float[]{1, 0, 0, 1});
 	}
 	
 			

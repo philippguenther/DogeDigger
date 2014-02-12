@@ -36,6 +36,11 @@ public class EntityStatic implements Entity {
 	public void activate() {
 		// yeah, do nothing
 	}
+	
+	@Override
+	public void fall() {
+		
+	}
 
 	@Override
 	public void tick(int delta) {
