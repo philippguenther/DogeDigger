@@ -124,6 +124,8 @@ public class EntityBox implements Entity {
 			Entity bot = this.level.get(new Vec2f(this.position.x, this.position.y + 1f));
 			if (bot == null) {
 				this.fall();
+			} else {
+				this.deltaDecay = 0;
 			}
 		}
 	}
