@@ -18,6 +18,9 @@ public class GraphicPolygon implements Graphic {
 	}
 
 	public void render(int delta) {
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_DST_ALPHA);
+		
 		GL11.glColor4f(this.color.r, this.color.g, this.color.b, this.color.a);
 		GL11.glTranslatef(this.offset.x, this.offset.y, 0f);
 		GL11.glPolygonMode(GL11.GL_FRONT, GL11.GL_FILL);
@@ -26,6 +29,8 @@ public class GraphicPolygon implements Graphic {
 				GL11.glVertex2f(v.x + this.offset.x, v.y + this.offset.y);
 			}
 		GL11.glEnd();
+		
+		GL11.glDisable(GL11.GL_BLEND);
 	}
 
 }
