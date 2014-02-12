@@ -6,6 +6,7 @@ public interface Entity {
 	public void addGraphic(Graphic g);
 	
 	public void activate();
+	public void deactivate();
 	public void fall();
 	
 	public void tick(int delta);

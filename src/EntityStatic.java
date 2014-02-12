@@ -34,7 +34,12 @@ public class EntityStatic implements Entity {
 	
 	@Override
 	public void activate() {
-		// yeah, do nothing
+		
+	}
+	
+	@Override
+	public void deactivate() {
+		
 	}
 	
 	@Override

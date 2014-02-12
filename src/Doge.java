@@ -28,11 +28,17 @@ public class Doge {
 		return this.position;
 	}
 	
-	public void fall() {
-		
-	}
-	
 	public void tick (int delta) {
+		
+		// set graphic according to moveDirection
+		switch (this.moveDirection) {
+		case 1:
+			this.graphics.set(0, this.graphicRight);
+			break;
+		default:
+			this.graphics.set(0, this.graphicLeft);
+		}
+		
 		//MOVER
 		if (this.mover != null) {
 			if (this.mover.ready()) {
@@ -40,16 +46,6 @@ public class Doge {
 			} else {
 				this.position.add(this.mover.getVecDelta(delta));
 			}
-		}
-		
-		switch (this.moveDirection) {
-		case 1:
-			this.graphics.set(0, this.graphicRight);
-			break;
-		case 3:
-			this.graphics.set(0, this.graphicLeft);
-		default:
-			this.graphics.set(0, this.graphicLeft);
 		}
 		
 		// make sure position is integer
@@ -87,9 +83,9 @@ public class Doge {
 				// right
 				this.moveDirection = 1;
 				Entity right = this.level.get(new Vec2f(this.position.x + 1, Math.round(this.position.y)));
+				this.deltaMove = 0;
 				if (right == null) {
 					this.mover = new MoverLinear(new Vec2f(1f, 0f), 100);
-					this.deltaMove = 0;
 					return;
 				} else {
 					Entity up = this.level.get(new Vec2f(this.position.x, this.position.y - 1));
@@ -97,7 +93,6 @@ public class Doge {
 						Entity rightup = this.level.get(new Vec2f(this.position.x + 1, this.position.y - 1));
 						if (rightup == null) {
 							this.mover = new MoverLinear(new Vec2f(1f, -1f), 200);
-							this.deltaMove = 0;
 						}
 					}
 				}
@@ -110,9 +105,9 @@ public class Doge {
 				// left
 				this.moveDirection = 3;
 				Entity left = this.level.get(new Vec2f(this.position.x - 1, this.position.y));
+				this.deltaMove = 0;
 				if (left == null) {
 					this.mover = new MoverLinear(new Vec2f(-1f, 0f), 100);
-					this.deltaMove = 0;
 					return;
 				} else {
 					Entity up = this.level.get(new Vec2f(this.position.x, this.position.y - 1));
@@ -120,7 +115,6 @@ public class Doge {
 						Entity leftup = this.level.get(new Vec2f(this.position.x - 1, this.position.y - 1));
 						if (leftup == null) {
 							this.mover = new MoverLinear(new Vec2f(-1f, -1f), 200);
-							this.deltaMove = 0;
 						}
 					}
 				}

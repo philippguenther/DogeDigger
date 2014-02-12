@@ -51,6 +51,7 @@ public class Game {
 
 			if (this.state == State.RUNNING) {
 				this.level.tick(delta);
+				
 				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 				this.level.render(delta);
 			}

@@ -53,20 +53,27 @@ public class EntityBox implements Entity {
 	
 	@Override
 	public void activate() {
-		this.active = true;
+		if (!this.active) {
+			this.active = true;
+			this.graphics.add(1, new GraphicPolygon(GraphicFactory.box, new Color4f(1f, 0f, 0f, 0.5f)));
+		}	
+	}
+	
+	@Override
+	public void deactivate() {
+		if (this.active) {
+		this.active = false;
+		if (this.graphics.size() > 1)
+			this.graphics.remove(1);
+		}
 	}
 	
 	@Override
 	public void fall() {
-		if (this.mover == null) {
-			Entity bot = this.level.get(new Vec2f(this.position.x, this.position.y + 1f));
-			if (bot == null) {
-				this.mover = new MoverLinear(new Vec2f(0f, 1f), Math.round(100 * (1 / this.level.getGravity())) );
-				Entity top = this.level.get(new Vec2f(this.position.x, this.position.y - 1));
-				if (top != null) {
-					top.fall();
-				}
-			}
+		this.mover = new MoverLinear(new Vec2f(0f, 1f), Math.round(100 * (1 / this.level.getGravity())) );
+		Entity top = this.level.get(new Vec2f(this.position.x, this.position.y - 1));
+		if (top != null) {
+			top.fall();
 		}
 	}
 	
@@ -76,8 +83,10 @@ public class EntityBox implements Entity {
 		// check for mover
 		if (this.mover != null) {
 			if (this.mover.ready()) {
+				// if mover is ready remove it
 				this.mover = null;
 			} else {
+				// if mover != null move
 				this.level.remove(this);
 				this.position.add(this.mover.getVecDelta(delta));
 				this.level.put(this);
@@ -89,18 +98,13 @@ public class EntityBox implements Entity {
 			this.position.round();
 		}
 		
-		if (!this.active) {
-			if (this.graphics.size() > 1)
-				this.graphics.remove(1);
-			return;
-		} else {
-			this.graphics.add(1, new GraphicPolygon(GraphicFactory.box, new Color4f(1f, 0f, 0f, 0.5f)));
-		}
-		
 		//FALLING
 		this.deltaDecay += delta;
-		if (this.mover == null && this.deltaDecay > Config.boxDecay) {
-			this.fall();
+		if (this.mover == null && this.active && this.deltaDecay > Config.boxDecay) {
+			Entity bot = this.level.get(new Vec2f(this.position.x, this.position.y + 1f));
+			if (bot == null) {
+				this.fall();
+			}
 		}
 	}
 	
