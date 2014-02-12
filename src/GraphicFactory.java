@@ -2,7 +2,7 @@ import java.util.Arrays;
 
 
 public class GraphicFactory {
-	private final static Vec2f[] box = {
+	public final static Vec2f[] box = {
 		new Vec2f(0f, 0f),
 		new Vec2f(1f, 0f),
 		new Vec2f(1f, 1f),
@@ -10,11 +10,11 @@ public class GraphicFactory {
 	};
 	
 	public static Graphic newBoxGraphic () {
-		return new GraphicImage("Box.png");
+		return new GraphicImage("Box_greyscale.png");
 	}
 	
 	public static Graphic newBoxStaticGraphic () {
-		return new GraphicPolygon(GraphicFactory.box, new Color4f(1f, 1f, 1f));
+		return new GraphicLineLoop(GraphicFactory.box, new Color4f(1f, 1f, 1f));
 	}
 	
 	public static Graphic newDogeLeftGraphic () {

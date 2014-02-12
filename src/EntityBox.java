@@ -89,8 +89,13 @@ public class EntityBox implements Entity {
 			this.position.round();
 		}
 		
-		if (!this.active)
+		if (!this.active) {
+			if (this.graphics.size() > 1)
+				this.graphics.remove(1);
 			return;
+		} else {
+			this.graphics.add(1, new GraphicPolygon(GraphicFactory.box, new Color4f(1f, 0f, 0f, 0.5f)));
+		}
 		
 		//FALLING
 		this.deltaDecay += delta;
