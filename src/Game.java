@@ -21,7 +21,7 @@ public class Game {
 
 	public void start() {
 		try {
-			Display.setDisplayMode(new DisplayMode(Config.windowWidth, Config.windowHeight));
+			Display.setDisplayMode(new DisplayMode(Config.windowX, Config.windowY));
 			Display.create();
 			Display.setVSyncEnabled(true);
 		} catch(LWJGLException e) {

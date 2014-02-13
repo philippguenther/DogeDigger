@@ -9,12 +9,7 @@ public class EntityStatic implements Entity {
 	
 	public EntityStatic (Vec2f _position) {
 		this.position = _position;
-		this.graphics.add(GraphicFactory.newBoxStaticGraphic());
-	}
-	
-	@Override
-	public Type getType() {
-		return Type.STATIC;
+		this.graphics.add(GraphicFactory.newStatic());
 	}
 	
 	@Override

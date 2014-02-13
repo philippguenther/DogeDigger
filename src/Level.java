@@ -6,7 +6,7 @@ import org.lwjgl.opengl.GL11;
 public class Level {
 	public Doge doge;
 	private float gravity = 1f;
-	private Entity[][] entities = new Entity[Config.levelMaxX][Config.levelMaxY];
+	private Entity[][] entities = new Entity[Config.gameBoxesX][Config.levelMaxY];
 	
 	public float scroll = 0f;
 	
@@ -23,14 +23,14 @@ public class Level {
 	}
 	
 	public Entity get (Vec2f v) {
-		if (v.x > -1 && v.x < Config.levelMaxX && v.y > -1 && v.y < Config.levelMaxY)
+		if (v.x > -1 && v.x < Config.gameBoxesX && v.y > -1 && v.y < Config.levelMaxY)
 			return this.entities[(int)(v.x)][(int)(v.y)];
 		else
 			return new EntityStatic(v.clone());
 	}
 	
 	public void remove (Vec2f v) {
-		if (v.x > -1 && v.x < Config.levelMaxX && v.y > -1 && v.y < Config.levelMaxY)
+		if (v.x > -1 && v.x < Config.gameBoxesX && v.y > -1 && v.y < Config.levelMaxY)
 			this.entities[Math.round(v.x)][Math.round(v.y)] = null;
 	}
 	
@@ -87,13 +87,14 @@ public class Level {
 		GL11.glPushMatrix();
 			GL11.glTranslatef(0f, -this.scroll, 0f);
 			
-			int y0 = (int) this.scroll;
+			int y0 = (int) Math.floor(this.scroll);
 			int y1 = y0 + Config.gameBoxesY + 2;
 			
-			for (int x = 0; x < Config.gameBoxesX && x < Config.levelMaxX; x++) {
-				for (int y = Math.max(y0, 0); y < y1 && y < Config.levelMaxY; y++) {
-					if (this.entities[x][y] != null)
-						this.entities[x][y].render(delta);
+			for (int x = 0; x < Config.gameBoxesX; x++) {
+				for (int y = y0; y < y1; y++) {
+					Entity e = this.get(new Vec2f(x, y));
+					if (e != null)
+						e.render(delta);
 				}
 			}
 			

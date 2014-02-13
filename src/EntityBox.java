@@ -8,32 +8,32 @@ public class EntityBox implements Entity {
 	
 	private Vec2f position;
 	private ArrayList<Graphic> graphics = new ArrayList<Graphic>();
-	private Type type;
+	private EntityBoxType type;
 	private boolean active = false;
 	private Mover mover;
 	
 	private int deltaDecay = 0;
 	
-	public EntityBox (Level _level, Vec2f _position, int _type) {
+	public EntityBox (Level _level, Vec2f _position, EntityBoxType _type) {
 		this.level = _level;
 		this.position = _position;
+		this.type = _type;
 		
-		switch(_type % 4) {
-		case 0:
-			this.type = Type.RED;
+		this.graphics.add(GraphicFactory.newBox());
+		switch(this.type) {
+		case RED:
+			this.graphics.add(1, GraphicFactory.newBoxRed());
 			break;
-		case 1:
-			this.type = Type.GREEN;
+		case GREEN:
+			this.graphics.add(1, GraphicFactory.newBoxGreen());
 			break;
-		case 2:
-			this.type = Type.BLUE;
+		case BLUE:
+			this.graphics.add(1, GraphicFactory.newBoxBlue());
 			break;
 		default:
-			this.type = Type.YELLOW;
+			this.graphics.add(1, GraphicFactory.newBoxYellow());
 		}
 		
-		this.graphics.add(GraphicFactory.newBoxGraphic());
-		this.graphics.add(GraphicFactory.newBoxColorGraphic(this.type));
 		this.level.put(this);
 	}
 	
@@ -47,13 +47,15 @@ public class EntityBox implements Entity {
 		
 		ArrayList<Entity> list = this.level.getDestroyField(this.position);
 		for (Entity e : list) {
-			if (e.getType() == this.type)
-				e.destroy();
+			if (e instanceof EntityBox) {
+				EntityBox b = (EntityBox) e;
+				if (b.getType() == this.type)
+					b.destroy();
+			}
 		}
 	}
 	
-	@Override
-	public Type getType() {
+	public EntityBoxType getType() {
 		return this.type;
 	}
 	
@@ -78,7 +80,7 @@ public class EntityBox implements Entity {
 	public void activate() {
 		if (!this.active) {
 			this.active = true;
-			this.graphics.add(1, new GraphicPolygon(GraphicFactory.box, new Color4f(1f, 1f, 1f, 0.5f)));
+			this.graphics.add(1, GraphicFactory.newBoxActive());
 		}	
 	}
 	
@@ -142,4 +144,11 @@ public class EntityBox implements Entity {
 			}
 		GL11.glPopMatrix();
 	}
+}
+
+enum EntityBoxType {
+	RED,
+	GREEN,
+	BLUE,
+	YELLOW
 }

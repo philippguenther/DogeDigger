@@ -7,10 +7,26 @@ public class LevelFactory {
 		lvl.doge = new Doge(lvl, new Vec2f(3, 0));
 		
 		Random rand = new Random(seed);
-		for (int x = 0; x < Config.levelMaxX; x++) {
+		for (int x = 0; x < Config.gameBoxesX; x++) {
 			for (int y = 0; y < Config.levelMaxY; y++) {
 				if (rand.nextBoolean()) {
-					EntityBox box = new EntityBox(lvl, new Vec2f(x, y), rand.nextInt());
+					EntityBoxType type;
+					
+					switch (rand.nextInt() % 4) {
+					case 0:
+						type = EntityBoxType.RED;
+						break;
+					case 1:
+						type = EntityBoxType.GREEN;
+						break;
+					case 2:
+						type = EntityBoxType.BLUE;
+						break;
+					default:
+						type = EntityBoxType.YELLOW;
+					}
+					
+					EntityBox box = new EntityBox(lvl, new Vec2f(x, y), type);
 					lvl.put(box);
 				}
 			}
@@ -21,9 +37,26 @@ public class LevelFactory {
 		lvl.doge = new Doge(lvl, new Vec2f(3, 0));
 		
 		Random rand = new Random(seed);
-		for (int x = 0; x < Config.levelMaxX; x++) {
+		for (int x = 0; x < Config.gameBoxesX; x++) {
 			for (int y = 2; y < Config.levelMaxY; y++) {
-				lvl.put(new EntityBox(lvl, new Vec2f(x, y), rand.nextInt()));
+				EntityBoxType type;
+				
+				switch (rand.nextInt() % 4) {
+				case 0:
+					type = EntityBoxType.RED;
+					break;
+				case 1:
+					type = EntityBoxType.GREEN;
+					break;
+				case 2:
+					type = EntityBoxType.BLUE;
+					break;
+				default:
+					type = EntityBoxType.YELLOW;
+				}
+				
+				EntityBox box = new EntityBox(lvl, new Vec2f(x, y), type);
+				lvl.put(box);
 			}
 		}
 	}

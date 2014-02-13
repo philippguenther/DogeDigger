@@ -2,15 +2,14 @@ import org.lwjgl.input.Keyboard;
 
 
 public class Config {
-	public static int windowWidth = 480;
-	public static int windowHeight = 640;
+	public static int windowX = 448;
+	public static int windowY = 576;
 
 	public static int gameBoxesX = 7;
 	public static int gameBoxesY = 9;
 	
-	public static int levelMaxX = gameBoxesX;
 	public static int levelMaxY = 64;
-	public static long levelSeed = 0;
+	public static long levelSeed = 4896309486l;
 	
 	public static int keyUp = Keyboard.KEY_W;
 	public static int keyRight = Keyboard.KEY_D;
