@@ -52,7 +52,7 @@ public class Doge {
 		
 		//ACTIVATE everything around me
 		if (this.mover == null) {
-			ArrayList<Entity> list = this.level.getSurrounding(this.position);
+			ArrayList<Entity> list = this.level.getActivationField(this.position);
 			for (Entity e : list) {
 				e.activate();
 			}

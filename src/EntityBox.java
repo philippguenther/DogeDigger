@@ -42,7 +42,7 @@ public class EntityBox implements Entity {
 		if (top != null)
 			top.fall();
 		
-		ArrayList<Entity> list = this.level.getSurrounding(this.position);
+		ArrayList<Entity> list = this.level.getDestroyField(this.position);
 		for (Entity e : list) {
 			if (e.getType() == this.type)
 				e.destroy();

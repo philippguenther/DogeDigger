@@ -38,7 +38,7 @@ public class Level {
 		this.remove(box.getPosition());
 	}
 	
-	public ArrayList<Entity> getSurrounding(Vec2f p) {
+	public ArrayList<Entity> getActivationField(Vec2f p) {
 		ArrayList<Entity> list = new ArrayList<Entity>();
 		
 		for (int x = Math.round(p.x) - 1; x < Math.round(p.x) + 2; x++) {
@@ -48,6 +48,25 @@ public class Level {
 					list.add(e);
 			}
 		}
+		
+		return list;
+	}
+	
+	public ArrayList<Entity> getDestroyField(Vec2f p) {
+		ArrayList<Entity> list = new ArrayList<Entity>();
+		
+		Entity t = this.get(new Vec2f(p.x, p.y - 1));
+		if (t != null)
+			list.add(t);
+		Entity r = this.get(new Vec2f(p.x + 1, p.y));
+		if (r != null)
+			list.add(r);
+		Entity b = this.get(new Vec2f(p.x, p.y + 1));
+		if (b != null)
+			list.add(b);
+		Entity l = this.get(new Vec2f(p.x - 1, p.y));
+		if (l != null)
+			list.add(l);
 		
 		return list;
 	}

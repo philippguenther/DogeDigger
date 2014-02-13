@@ -36,15 +36,15 @@ public class Game {
 		GL11.glDisable(GL11.GL_DEPTH_TEST); //it's a 2D game
 
 		this.level = new Level();
-		LevelFactory.random(this.level, Config.levelSeed);
-		//LevelFactory.full(this.level);
+		//LevelFactory.random(this.level, Config.levelSeed);
+		LevelFactory.randomFull(this.level, Config.levelSeed);
 		
 		this.lastFrame = getTime();
 		while(!Display.isCloseRequested() && !Keyboard.isKeyDown(Config.keyQuit)) {
 			
 			if (Keyboard.isKeyDown(Keyboard.KEY_R)) {
 				this.level = new Level();
-				LevelFactory.random(this.level, Config.levelSeed);
+				LevelFactory.randomCheese(this.level, Config.levelSeed);
 			}
 			
 			int delta = this.getDelta();
