@@ -25,6 +25,10 @@ public class Doge {
 		return this.position;
 	}
 	
+	public void die() {
+		System.out.println("DEEEEEEEEEEATH!!!");
+	}
+	
 	public void tick (int delta) {
 		
 		// set graphic according to moveDirection
@@ -43,6 +47,12 @@ public class Doge {
 			} else {
 				this.position.add(this.mover.getVecDelta(delta));
 			}
+		}
+		
+		//DIE
+		if (this.mover == null) {
+			if (this.level.get(this.position) != null)
+				this.die();
 		}
 		
 		// make sure position is integer

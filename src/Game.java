@@ -44,7 +44,7 @@ public class Game {
 			
 			if (Keyboard.isKeyDown(Keyboard.KEY_R)) {
 				this.level = new Level();
-				LevelFactory.randomCheese(this.level, Config.levelSeed);
+				LevelFactory.randomFull(this.level, Config.levelSeed);
 			}
 			
 			int delta = this.getDelta();

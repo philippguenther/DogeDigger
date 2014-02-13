@@ -19,5 +19,6 @@ enum Type {
 	STATIC,
 	RED,
 	GREEN,
-	BLUE
+	BLUE,
+	YELLOW
 }

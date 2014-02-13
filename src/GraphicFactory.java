@@ -22,8 +22,12 @@ public class GraphicFactory {
 		case GREEN:
 			color.g = 1f;
 			break;
-		default:
+		case BLUE:
 			color.b = 1f;
+			break;
+		default:
+			color.r = 1f;
+			color.g = 1f;
 		}
 		return new GraphicPolygon(GraphicFactory.box, color);
 	}

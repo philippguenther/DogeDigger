@@ -18,15 +18,18 @@ public class EntityBox implements Entity {
 		this.level = _level;
 		this.position = _position;
 		
-		switch(_type % 3) {
+		switch(_type % 4) {
 		case 0:
 			this.type = Type.RED;
 			break;
 		case 1:
 			this.type = Type.GREEN;
 			break;
-		default:
+		case 2:
 			this.type = Type.BLUE;
+			break;
+		default:
+			this.type = Type.YELLOW;
 		}
 		
 		this.graphics.add(GraphicFactory.newBoxGraphic());
