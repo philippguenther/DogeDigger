@@ -95,10 +95,20 @@ public class EntityBox implements Entity {
 	
 	@Override
 	public void fall() {
-		this.mover = new MoverLinear(new Vec2f(0f, 1f), Math.round(100 * (1 / this.level.getGravity())) );
-		Entity top = this.level.get(new Vec2f(this.position.x, this.position.y - 1));
-		if (top != null) {
-			top.activate();
+		boolean b = true;
+		for (Entity e : this.level.getDestroyField(this.position)) {
+			if (e instanceof EntityBox) {
+				EntityBox box = (EntityBox) e;
+				if (box.getType() == this.type)
+					b = false;
+			}
+		}
+		if (b) {
+			this.mover = new MoverLinear(new Vec2f(0f, 1f), Math.round(100 * (1 / this.level.getGravity())) );
+			Entity top = this.level.get(new Vec2f(this.position.x, this.position.y - 1));
+			if (top != null) {
+				top.activate();
+			}
 		}
 	}
 	

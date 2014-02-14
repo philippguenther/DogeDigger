@@ -9,7 +9,7 @@ public class Config {
 	public static int gameBoxesY = 9;
 	
 	public static int levelMaxY = 64;
-	public static long levelSeed = 4896309486l;
+	public static long levelSeed = 1l;
 	
 	public static int keyUp = Keyboard.KEY_W;
 	public static int keyRight = Keyboard.KEY_D;

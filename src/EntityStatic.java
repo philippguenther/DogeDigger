@@ -7,8 +7,8 @@ public class EntityStatic implements Entity {
 	private Vec2f position;
 	private ArrayList<Graphic> graphics = new ArrayList<Graphic>();
 	
-	public EntityStatic (Vec2f _position) {
-		this.position = _position;
+	public EntityStatic (Vec2f p) {
+		this.position = new Vec2f(Math.round(p.x), Math.round(p.y));
 		this.graphics.add(GraphicFactory.newStatic());
 	}
 	

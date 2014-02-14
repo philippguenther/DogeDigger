@@ -92,6 +92,16 @@ public class Doge {
 			this.position.round();
 		}
 		
+		//[intensifies]
+		if (this.mover == null && !this.intense && this.position.y > Config.levelMaxY - 10) {
+			this.intense = true;
+			this.graphicLeft = GraphicFactory.newDogeIntense();
+			this.graphicRight = GraphicFactory.newDogeIntense();
+			this.graphicRight.flip();
+			this.graphicSitting = GraphicFactory.newDogeIntense();
+			this.graphicDigging = GraphicFactory.newDogeIntense();
+		}
+		
 		//ACTIVATE everything around me
 		if (this.mover == null) {
 			ArrayList<Entity> list = this.level.getActivationField(this.position);
@@ -166,13 +176,6 @@ public class Doge {
 			} else {
 				this.state = DogeState.SITTING;
 				this.stateChanged = true;
-			}
-			
-			if (this.mover == null && !this.intense && this.position.y > Config.levelMaxY - 10) {
-				this.intense = true;
-				this.graphicLeft = GraphicFactory.newDogeIntense();
-				this.graphicRight = GraphicFactory.newDogeIntense();
-				this.graphicRight.flip();
 			}
 		}
 		
