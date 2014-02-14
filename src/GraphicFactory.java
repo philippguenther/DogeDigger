@@ -40,7 +40,7 @@ public class GraphicFactory {
 	}
 	
 	public static Graphic newDogeDigging() {
-		return new GraphicImage("Doge.png");
+		return new GraphicAnimation(imagesWithEvenClipping("DogeDigDown.png", 4), evenDelays(40, 4));
 	}
 	
 	public static Graphic newDogeSitting() {
