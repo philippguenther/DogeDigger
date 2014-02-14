@@ -10,7 +10,7 @@ public class GraphicFactory {
 	
 	//BOX-----------------------------------------------------
 	public static Graphic newBox () {
-		return new GraphicImage("Box_greyscale.png");
+		return new GraphicImage("BoxGrey.png");
 	}
 	
 	public static Graphic newBoxRed() {
@@ -36,23 +36,23 @@ public class GraphicFactory {
 	
 	//DOGE--------------------------------------------------
 	public static Graphic newDogeWalking() {
-		return new GraphicAnimation(imagesWithEvenClipping("walk.png", 5), evenDelays(25, 5));
+		return new GraphicAnimation(imagesWithEvenClipping("DogeWalking.png", 5), evenDelays(25, 5));
 	}
 	
 	public static Graphic newDogeDigging() {
-		return new GraphicImage("[intensifies].png", new float[]{0, 0, 0.25f, 1});
+		return new GraphicImage("Doge.png");
 	}
 	
 	public static Graphic newDogeSitting() {
-		return new GraphicImage("[intensifies].png", new float[]{0, 0, 0.25f, 1});
+		return new GraphicImage("Doge.png");
 	}
 	
 	public static Graphic newDogeDead() {
-		return new GraphicImage("[intensifies].png", new float[]{0, 0, 0.25f, 1});
+		return new GraphicImage("Doge.png");
 	}
 	
 	public static Graphic newDogeIntense() {
-		return new GraphicAnimation(imagesWithEvenClipping("[intensifies].png", 4), evenDelays(1, 4));
+		return new GraphicAnimation(imagesWithEvenClipping("DogeIntense.png", 4), evenDelays(1, 4));
 	}
 	
 	

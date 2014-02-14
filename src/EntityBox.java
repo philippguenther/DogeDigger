@@ -98,7 +98,7 @@ public class EntityBox implements Entity {
 		this.mover = new MoverLinear(new Vec2f(0f, 1f), Math.round(100 * (1 / this.level.getGravity())) );
 		Entity top = this.level.get(new Vec2f(this.position.x, this.position.y - 1));
 		if (top != null) {
-			top.fall();
+			top.activate();
 		}
 	}
 	
@@ -129,8 +129,6 @@ public class EntityBox implements Entity {
 			Entity bot = this.level.get(new Vec2f(this.position.x, this.position.y + 1f));
 			if (bot == null) {
 				this.fall();
-			} else {
-				this.deltaDecay = 0;
 			}
 		}
 	}
