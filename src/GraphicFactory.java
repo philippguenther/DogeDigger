@@ -35,8 +35,8 @@ public class GraphicFactory {
 	
 	
 	//DOGE--------------------------------------------------
-	public static Graphic newDoge() {
-		return new GraphicImage("[intensifies].png", new float[]{0, 0, 0.25f, 1});
+	public static Graphic newDogeWalking() {
+		return new GraphicAnimation(imagesWithEvenClipping("walk.png", 5), evenDelays(25, 5));
 	}
 	
 	public static Graphic newDogeDigging() {

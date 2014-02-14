@@ -8,10 +8,11 @@ public class Doge {
 	
 	private Vec2f position;
 	private ArrayList<Graphic> graphics = new ArrayList<Graphic>();
+	
 	private DogeState state = DogeState.SITTING;
+	private boolean stateChanged = false;
 	private boolean intense = false;
 	
-	private boolean stateChanged = false;
 	private Mover mover;
 	
 	private int deltaMove = Config.dogeDelayMove;
@@ -29,8 +30,8 @@ public class Doge {
 		this.level = _level;
 		this.position = _position;
 		
-		this.graphicLeft = GraphicFactory.newDoge();
-		this.graphicRight = GraphicFactory.newDoge();
+		this.graphicLeft = GraphicFactory.newDogeWalking();
+		this.graphicRight = GraphicFactory.newDogeWalking();
 		this.graphicRight.flip();
 		this.graphicSitting = GraphicFactory.newDogeSitting();
 		this.graphicDigging = GraphicFactory.newDogeDigging();
@@ -113,6 +114,8 @@ public class Doge {
 			if (Keyboard.isKeyDown(Config.keyUp)) {
 				// top
 				this.moveDirection = 0;
+				this.state = DogeState.SITTING;
+				this.stateChanged = true;
 				
 			} else if (Keyboard.isKeyDown(Config.keyRight)) {
 				// right
@@ -138,6 +141,8 @@ public class Doge {
 			} else if (Keyboard.isKeyDown(Config.keyDown)) {
 				// down
 				this.moveDirection = 2;
+				this.state = DogeState.SITTING;
+				this.stateChanged = true;
 				
 			} else if (Keyboard.isKeyDown(Config.keyLeft)) {
 				// left
@@ -158,6 +163,9 @@ public class Doge {
 						}
 					}
 				}
+			} else {
+				this.state = DogeState.SITTING;
+				this.stateChanged = true;
 			}
 			
 			if (this.mover == null && !this.intense && this.position.y > Config.levelMaxY - 10) {
