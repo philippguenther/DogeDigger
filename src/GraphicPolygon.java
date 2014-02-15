@@ -26,6 +26,11 @@ public class GraphicPolygon implements Graphic {
 	public void unflip() {
 		
 	}
+
+	@Override
+	public void reset() {
+		
+	}
 	
 	public void render(int delta) {
 		GL11.glEnable(GL11.GL_BLEND);

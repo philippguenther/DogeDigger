@@ -55,18 +55,23 @@ public class Doge {
 		if (this.stateChanged) {
 			switch (this.state) {
 			case RIGHT:
+				this.graphicRight.reset();
 				this.graphics.set(0, this.graphicRight);
 				break;
 			case LEFT:
+				this.graphicRight.reset();
 				this.graphics.set(0, this.graphicLeft);
 				break;
 			case DEAD:
+				this.graphicRight.reset();
 				this.graphics.set(0, this.graphicDead);
 				break;
 			case DIGGING:
+				this.graphicRight.reset();
 				this.graphics.set(0, this.graphicDigging);
 				break;
 			default:
+				this.graphicRight.reset();
 				this.graphics.set(0, this.graphicSitting);
 			}
 			this.stateChanged = false;
@@ -99,7 +104,6 @@ public class Doge {
 			this.graphicRight = GraphicFactory.newDogeIntense();
 			this.graphicRight.flip();
 			this.graphicSitting = GraphicFactory.newDogeIntense();
-			this.graphicDigging = GraphicFactory.newDogeIntense();
 		}
 		
 		//ACTIVATE everything around me

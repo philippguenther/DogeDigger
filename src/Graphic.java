@@ -3,4 +3,6 @@ public interface Graphic {
 	
 	public void flip();
 	public void unflip();
+	
+	public void reset();
 }

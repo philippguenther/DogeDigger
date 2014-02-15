@@ -134,11 +134,12 @@ public class EntityBox implements Entity {
 		}
 		
 		//FALLING
-		this.deltaDecay += delta;
-		if (this.mover == null && this.active && this.deltaDecay > Config.boxDecay) {
+		if (this.mover == null && this.active) {
 			Entity bot = this.level.get(new Vec2f(this.position.x, this.position.y + 1f));
 			if (bot == null) {
-				this.fall();
+				this.deltaDecay += delta;
+				if (this.deltaDecay > Config.boxDecay)
+					this.fall();
 			}
 		}
 	}

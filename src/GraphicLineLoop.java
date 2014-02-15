@@ -26,6 +26,11 @@ public class GraphicLineLoop implements Graphic {
 	public void unflip() {
 		
 	}
+	
+	@Override
+	public void reset() {
+		
+	}
 
 	@Override
 	public void render(int delta) {

@@ -26,6 +26,12 @@ public class GraphicAnimation implements Graphic {
 			g.unflip();
 		}
 	}
+	
+	@Override
+	public void reset() {
+		this.current = 0;
+		this.delta = 0;
+	}
 
 	@Override
 	public void render(int delta) {

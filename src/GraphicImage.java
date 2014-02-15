@@ -61,6 +61,11 @@ public class GraphicImage implements Graphic {
 			this.clipping[2] = xStart;
 		}
 	}
+	
+	@Override
+	public void reset() {
+		
+	}
 
 	@Override
 	public void render(int delta) {

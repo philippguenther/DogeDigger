@@ -43,7 +43,7 @@ public class LevelFactory {
 			for (int y = 2; y < Config.levelMaxY; y++) {
 				Entity ent;
 				
-				switch (rand.nextInt(5)) {
+				switch (rand.nextInt(4)) {
 				case 0:
 					ent = new EntityBox(lvl, new Vec2f(x, y), EntityBoxType.RED);
 					break;
