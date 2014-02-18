@@ -60,11 +60,6 @@ public class EntityBox implements Entity {
 	}
 	
 	@Override
-	public void addGraphic (Graphic _graphic) {
-		this.graphics.add(_graphic);
-	}
-	
-	@Override
 	public Vec2f getPosition() {
 		return this.position;
 	}
@@ -117,7 +112,7 @@ public class EntityBox implements Entity {
 		
 		// check for mover
 		if (this.mover != null) {
-			if (this.mover.ready()) {
+			if (this.mover.disposable()) {
 				// if mover is ready remove it
 				this.mover = null;
 			} else {

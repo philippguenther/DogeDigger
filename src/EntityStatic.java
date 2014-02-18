@@ -26,11 +26,6 @@ public class EntityStatic implements Entity {
 	public void destroy() {
 		// don't give a fuck
 	}
-
-	@Override
-	public void addGraphic(Graphic g) {
-		this.graphics.add(g);
-	}
 	
 	@Override
 	public void activate() {

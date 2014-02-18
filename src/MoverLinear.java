@@ -6,14 +6,14 @@ public class MoverLinear implements Mover {
 	private Vec2f todo;
 	private int deltaSum = 0;
 	
-	public MoverLinear (Vec2f _move, int _duration) {
+	public MoverLinear(Vec2f _move, int _duration) {
 		this.move = _move.clone();
 		this.todo = _move.clone();
 		this.duration = _duration;
 	}
 	
 	@Override
-	public Vec2f getVecDelta (int delta) {
+	public Vec2f getVecDelta(int delta) {
 		this.deltaSum += delta;
 		
 		if (this.deltaSum < this.duration) {
@@ -37,7 +37,7 @@ public class MoverLinear implements Mover {
 	}
 
 	@Override
-	public boolean ready () {
+	public boolean disposable() {
 		if (this.deltaSum > this.duration)
 			return true;
 		else

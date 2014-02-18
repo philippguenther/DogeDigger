@@ -7,7 +7,7 @@ public class Doge {
 	private Level level;
 	
 	private Vec2f position;
-	private ArrayList<Graphic> graphics = new ArrayList<Graphic>();
+	private Graphic[] graphics = new Graphic[4];
 	
 	private DogeState state = DogeState.SITTING;
 	private boolean stateChanged = false;
@@ -37,7 +37,7 @@ public class Doge {
 		this.graphicDigging = GraphicFactory.newDogeDigging();
 		this.graphicDead = GraphicFactory.newDogeDead();
 				
-		this.graphics.add(0, this.graphicDigging);
+		this.graphics[0] = this.graphicDigging;
 	}
 	
 	public Vec2f getPosition() {
@@ -52,34 +52,39 @@ public class Doge {
 	public void tick (int delta) {
 		
 		//GRAPHIC
-		if (this.stateChanged) {
+		boolean disposable = true;
+		if (this.graphics[0] instanceof GraphicAnimation) {
+			disposable = !((GraphicAnimation) this.graphics[0]).disposable();
+		}
+		
+		if (this.stateChanged && disposable) {
 			switch (this.state) {
 			case RIGHT:
 				this.graphicRight.reset();
-				this.graphics.set(0, this.graphicRight);
+				this.graphics[0] = this.graphicRight;
 				break;
 			case LEFT:
 				this.graphicRight.reset();
-				this.graphics.set(0, this.graphicLeft);
+				this.graphics[0] = this.graphicLeft;
 				break;
 			case DEAD:
 				this.graphicRight.reset();
-				this.graphics.set(0, this.graphicDead);
+				this.graphics[0] = this.graphicDead;
 				break;
 			case DIGGING:
 				this.graphicRight.reset();
-				this.graphics.set(0, this.graphicDigging);
+				this.graphics[0] = this.graphicDigging;
 				break;
 			default:
 				this.graphicRight.reset();
-				this.graphics.set(0, this.graphicSitting);
+				this.graphics[0] = this.graphicSitting;
 			}
 			this.stateChanged = false;
 		}
 		
 		//MOVER
 		if (this.mover != null) {
-			if (this.mover.ready()) {
+			if (this.mover.disposable()) {
 				this.mover = null;
 			} else {
 				this.position.add(this.mover.getVecDelta(delta));
@@ -231,7 +236,8 @@ public class Doge {
 		GL11.glPushMatrix();
 			GL11.glTranslatef(this.position.x, this.position.y, 0f);
 			for (Graphic g : this.graphics) {
-				g.render(delta);
+				if (g != null)
+					g.render(delta);
 			}
 		GL11.glPopMatrix();
 	}
