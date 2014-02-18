@@ -22,7 +22,9 @@ public class Doge {
 	private Graphic graphicLeft;
 	private Graphic graphicRight;
 	private Graphic graphicSitting;
-	private Graphic graphicDigging;
+	private Graphic graphicDiggingDown;
+	private Graphic graphicDiggingLeft;
+	private Graphic graphicDiggingRigth;
 	private Graphic graphicDead;
 	
 	
@@ -34,10 +36,14 @@ public class Doge {
 		this.graphicRight = GraphicFactory.newDogeWalking();
 		this.graphicRight.flip();
 		this.graphicSitting = GraphicFactory.newDogeSitting();
-		this.graphicDigging = GraphicFactory.newDogeDigging();
+		this.graphicDiggingDown = GraphicFactory.newDogeDiggingDown();
+		this.graphicDiggingLeft = GraphicFactory.newDogeDiggingSide();
+		this.graphicDiggingRigth = GraphicFactory.newDogeDiggingSide();
+		this.graphicDiggingRigth.flip();
+
 		this.graphicDead = GraphicFactory.newDogeDead();
 				
-		this.graphics[0] = this.graphicDigging;
+		this.graphics[0] = this.graphicDiggingDown;
 	}
 	
 	public Vec2f getPosition() {
@@ -71,10 +77,20 @@ public class Doge {
 				this.graphicRight.reset();
 				this.graphics[0] = this.graphicDead;
 				break;
-			case DIGGING:
+			case DIGGINGDOWN:
 				this.graphicRight.reset();
-				this.graphics[0] = this.graphicDigging;
+				this.graphics[0] = this.graphicDiggingDown;
 				break;
+			case DIGGINGLEFT:
+				this.graphicRight.reset();
+				this.graphics[0] = this.graphicDiggingLeft;
+				break;
+			case DIGGINGRIGTH:
+				this.graphicRight.reset();
+				this.graphics[0] = this.graphicDiggingRigth;
+				break;
+				
+				
 			default:
 				this.graphicRight.reset();
 				this.graphics[0] = this.graphicSitting;
@@ -191,8 +207,7 @@ public class Doge {
 		// DIGGING
 		deltaDig += delta;
 		if (this.mover == null && this.deltaDig > Config.dogeDelayDig && Keyboard.isKeyDown(Config.keyDig)) {
-			this.state = DogeState.DIGGING;
-			this.stateChanged = true;
+			
 			
 			if (this.moveDirection == 0) {
 				// up
@@ -205,6 +220,8 @@ public class Doge {
 			} else if (this.moveDirection == 1) {
 				// right
 				Entity right = this.level.get(new Vec2f(this.position.x + 1, this.position.y));
+				this.state = DogeState.DIGGINGRIGTH;
+				this.stateChanged = true;
 				if (right != null) {
 					right.destroy();
 					this.deltaDig = 0;
@@ -213,6 +230,8 @@ public class Doge {
 				
 			} else if (this.moveDirection == 2) {
 				// down
+				this.state = DogeState.DIGGINGDOWN;
+				this.stateChanged = true;
 				Entity bottom = this.level.get(new Vec2f(this.position.x, this.position.y + 1));
 				if (bottom != null) {
 					bottom.destroy();
@@ -223,6 +242,8 @@ public class Doge {
 			} else if (this.moveDirection == 3) {
 				// left
 				Entity left = this.level.get(new Vec2f(this.position.x - 1, this.position.y));
+				this.state = DogeState.DIGGINGLEFT;
+				this.stateChanged = true;
 				if (left != null) {
 					left.destroy();
 					this.deltaDig = 0;
@@ -247,6 +268,8 @@ enum DogeState {
 	SITTING,
 	RIGHT,
 	LEFT,
-	DIGGING,
+	DIGGINGDOWN,
+	DIGGINGRIGTH,
+	DIGGINGLEFT,
 	DEAD
 }

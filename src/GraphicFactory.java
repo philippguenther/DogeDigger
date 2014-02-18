@@ -39,8 +39,12 @@ public class GraphicFactory {
 		return new GraphicAnimation(imagesWithEvenClipping("DogeWalking.png", 5), evenDelays(25, 5));
 	}
 	
-	public static Graphic newDogeDigging() {
+	public static Graphic newDogeDiggingDown() {
 		return new GraphicAnimation(imagesWithEvenClipping("DogeDigDown.png", 4), evenDelays(40, 4));
+	}
+	
+	public static Graphic newDogeDiggingSide() {
+		return new GraphicAnimation(imagesWithEvenClipping("DogeDigSide.png", 5), evenDelays(40, 5));
 	}
 	
 	public static Graphic newDogeSitting() {
