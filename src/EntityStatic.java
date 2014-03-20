@@ -41,6 +41,11 @@ public class EntityStatic implements Entity {
 	}
 	
 	@Override
+	public void deactivate() {
+		
+	}
+	
+	@Override
 	public boolean isActive() {
 		return false;
 	}

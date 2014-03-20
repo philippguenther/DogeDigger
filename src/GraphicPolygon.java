@@ -47,5 +47,12 @@ public class GraphicPolygon implements Graphic {
 		
 		GL11.glDisable(GL11.GL_BLEND);
 	}
+	
+	@Override
+	public void destroy() {
+		this.color = null;
+		this.offset = null;
+		this.vertices = null;
+	}
 
 }

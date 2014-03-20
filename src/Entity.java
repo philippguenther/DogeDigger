@@ -6,6 +6,7 @@ public interface Entity {
 	public void destroy();
 	
 	public void activate();
+	public void deactivate();
 	public boolean isActive();
 	
 	public boolean readyToFall();

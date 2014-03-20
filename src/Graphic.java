@@ -5,4 +5,6 @@ public interface Graphic {
 	public void unflip();
 	
 	public void reset();
+	
+	public void destroy();
 }

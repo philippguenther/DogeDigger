@@ -52,4 +52,12 @@ public class GraphicAnimation implements Graphic {
 		
 		this.frames[this.current].render(delta);
 	}
+	
+	@Override
+	public void destroy() {
+		for (Graphic g : this.frames)
+			g.destroy();
+		this.frames = null;
+		this.delays = null;
+	}
 }

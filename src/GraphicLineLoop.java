@@ -44,4 +44,11 @@ public class GraphicLineLoop implements Graphic {
 		GL11.glEnd();
 	}
 
+	@Override
+	public void destroy() {
+		this.color = null;
+		this.offset = null;
+		this.vertices = null;
+	}
+	
 }

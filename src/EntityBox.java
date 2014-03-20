@@ -8,7 +8,7 @@ public class EntityBox implements Entity {
 	
 	private Vec2i position;
 	private Vec2f offset = Vec2f.nil();
-	private ArrayList<Graphic> graphics = new ArrayList<Graphic>();
+	private Graphic[] graphics = new Graphic[3];
 	private EntityBoxType type;
 	private boolean active = false;
 	private Mover mover;
@@ -20,25 +20,26 @@ public class EntityBox implements Entity {
 		this.position = _position;
 		this.type = _type;
 		
-		this.graphics.add(GraphicFactory.newBox());
+		this.graphics[0] = GraphicFactory.newBox();
 		switch(this.type) {
 		case RED:
-			this.graphics.add(GraphicFactory.newBoxRed());
+			this.graphics[1] = GraphicFactory.newBoxRed();
 			break;
 		case GREEN:
-			this.graphics.add(GraphicFactory.newBoxGreen());
+			this.graphics[1] = GraphicFactory.newBoxGreen();
 			break;
 		case BLUE:
-			this.graphics.add(GraphicFactory.newBoxBlue());
+			this.graphics[1] = GraphicFactory.newBoxBlue();
 			break;
 		default:
-			this.graphics.add(GraphicFactory.newBoxYellow());
+			this.graphics[1] = GraphicFactory.newBoxYellow();
 		}
 	}
 	
 	@Override
 	public void destroy () {
-		this.graphics.clear();
+		for (Graphic g : this.graphics)
+			g.destroy();
 		this.level.remove(this.position);
 		
 		// destroy connecting boxes of same type
@@ -72,13 +73,20 @@ public class EntityBox implements Entity {
 	public void activate() {
 		if (!this.active) {
 			this.active = true;
-			this.graphics.add(GraphicFactory.newBoxActive());
+			this.graphics[2] = GraphicFactory.newBoxActive();
 		}
 		
 		for (EntityBox i : this.getBond(new ArrayList<EntityBox>())) {
 			if (!i.isActive())
 				i.activate();
 		}
+	}
+	
+	@Override
+	public void deactivate() {
+		this.active = false;
+		this.deltaDecay = 0;
+		this.graphics[2] = null;
 	}
 	
 	@Override
@@ -140,11 +148,29 @@ public class EntityBox implements Entity {
 				this.offset.add(this.mover.getVecDelta(delta));
 			}
 		} else {
-			this.level.remove(this);
-			this.position.x += Math.round(this.offset.x);
-			this.position.y += Math.round(this.offset.y);
-			this.offset = Vec2f.nil();
-			this.level.put(this);
+			
+			if (this.offset.x > 0.99) {
+				this.level.remove(this);
+				this.position.x += 1;
+				this.offset.x -= 1;
+				this.level.put(this);
+			} else if (this.offset.x < -0.99) {
+				this.level.remove(this);
+				this.position.x -= 1;
+				this.offset.x += 1;
+				this.level.put(this);
+			}
+			if (this.offset.y > 0.99) {
+				this.level.remove(this);
+				this.position.y += 1;
+				this.offset.y -= 1;
+				this.level.put(this);
+			} else if (this.offset.y < -0.99) {
+				this.level.remove(this);
+				this.position.y -= 1;
+				this.offset.y += 1;
+				this.level.put(this);
+			}
 			
 			if (this.active)
 				this.deltaDecay += delta;
@@ -167,6 +193,8 @@ public class EntityBox implements Entity {
 						eb.moveY(1);
 						eb.deltaDecay = delta;
 					}
+				} else {
+					this.deactivate();
 				}
 				
 			}
@@ -178,7 +206,8 @@ public class EntityBox implements Entity {
 		GL11.glPushMatrix();
 			GL11.glTranslatef(this.position.x + this.offset.x, this.position.y + this.offset.y, 0f);
 			for (Graphic g : this.graphics) {
-				g.render(delta);
+				if (g != null)
+					g.render(delta);
 			}
 		GL11.glPopMatrix();
 	}

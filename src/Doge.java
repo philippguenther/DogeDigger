@@ -15,7 +15,6 @@ public class Doge {
 	private boolean stateChanged = false;
 	private boolean intense = false;
 	
-	private int deltaMove = Config.dogeDelayMove;
 	private int deltaDig = Config.dogeDelayDig;
 	private int moveDirection = 2;
 	
@@ -107,9 +106,21 @@ public class Doge {
 			else
 				this.offset.add(this.mover.getVecDelta(delta));				
 		} else {
-			this.position.x += Math.round(this.offset.x);
-			this.position.y += Math.round(this.offset.y);
-			this.offset = Vec2f.nil();
+			
+			if (this.offset.x > 0.99) {
+				this.position.x += 1;
+				this.offset.x -= 1;
+			} else if (this.offset.x < -0.99) {
+				this.position.x -= 1;
+				this.offset.x += 1;
+			}
+			if (this.offset.y > 0.99) {
+				this.position.y += 1;
+				this.offset.y -= 1;
+			} else if (this.offset.y < -0.99) {
+				this.position.y -= 1;
+				this.offset.y += 1;
+			}
 		
 			// die
 			if (this.level.get(this.position) != null)
@@ -134,67 +145,67 @@ public class Doge {
 			Entity bot = this.level.get(new Vec2i(this.position.x, this.position.y + 1));
 			if (bot == null) {
 				this.mover = new MoverLinear(new Vec2f(0f, 1f), Math.round(100 * (1 / this.level.getGravity())) );
+				return;
 			}
 			
 			// move
-			deltaMove += delta;
-			if (this.deltaMove > Config.dogeDelayMove) {
-				if (Keyboard.isKeyDown(Config.keyUp)) {
-					// top
-					this.moveDirection = 0;
-					this.state = DogeState.SITTING;
-					this.stateChanged = true;
-					
-				} else if (Keyboard.isKeyDown(Config.keyRight)) {
-					// right
-					this.moveDirection = 1;
+			if (Keyboard.isKeyDown(Config.keyUp)) {
+				// top
+				this.moveDirection = 0;
+				this.state = DogeState.SITTING;
+				this.stateChanged = true;
+				return;
+				
+			} else if (Keyboard.isKeyDown(Config.keyRight)) {
+				// right
+				this.moveDirection = 1;
+				this.state = DogeState.RIGHT;
+				this.stateChanged = true;
+				
+				Entity right = this.level.get(new Vec2i(this.position.x + 1, Math.round(this.position.y)));
+				if (right == null) {
+					this.mover = new MoverLinear(new Vec2f(1f, 0f), 100);
 					this.state = DogeState.RIGHT;
-					this.stateChanged = true;
-					
-					Entity right = this.level.get(new Vec2i(this.position.x + 1, Math.round(this.position.y)));
-					this.deltaMove = 0;
-					if (right == null) {
-						this.mover = new MoverLinear(new Vec2f(1f, 0f), 100);
-						this.state = DogeState.RIGHT;
-					} else {
-						Entity up = this.level.get(new Vec2i(this.position.x, this.position.y - 1));
-						if (up == null) {
-							Entity rightup = this.level.get(new Vec2i(this.position.x + 1, this.position.y - 1));
-							if (rightup == null) {
-								this.mover = new MoverLinear(new Vec2f(1f, -1f), 200);
-							}
-						}
-					}
-					
-				} else if (Keyboard.isKeyDown(Config.keyDown)) {
-					// down
-					this.moveDirection = 2;
-					this.state = DogeState.SITTING;
-					this.stateChanged = true;
-					
-				} else if (Keyboard.isKeyDown(Config.keyLeft)) {
-					// left
-					this.moveDirection = 3;
-					this.state = DogeState.LEFT;
-					this.stateChanged = true;
-					
-					Entity left = this.level.get(new Vec2i(this.position.x - 1, this.position.y));
-					this.deltaMove = 0;
-					if (left == null) {
-						this.mover = new MoverLinear(new Vec2f(-1f, 0f), 100);
-					} else {
-						Entity up = this.level.get(new Vec2i(this.position.x, this.position.y - 1));
-						if (up == null) {
-							Entity leftup = this.level.get(new Vec2i(this.position.x - 1, this.position.y - 1));
-							if (leftup == null) {
-								this.mover = new MoverLinear(new Vec2f(-1f, -1f), 200);
-							}
-						}
-					}
 				} else {
-					this.state = DogeState.SITTING;
-					this.stateChanged = true;
+					Entity up = this.level.get(new Vec2i(this.position.x, this.position.y - 1));
+					if (up == null) {
+						Entity rightup = this.level.get(new Vec2i(this.position.x + 1, this.position.y - 1));
+						if (rightup == null) {
+							this.mover = new MoverLinear(new Vec2f(1f, -1f), 200);
+							return;
+						}
+					}
 				}
+				
+			} else if (Keyboard.isKeyDown(Config.keyDown)) {
+				// down
+				this.moveDirection = 2;
+				this.state = DogeState.SITTING;
+				this.stateChanged = true;
+				return;
+				
+			} else if (Keyboard.isKeyDown(Config.keyLeft)) {
+				// left
+				this.moveDirection = 3;
+				this.state = DogeState.LEFT;
+				this.stateChanged = true;
+				
+				Entity left = this.level.get(new Vec2i(this.position.x - 1, this.position.y));
+				if (left == null) {
+					this.mover = new MoverLinear(new Vec2f(-1f, 0f), 100);
+				} else {
+					Entity up = this.level.get(new Vec2i(this.position.x, this.position.y - 1));
+					if (up == null) {
+						Entity leftup = this.level.get(new Vec2i(this.position.x - 1, this.position.y - 1));
+						if (leftup == null) {
+							this.mover = new MoverLinear(new Vec2f(-1f, -1f), 200);
+							return;
+						}
+					}
+				}
+			} else {
+				this.state = DogeState.SITTING;
+				this.stateChanged = true;
 			}
 		}
 		
@@ -206,8 +217,8 @@ public class Doge {
 				Entity top = this.level.get(new Vec2i(this.position.x, this.position.y - 1));
 				if (top != null) {
 					top.destroy();
-					this.deltaDig = 0;
-					this.deltaMove = 0;
+					this.deltaDig = delta;
+					return;
 				}
 			} else if (this.moveDirection == 1) {
 				// right
@@ -216,8 +227,8 @@ public class Doge {
 				this.stateChanged = true;
 				if (right != null) {
 					right.destroy();
-					this.deltaDig = 0;
-					this.deltaMove = -Config.dogeDelayMove;
+					this.deltaDig = delta;
+					return;
 				}
 				
 			} else if (this.moveDirection == 2) {
@@ -227,8 +238,8 @@ public class Doge {
 				Entity bottom = this.level.get(new Vec2i(this.position.x, this.position.y + 1));
 				if (bottom != null) {
 					bottom.destroy();
-					this.deltaDig = 0;
-					this.deltaMove = 0;
+					this.deltaDig = delta;
+					return;
 				}
 				
 			} else if (this.moveDirection == 3) {
@@ -238,8 +249,8 @@ public class Doge {
 				this.stateChanged = true;
 				if (left != null) {
 					left.destroy();
-					this.deltaDig = 0;
-					this.deltaMove = -Config.dogeDelayMove;
+					this.deltaDig = delta;
+					return;
 				}
 			}
 		}

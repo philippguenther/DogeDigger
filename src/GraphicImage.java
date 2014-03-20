@@ -102,6 +102,14 @@ public class GraphicImage implements Graphic {
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glDisable(GL11.GL_SRC_ALPHA);
 	}
+	
+	@Override
+	public void destroy() {
+		this.img.destroy();
+		this.img = null;
+		this.offset = null;
+		this.clipping = null;
+	}
 }
 
 
@@ -159,6 +167,10 @@ class GLImage {
 	
 	public int getHeight () {
 		return this.height;
+	}
+	
+	public void destroy() {
+		//TODO: clear image in OpenGL
 	}
 	
 }

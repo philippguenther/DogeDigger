@@ -20,7 +20,7 @@ public class Level {
 	
 	public void put (Entity box) {
 		if (this.entities[box.getPosition().x][box.getPosition().y] != null)
-			System.out.println("WARNING: position already occupied!");
+			System.out.println("WARNING: " + box.getPosition().x + "|" + box.getPosition().y + " already occupied!");
 		this.entities[box.getPosition().x][box.getPosition().y] = box;
 	}
 	
