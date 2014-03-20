@@ -44,30 +44,41 @@ public class GraphicFactory {
 	
 	
 	//DOGE--------------------------------------------------
-	public static Graphic newDogeWalking() {
-		return new GraphicAnimation(imagesWithEvenClipping("DogeWalking.png", 5), evenDelays(25, 5));
-	}
-	
-	public static Graphic newDogeDiggingDown() {
-		return new GraphicAnimation(imagesWithEvenClipping("DogeDigDown.png", 4), evenDelays(40, 4));
-	}
-	
-	public static Graphic newDogeDiggingSide() {
-		return new GraphicAnimation(imagesWithEvenClipping("DogeDigSide.png", 5), evenDelays(40, 5));
-	}
-	
-	public static Graphic newDogeSitting() {
-		return new GraphicImage("Doge.png");
-	}
-	
 	public static Graphic newDogeDead() {
-		return new GraphicImage("Doge.png");
+		return new GraphicAnimation(imagesWithEvenClipping("DogeBodyDiggingDown.png", 4), evenDelays(25, 4));
 	}
 	
-	public static Graphic newDogeIntense() {
-		return new GraphicAnimation(imagesWithEvenClipping("DogeIntense.png", 4), evenDelays(1, 4));
+	public static Graphic newDogeBodyDiggingDown() {
+		return new GraphicAnimation(imagesWithEvenClipping("DogeBodyDiggingDown.png", 4), evenDelays(25, 4));
 	}
 	
+	public static Graphic newDogeBodyDiggingSide() {
+		return new GraphicAnimation(imagesWithEvenClipping("DogeBodyDiggingSide.png", 5), evenDelays(20, 5));
+	}
+	
+	public static Graphic newDogeBodyWaiting() {
+		return new GraphicImage("DogeBodyWalking.png");
+	}
+	
+	public static Graphic newDogeBodyWalking() {
+		return new GraphicAnimation(imagesWithEvenClipping("DogeBodyWalking.png", 5), evenDelays(20, 5));
+	}
+	
+	public static Graphic newDogeHeadDiggingDown() {
+		return new GraphicAnimation(imagesWithEvenClipping("DogeHeadDiggingDown.png", 4), evenDelays(25, 4));
+	}
+	
+	public static Graphic newDogeHeadDiggingSide() {
+		return new GraphicAnimation(imagesWithEvenClipping("DogeBodyDiggingSide.png", 5), evenDelays(20, 5));
+	}
+	
+	public static Graphic newDogeHeadWaiting() {
+		return new GraphicImage("DogeHeadIntense.png");
+	}
+	
+	public static Graphic newDogeHeadWalking() {
+		return new GraphicAnimation(imagesWithEvenClipping("DogeHeadWalking.png", 5), evenDelays(20, 5));
+	}
 	
 	//HELPER-----------------------------------------------
 			
