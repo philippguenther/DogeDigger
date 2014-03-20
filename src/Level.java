@@ -5,7 +5,7 @@ import org.lwjgl.opengl.GL11;
 
 public class Level {
 	public Doge doge;
-	private float gravity = 1f;
+	private float gravity = Config.levelStandardGravity;
 	private Entity[][] entities = new Entity[Config.gameBoxesX][Config.levelMaxY];
 	
 	public float scroll = 0f;
@@ -19,31 +19,41 @@ public class Level {
 	}
 	
 	public void put (Entity box) {
-		this.entities[Math.round(box.getPosition().x)][Math.round(box.getPosition().y)] = box;
+		if (this.entities[box.getPosition().x][box.getPosition().y] != null)
+			System.out.println("WARNING: position already occupied!");
+		this.entities[box.getPosition().x][box.getPosition().y] = box;
 	}
 	
-	public Entity get (Vec2f v) {
+	public Entity get (Vec2i v) {
 		if (v.x > -1 && v.x < Config.gameBoxesX && v.y > -1 && v.y < Config.levelMaxY)
-			return this.entities[(int)(v.x)][(int)(v.y)];
+			return this.entities[v.x][v.y];
 		else
-			return new EntityStatic(v.clone());
+			return new EntityStatic(this, v.clone());
 	}
 	
-	public void remove (Vec2f v) {
+	public void remove (Vec2i v) {
 		if (v.x > -1 && v.x < Config.gameBoxesX && v.y > -1 && v.y < Config.levelMaxY)
-			this.entities[Math.round(v.x)][Math.round(v.y)] = null;
+			this.entities[v.x][v.y] = null;
 	}
 	
 	public void remove (Entity box) {
 		this.remove(box.getPosition());
 	}
 	
-	public ArrayList<Entity> getActivationField(Vec2f p) {
+	public Entity getEntityBeneath(Vec2i p) {
+		if (this.get(p) != null) {
+			return this.get(p);
+		} else {
+			return getEntityBeneath(Vec2i.add(p, new Vec2i(0, 1)));
+		}
+	}
+	
+	public ArrayList<Entity> getEntitiesInRadius(Vec2i p, int r) {
 		ArrayList<Entity> list = new ArrayList<Entity>();
 		
-		for (int x = Math.round(p.x) - 1; x < Math.round(p.x) + 2; x++) {
-			for (int y = Math.round(p.y) - 1; y < Math.round(p.y) + 2; y++) {
-				Entity e = this.get(new Vec2f(x, y));
+		for (int x = Math.round(p.x) - r; x <= Math.round(p.x) + r; x++) {
+			for (int y = Math.round(p.y) - r; y <= Math.round(p.y) + r; y++) {
+				Entity e = this.get(new Vec2i(x, y));
 				if (e != null)
 					list.add(e);
 			}
@@ -52,19 +62,19 @@ public class Level {
 		return list;
 	}
 	
-	public ArrayList<Entity> getDestroyField(Vec2f p) {
+	public ArrayList<Entity> getEntitiesConnected(Vec2i p) {
 		ArrayList<Entity> list = new ArrayList<Entity>();
 		
-		Entity t = this.get(new Vec2f(p.x, p.y - 1));
+		Entity t = this.get(new Vec2i(p.x, p.y - 1));
 		if (t != null)
 			list.add(t);
-		Entity r = this.get(new Vec2f(p.x + 1, p.y));
+		Entity r = this.get(new Vec2i(p.x + 1, p.y));
 		if (r != null)
 			list.add(r);
-		Entity b = this.get(new Vec2f(p.x, p.y + 1));
+		Entity b = this.get(new Vec2i(p.x, p.y + 1));
 		if (b != null)
 			list.add(b);
-		Entity l = this.get(new Vec2f(p.x - 1, p.y));
+		Entity l = this.get(new Vec2i(p.x - 1, p.y));
 		if (l != null)
 			list.add(l);
 		
@@ -72,7 +82,7 @@ public class Level {
 	}
 	
 	public void tick (int delta) {
-		this.scroll = this.doge.getPosition().y - Config.gameBoxesY / 2;
+		this.scroll = this.doge.getPosition().y + this.doge.getOffset().y - Config.gameBoxesY / 2;
 		
 		for (Entity[] bv : this.entities) {
 			for (Entity bi : bv) {
@@ -92,7 +102,7 @@ public class Level {
 			
 			for (int x = 0; x < Config.gameBoxesX; x++) {
 				for (int y = y0; y < y1; y++) {
-					Entity e = this.get(new Vec2f(x, y));
+					Entity e = this.get(new Vec2i(x, y));
 					if (e != null)
 						e.render(delta);
 				}

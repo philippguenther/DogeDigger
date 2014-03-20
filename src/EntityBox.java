@@ -6,7 +6,8 @@ import org.lwjgl.opengl.GL11;
 public class EntityBox implements Entity {
 	private Level level;
 	
-	private Vec2f position;
+	private Vec2i position;
+	private Vec2f offset = Vec2f.nil();
 	private ArrayList<Graphic> graphics = new ArrayList<Graphic>();
 	private EntityBoxType type;
 	private boolean active = false;
@@ -14,7 +15,7 @@ public class EntityBox implements Entity {
 	
 	private int deltaDecay = 0;
 	
-	public EntityBox (Level _level, Vec2f _position, EntityBoxType _type) {
+	public EntityBox (Level _level, Vec2i _position, EntityBoxType _type) {
 		this.level = _level;
 		this.position = _position;
 		this.type = _type;
@@ -22,30 +23,26 @@ public class EntityBox implements Entity {
 		this.graphics.add(GraphicFactory.newBox());
 		switch(this.type) {
 		case RED:
-			this.graphics.add(1, GraphicFactory.newBoxRed());
+			this.graphics.add(GraphicFactory.newBoxRed());
 			break;
 		case GREEN:
-			this.graphics.add(1, GraphicFactory.newBoxGreen());
+			this.graphics.add(GraphicFactory.newBoxGreen());
 			break;
 		case BLUE:
-			this.graphics.add(1, GraphicFactory.newBoxBlue());
+			this.graphics.add(GraphicFactory.newBoxBlue());
 			break;
 		default:
-			this.graphics.add(1, GraphicFactory.newBoxYellow());
+			this.graphics.add(GraphicFactory.newBoxYellow());
 		}
-		
-		this.level.put(this);
 	}
 	
 	@Override
 	public void destroy () {
 		this.graphics.clear();
 		this.level.remove(this.position);
-		Entity top = this.level.get(new Vec2f(this.position.x, this.position.y - 1));
-		if (top != null)
-			top.fall();
 		
-		ArrayList<Entity> list = this.level.getDestroyField(this.position);
+		// destroy connecting boxes of same type
+		ArrayList<Entity> list = this.level.getEntitiesConnected(this.position);
 		for (Entity e : list) {
 			if (e instanceof EntityBox) {
 				EntityBox b = (EntityBox) e;
@@ -60,12 +57,12 @@ public class EntityBox implements Entity {
 	}
 	
 	@Override
-	public Vec2f getPosition() {
+	public Vec2i getPosition() {
 		return this.position;
 	}
 	
 	@Override
-	public void setPosition(Vec2f _position) {
+	public void setPosition(Vec2i _position) {
 		this.level.remove(this);
 		this.position = _position;
 		this.level.put(this);
@@ -75,66 +72,103 @@ public class EntityBox implements Entity {
 	public void activate() {
 		if (!this.active) {
 			this.active = true;
-			this.graphics.add(1, GraphicFactory.newBoxActive());
-		}	
-	}
-	
-	@Override
-	public void deactivate() {
-		if (this.active) {
-		this.active = false;
-		if (this.graphics.size() > 1)
-			this.graphics.remove(1);
+			this.graphics.add(GraphicFactory.newBoxActive());
+		}
+		
+		for (EntityBox i : this.getBond(new ArrayList<EntityBox>())) {
+			if (!i.isActive())
+				i.activate();
 		}
 	}
 	
 	@Override
-	public void fall() {
-		boolean b = true;
-		for (Entity e : this.level.getDestroyField(this.position)) {
+	public boolean isActive() {
+		return this.active;
+	}
+	
+	@Override
+	public void moveX(int _d) {
+		this.mover = new MoverLinear(new Vec2f(Math.round(_d), 0f), Math.round(_d * Config.boxMove * (1 / this.level.getGravity())) );
+	}
+	
+	@Override
+	public void moveY(int _d) {
+		this.mover = new MoverLinear(new Vec2f(0f, Math.round(_d)), Math.round(_d * Config.boxMove * (1 / this.level.getGravity())) );
+	}
+	
+	@Override
+	public boolean readyToFall() {
+		if (this.deltaDecay > Config.boxDecay) {
+			Entity bot = this.level.get(new Vec2i(this.position.x, this.position.y + 1));
+			if (bot == null)
+				return true;
+			if (bot instanceof EntityBox) {
+				EntityBox b = (EntityBox) bot;
+				if (b.getType() == this.type)
+					return true;
+			}
+		}
+		return false;
+	}
+	
+	public ArrayList<EntityBox> getBond(ArrayList<EntityBox> bond) {
+		if (bond.indexOf(this) < 0)
+			bond.add(this);
+		
+		ArrayList<Entity> list = this.level.getEntitiesConnected(this.position);
+		for (Entity e : list) {
 			if (e instanceof EntityBox) {
-				EntityBox box = (EntityBox) e;
-				if (box.getType() == this.type)
-					b = false;
+				EntityBox b = (EntityBox) e;
+				if (!bond.contains(b) && b.getType() == this.type) {
+					bond.add(b);
+					b.getBond(bond);
+				}
 			}
 		}
-		if (b) {
-			this.mover = new MoverLinear(new Vec2f(0f, 1f), Math.round(100 * (1 / this.level.getGravity())) );
-			Entity top = this.level.get(new Vec2f(this.position.x, this.position.y - 1));
-			if (top != null) {
-				top.activate();
-			}
-		}
+		
+		return bond;
 	}
 	
 	@Override
 	public void tick(int delta) {
-		
-		// check for mover
 		if (this.mover != null) {
 			if (this.mover.disposable()) {
 				// if mover is ready remove it
 				this.mover = null;
 			} else {
 				// if mover != null move
-				this.level.remove(this);
-				this.position.add(this.mover.getVecDelta(delta));
-				this.level.put(this);
+				this.offset.add(this.mover.getVecDelta(delta));
 			}
-		}
-		
-		// make sure position is integer
-		if (this.mover == null) {
-			this.position.round();
-		}
-		
-		//FALLING
-		if (this.mover == null && this.active) {
-			Entity bot = this.level.get(new Vec2f(this.position.x, this.position.y + 1f));
-			if (bot == null) {
+		} else {
+			this.level.remove(this);
+			this.position.x += Math.round(this.offset.x);
+			this.position.y += Math.round(this.offset.y);
+			this.offset = Vec2f.nil();
+			this.level.put(this);
+			
+			if (this.active)
 				this.deltaDecay += delta;
-				if (this.deltaDecay > Config.boxDecay)
-					this.fall();
+			
+			// check to fall
+			if (this.active && this.readyToFall()) {
+				ArrayList<EntityBox> blob = new ArrayList<EntityBox>();
+				blob = this.getBond(blob);
+				
+				boolean ready = true;
+				for (Entity i : blob) {
+					if (!i.readyToFall()) {
+						ready = false;
+						break;
+					}
+				}
+				
+				if (ready) {
+					for (EntityBox eb : blob) {
+						eb.moveY(1);
+						eb.deltaDecay = delta;
+					}
+				}
+				
 			}
 		}
 	}
@@ -142,7 +176,7 @@ public class EntityBox implements Entity {
 	@Override
 	public void render (int delta) {
 		GL11.glPushMatrix();
-			GL11.glTranslatef(this.position.x, this.position.y, 0f);
+			GL11.glTranslatef(this.position.x + this.offset.x, this.position.y + this.offset.y, 0f);
 			for (Graphic g : this.graphics) {
 				g.render(delta);
 			}

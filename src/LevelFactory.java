@@ -4,7 +4,7 @@ import java.util.Random;
 public class LevelFactory {
 	
 	public static void randomCheese (Level lvl, long seed) {
-		lvl.doge = new Doge(lvl, new Vec2f(3, 0));
+		lvl.doge = new Doge(lvl, new Vec2i(3, 0));
 		
 		Random rand = new Random(seed);
 		for (int x = 0; x < Config.gameBoxesX; x++) {
@@ -14,19 +14,19 @@ public class LevelFactory {
 					
 					switch (rand.nextInt(5)) {
 					case 0:
-						ent = new EntityBox(lvl, new Vec2f(x, y), EntityBoxType.RED);
+						ent = new EntityBox(lvl, new Vec2i(x, y), EntityBoxType.RED);
 						break;
 					case 1:
-						ent = new EntityBox(lvl, new Vec2f(x, y), EntityBoxType.GREEN);
+						ent = new EntityBox(lvl, new Vec2i(x, y), EntityBoxType.GREEN);
 						break;
 					case 2:
-						ent = new EntityBox(lvl, new Vec2f(x, y), EntityBoxType.BLUE);
+						ent = new EntityBox(lvl, new Vec2i(x, y), EntityBoxType.BLUE);
 						break;
 					case 3:
-						ent = new EntityBox(lvl, new Vec2f(x, y), EntityBoxType.YELLOW);
+						ent = new EntityBox(lvl, new Vec2i(x, y), EntityBoxType.YELLOW);
 						break;
 					default:
-						ent = new EntityStatic(new Vec2f(x, y));
+						ent = new EntityStatic(lvl, new Vec2i(x, y));
 					}
 					
 					lvl.put(ent);
@@ -36,7 +36,7 @@ public class LevelFactory {
 	}
 	
 	public static void randomFull (Level lvl, long seed) {
-		lvl.doge = new Doge(lvl, new Vec2f(3, 0));
+		lvl.doge = new Doge(lvl, new Vec2i(3, 0));
 		
 		Random rand = new Random(seed);
 		for (int x = 0; x < Config.gameBoxesX; x++) {
@@ -45,19 +45,19 @@ public class LevelFactory {
 				
 				switch (rand.nextInt(4)) {
 				case 0:
-					ent = new EntityBox(lvl, new Vec2f(x, y), EntityBoxType.RED);
+					ent = new EntityBox(lvl, new Vec2i(x, y), EntityBoxType.RED);
 					break;
 				case 1:
-					ent = new EntityBox(lvl, new Vec2f(x, y), EntityBoxType.GREEN);
+					ent = new EntityBox(lvl, new Vec2i(x, y), EntityBoxType.GREEN);
 					break;
 				case 2:
-					ent = new EntityBox(lvl, new Vec2f(x, y), EntityBoxType.BLUE);
+					ent = new EntityBox(lvl, new Vec2i(x, y), EntityBoxType.BLUE);
 					break;
 				case 3:
-					ent = new EntityBox(lvl, new Vec2f(x, y), EntityBoxType.YELLOW);
+					ent = new EntityBox(lvl, new Vec2i(x, y), EntityBoxType.YELLOW);
 					break;
 				default:
-					ent = new EntityStatic(new Vec2f(x, y));
+					ent = new EntityStatic(lvl, new Vec2i(x, y));
 				}
 				
 				lvl.put(ent);
