@@ -44,8 +44,8 @@ public class GraphicFactory {
 	
 	
 	//DOGE--------------------------------------------------
-	public static Graphic newDogeDead() {
-		return new GraphicAnimation(imagesWithEvenClipping("DogeBodyDiggingDown.png", 4), evenDelays(25, 4));
+	public static Graphic newDogeBodyDead() {
+		return new GraphicImage("DogeBodyWalking.png", new float[] {0f, 0f, 0.2f, 1f});
 	}
 	
 	public static Graphic newDogeBodyDiggingDown() {
@@ -57,11 +57,15 @@ public class GraphicFactory {
 	}
 	
 	public static Graphic newDogeBodyWaiting() {
-		return new GraphicImage("DogeBodyWalking.png");
+		return new GraphicImage("DogeBodyWalking.png", new float[] {0f, 0f, 0.2f, 1f});
 	}
 	
 	public static Graphic newDogeBodyWalking() {
 		return new GraphicAnimation(imagesWithEvenClipping("DogeBodyWalking.png", 5), evenDelays(20, 5));
+	}
+	
+	public static Graphic newDogeHeadDead() {
+		return new GraphicImage("DogeHeadWalking.png", new float[] {0f, 0f, 0.2f, 1f});
 	}
 	
 	public static Graphic newDogeHeadDiggingDown() {
@@ -69,11 +73,11 @@ public class GraphicFactory {
 	}
 	
 	public static Graphic newDogeHeadDiggingSide() {
-		return new GraphicAnimation(imagesWithEvenClipping("DogeBodyDiggingSide.png", 5), evenDelays(20, 5));
+		return new GraphicAnimation(imagesWithEvenClipping("DogeHeadDiggingSide.png", 5), evenDelays(20, 5));
 	}
 	
 	public static Graphic newDogeHeadWaiting() {
-		return new GraphicImage("DogeHeadIntense.png");
+		return new GraphicImage("DogeHeadWalking.png", new float[] {0f, 0f, 0.2f, 1f});
 	}
 	
 	public static Graphic newDogeHeadWalking() {

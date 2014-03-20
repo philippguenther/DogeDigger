@@ -36,6 +36,11 @@ public class GraphicPolygon implements Graphic {
 		
 	}
 	
+	@Override
+	public boolean disposable() {
+		return true;
+	}
+	
 	public void render(int delta) {
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_DST_ALPHA);

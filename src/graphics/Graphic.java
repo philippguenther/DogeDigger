@@ -5,6 +5,7 @@ public interface Graphic {
 	public void flip();
 	public void unflip();
 	
+	public boolean disposable();
 	public void reset();
 	
 	public void destroy();

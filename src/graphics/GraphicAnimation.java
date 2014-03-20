@@ -36,14 +36,16 @@ public class GraphicAnimation implements Graphic {
 		this.delta = 0;
 	}
 	
+	@Override
 	public boolean disposable() {
 		return this.disposable;
 	}
 
 	@Override
 	public void render(int delta) {
-		if (this.current == this.frames.length)
+		if (this.current == this.frames.length - 1) {
 			this.disposable = true;
+		}
 		
 		this.delta += delta;
 		if (this.delta > this.delays[this.current]) {

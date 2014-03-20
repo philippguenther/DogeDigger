@@ -20,7 +20,7 @@ public class Config {
 	public final static int keyReset = Keyboard.KEY_R;
 	public final static int keyQuit = Keyboard.KEY_Q;
 
-	public final static int dogeDelayMove = 100;
+	public final static int dogeDelayMove = 0;
 	public final static int dogeDelayDig = 300;
 	
 	public final static int boxDecay = 1000;

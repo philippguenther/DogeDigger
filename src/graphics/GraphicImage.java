@@ -69,6 +69,11 @@ public class GraphicImage implements Graphic {
 	public void reset() {
 		
 	}
+	
+	@Override
+	public boolean disposable() {
+		return true;
+	}
 
 	@Override
 	public void render(int delta) {
