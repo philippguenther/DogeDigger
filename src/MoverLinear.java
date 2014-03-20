@@ -1,3 +1,5 @@
+import util.Vec2f;
+
 
 public class MoverLinear implements Mover {
 	private Vec2f move;

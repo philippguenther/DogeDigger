@@ -1,3 +1,5 @@
+import util.Vec2i;
+
 
 public interface Entity {
 	public Vec2i getPosition();

@@ -1,7 +1,13 @@
+import graphics.Graphic;
+import graphics.GraphicAnimation;
+
 import java.util.ArrayList;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
+
+import util.Vec2f;
+import util.Vec2i;
 
 public class Doge {
 	private Level level;

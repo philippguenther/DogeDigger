@@ -1,5 +1,7 @@
 import java.util.Random;
 
+import util.Vec2i;
+
 
 public class LevelFactory {
 	

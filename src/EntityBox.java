@@ -1,6 +1,11 @@
+import graphics.Graphic;
+
 import java.util.ArrayList;
 
 import org.lwjgl.opengl.GL11;
+
+import util.Vec2f;
+import util.Vec2i;
 
 
 public class EntityBox implements Entity {
@@ -38,8 +43,8 @@ public class EntityBox implements Entity {
 	
 	@Override
 	public void destroy () {
-		for (Graphic g : this.graphics)
-			g.destroy();
+		/*for (Graphic g : this.graphics)
+			g.destroy();*/
 		this.level.remove(this.position);
 		
 		// destroy connecting boxes of same type
@@ -177,24 +182,34 @@ public class EntityBox implements Entity {
 			
 			// check to fall
 			if (this.active && this.readyToFall()) {
-				ArrayList<EntityBox> blob = new ArrayList<EntityBox>();
-				blob = this.getBond(blob);
+				ArrayList<EntityBox> bond = new ArrayList<EntityBox>();
+				bond = this.getBond(bond);
 				
 				boolean ready = true;
-				for (Entity i : blob) {
+				for (Entity i : bond) {
 					if (!i.readyToFall()) {
 						ready = false;
 						break;
 					}
 				}
 				
+				EntityBox[] bondArray = new EntityBox[bond.size()];
+				bond.toArray(bondArray);
+				for (int i = bondArray.length; i > 0; i--) {
+					for (int j = 0; j < bondArray.length - 1; j++) {
+						if (bondArray[j].getPosition().y < bondArray[j + 1].getPosition().y) {
+							EntityBox tmp = bondArray[j];
+							bondArray[j] = bondArray[j + 1];
+							bondArray[j + 1] = tmp;
+						}
+					}
+				}
+				
 				if (ready) {
-					for (EntityBox eb : blob) {
+					for (EntityBox eb : bondArray) {
 						eb.moveY(1);
 						eb.deltaDecay = delta;
 					}
-				} else {
-					this.deactivate();
 				}
 				
 			}

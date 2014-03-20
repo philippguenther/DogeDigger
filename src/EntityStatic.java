@@ -1,4 +1,9 @@
+import graphics.Graphic;
+
 import org.lwjgl.opengl.GL11;
+
+import util.Vec2f;
+import util.Vec2i;
 
 
 public class EntityStatic implements Entity {

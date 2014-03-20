@@ -1,3 +1,4 @@
+package graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -7,6 +8,8 @@ import javax.imageio.ImageIO;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
+
+import util.Vec2f;
 
 public class GraphicImage implements Graphic {
 	
@@ -115,15 +118,13 @@ public class GraphicImage implements Graphic {
 
 
 class GLImage {
-	private final static String TEXTURE_FOLDER = "textures/";
-	
 	private int id;
 	private int width;
 	private int height;
 	
 	public GLImage (String _filename) {
 		try {
-			BufferedImage image = ImageIO.read(this.getClass().getResource(GLImage.TEXTURE_FOLDER + _filename));
+			BufferedImage image = ImageIO.read(this.getClass().getResource("/textures/" + _filename));
 			int[] pixels = new int[image.getWidth() * image.getHeight()];
 		    image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
 		    ByteBuffer buffer = BufferUtils.createByteBuffer(image.getWidth() * image.getHeight() * 4); //4 for RGBA, 3 for RGB

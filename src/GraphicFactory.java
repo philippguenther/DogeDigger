@@ -1,4 +1,13 @@
+
+import graphics.Graphic;
+import graphics.GraphicAnimation;
+import graphics.GraphicImage;
+import graphics.GraphicPolygon;
+
 import java.util.Arrays;
+
+import util.Color4f;
+import util.Vec2f;
 
 
 public class GraphicFactory {

@@ -1,3 +1,4 @@
+package util;
 
 public class Vec2f {
 	public float x;

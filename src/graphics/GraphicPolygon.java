@@ -1,4 +1,8 @@
+package graphics;
 import org.lwjgl.opengl.GL11;
+
+import util.Color4f;
+import util.Vec2f;
 
 
 public class GraphicPolygon implements Graphic {

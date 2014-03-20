@@ -2,6 +2,8 @@ import java.util.ArrayList;
 
 import org.lwjgl.opengl.GL11;
 
+import util.Vec2i;
+
 
 public class Level {
 	public Doge doge;

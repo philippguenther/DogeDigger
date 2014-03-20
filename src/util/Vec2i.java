@@ -1,3 +1,4 @@
+package util;
 
 public class Vec2i {
 	public int x;
