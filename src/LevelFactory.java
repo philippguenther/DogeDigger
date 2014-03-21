@@ -5,7 +5,7 @@ import util.Vec2i;
 
 public class LevelFactory {
 	
-	public static void randomCheese (Level lvl, long seed) {
+	public static void randomCheese(Level lvl, long seed) {
 		lvl.doge = new Doge(lvl, new Vec2i(3, 0));
 		
 		Random rand = new Random(seed);
@@ -37,7 +37,7 @@ public class LevelFactory {
 		}
 	}
 	
-	public static void randomFull (Level lvl, long seed) {
+	public static void randomFull(Level lvl, long seed) {
 		lvl.doge = new Doge(lvl, new Vec2i(3, 0));
 		
 		Random rand = new Random(seed);

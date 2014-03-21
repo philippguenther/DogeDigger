@@ -14,7 +14,7 @@ public class EntityStatic implements Entity {
 	private Graphic graphic;
 	private Mover mover;
 	
-	public EntityStatic (Level _level, Vec2i _position) {
+	public EntityStatic(Level _level, Vec2i _position) {
 		this.level = _level;
 		
 		this.position = _position.clone();

@@ -20,7 +20,7 @@ public class EntityBox implements Entity {
 	
 	private int deltaDecay = 0;
 	
-	public EntityBox (Level _level, Vec2i _position, EntityBoxType _type) {
+	public EntityBox(Level _level, Vec2i _position, EntityBoxType _type) {
 		this.level = _level;
 		this.position = _position;
 		this.type = _type;
@@ -42,7 +42,7 @@ public class EntityBox implements Entity {
 	}
 	
 	@Override
-	public void destroy () {
+	public void destroy() {
 		/*for (Graphic g : this.graphics)
 			g.destroy();*/
 		this.level.remove(this.position);
@@ -217,7 +217,7 @@ public class EntityBox implements Entity {
 	}
 	
 	@Override
-	public void render (int delta) {
+	public void render(int delta) {
 		GL11.glPushMatrix();
 			GL11.glTranslatef(this.position.x + this.offset.x, this.position.y + this.offset.y, 0f);
 			for (Graphic g : this.graphics) {

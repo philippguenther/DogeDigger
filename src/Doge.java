@@ -43,7 +43,7 @@ public class Doge {
 	private Graphic[] graphicDead;
 	
 	
-	public Doge (Level _level, Vec2i _position) {
+	public Doge(Level _level, Vec2i _position) {
 		this.level = _level;
 		
 		this.position = _position;
@@ -152,7 +152,7 @@ public class Doge {
 		System.out.println("DEATH!!!");
 	}
 	
-	public void tick (int delta) {
+	public void tick(int delta) {
 		// mover
 		if (this.mover != null) {
 			if (this.mover.disposable())
@@ -370,7 +370,7 @@ public class Doge {
 		}
 	}
 	
-	public void render (int delta) {
+	public void render(int delta) {
 		GL11.glPushMatrix();
 			GL11.glTranslatef(this.position.x + this.offset.x, this.position.y + this.offset.y, 0f);
 			for (Graphic g : this.graphics) {

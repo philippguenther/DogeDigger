@@ -86,7 +86,7 @@ public class GraphicFactory {
 	
 	//HELPER-----------------------------------------------
 			
-	private static GraphicImage[] imagesWithEvenClipping (String _filename, int c) {
+	private static GraphicImage[] imagesWithEvenClipping(String _filename, int c) {
 		GraphicImage[] frames = new GraphicImage[c];
 		float[] clipping = {0, 0, 1, 1};
 		for (int i = 0; i < c; i++) {
@@ -97,7 +97,7 @@ public class GraphicFactory {
 		return frames;
 	}
 	
-	private static int[] evenDelays (int delay, int c) {
+	private static int[] evenDelays(int delay, int c) {
 		int[] delays = new int[c];
 		Arrays.fill(delays, delay);
 		return delays;

@@ -12,7 +12,7 @@ public class Level {
 	
 	public float scroll = 0f;
 	
-	public void setGravity (float _gravity) {
+	public void setGravity(float _gravity) {
 		this.gravity = _gravity;
 	}
 	
