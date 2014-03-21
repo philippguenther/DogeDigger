@@ -34,6 +34,7 @@ public class GraphicAnimation implements Graphic {
 	public void reset() {
 		this.current = 0;
 		this.delta = 0;
+		this.disposable = false;
 	}
 	
 	@Override
