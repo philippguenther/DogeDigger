@@ -20,25 +20,25 @@ public class Level {
 		return this.gravity;
 	}
 	
-	public void put (Entity box) {
+	public void insert(Entity box) {
 		if (this.entities[box.getPosition().x][box.getPosition().y] != null)
 			System.out.println("WARNING: " + box.getPosition().x + "|" + box.getPosition().y + " already occupied!");
 		this.entities[box.getPosition().x][box.getPosition().y] = box;
 	}
 	
-	public Entity get (Vec2i v) {
+	public Entity get(Vec2i v) {
 		if (v.x > -1 && v.x < Config.gameBoxesX && v.y > -1 && v.y < Config.levelMaxY)
 			return this.entities[v.x][v.y];
 		else
 			return new EntityStatic(this, v.clone());
 	}
 	
-	public void remove (Vec2i v) {
+	public void remove(Vec2i v) {
 		if (v.x > -1 && v.x < Config.gameBoxesX && v.y > -1 && v.y < Config.levelMaxY)
 			this.entities[v.x][v.y] = null;
 	}
 	
-	public void remove (Entity box) {
+	public void remove(Entity box) {
 		this.remove(box.getPosition());
 	}
 	
@@ -83,7 +83,7 @@ public class Level {
 		return list;
 	}
 	
-	public void tick (int delta) {
+	public void tick(int delta) {
 		this.scroll = this.doge.getPosition().y + this.doge.getOffset().y - Config.gameBoxesY / 2;
 		
 		for (Entity[] bv : this.entities) {
@@ -95,7 +95,7 @@ public class Level {
 		this.doge.tick(delta);
 	}
 	
-	public void render (int delta) {
+	public void render(int delta) {
 		GL11.glPushMatrix();
 			GL11.glTranslatef(0f, -this.scroll, 0f);
 			

@@ -31,7 +31,7 @@ public class LevelFactory {
 						ent = new EntityStatic(lvl, new Vec2i(x, y));
 					}
 					
-					lvl.put(ent);
+					lvl.insert(ent);
 				}
 			}
 		}
@@ -62,7 +62,7 @@ public class LevelFactory {
 					ent = new EntityStatic(lvl, new Vec2i(x, y));
 				}
 				
-				lvl.put(ent);
+				lvl.insert(ent);
 			}
 		}
 	}

@@ -71,7 +71,7 @@ public class EntityBox implements Entity {
 	public void setPosition(Vec2i _position) {
 		this.level.remove(this);
 		this.position = _position;
-		this.level.put(this);
+		this.level.insert(this);
 	}
 	
 	@Override
@@ -158,23 +158,23 @@ public class EntityBox implements Entity {
 				this.level.remove(this);
 				this.position.x += 1;
 				this.offset.x -= 1;
-				this.level.put(this);
+				this.level.insert(this);
 			} else if (this.offset.x < -0.99) {
 				this.level.remove(this);
 				this.position.x -= 1;
 				this.offset.x += 1;
-				this.level.put(this);
+				this.level.insert(this);
 			}
 			if (this.offset.y > 0.99) {
 				this.level.remove(this);
 				this.position.y += 1;
 				this.offset.y -= 1;
-				this.level.put(this);
+				this.level.insert(this);
 			} else if (this.offset.y < -0.99) {
 				this.level.remove(this);
 				this.position.y -= 1;
 				this.offset.y += 1;
-				this.level.put(this);
+				this.level.insert(this);
 			}
 			
 			if (this.active)
