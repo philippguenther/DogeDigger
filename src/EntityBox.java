@@ -12,11 +12,11 @@ public class EntityBox implements Entity {
 	private Level level;
 	
 	private Vec2i position;
-	private Vec2f offset = Vec2f.nil();
+	private Vec2f offset = new Vec2f(0f, 0f);
+	private Mover mover = null;
 	private Graphic[] graphics = new Graphic[3];
 	private EntityBoxType type;
 	private boolean active = false;
-	private Mover mover;
 	
 	private int deltaDecay = 0;
 	
@@ -25,20 +25,25 @@ public class EntityBox implements Entity {
 		this.position = _position;
 		this.type = _type;
 		
-		this.graphics[0] = GraphicFactory.newBox();
+		this.graphics[0] = GraphicFactory.ENTITY_BOX.clone();
 		switch(this.type) {
 		case RED:
-			this.graphics[1] = GraphicFactory.newBoxRed();
+			this.graphics[1] = GraphicFactory.ENTITY_BOX_RED.clone();
 			break;
 		case GREEN:
-			this.graphics[1] = GraphicFactory.newBoxGreen();
+			this.graphics[1] = GraphicFactory.ENTITY_BOX_GREEN.clone();
 			break;
 		case BLUE:
-			this.graphics[1] = GraphicFactory.newBoxBlue();
+			this.graphics[1] = GraphicFactory.ENTITY_BOX_BLUE.clone();
 			break;
 		default:
-			this.graphics[1] = GraphicFactory.newBoxYellow();
+			this.graphics[1] = GraphicFactory.ENTITY_BOX_YELLOW.clone();
 		}
+	}
+	
+	@Override
+	public void takeHit() {
+		this.destroy();
 	}
 	
 	@Override
@@ -47,6 +52,11 @@ public class EntityBox implements Entity {
 		ArrayList<EntityBox> list = this.getBond();
 		for (EntityBox b : list) {
 			this.level.remove(b.getPosition());
+			b.position = null;
+			b.offset = null;
+			b.graphics = null;
+			b.active = false;
+			b.mover = null;
 		}
 	}
 	
@@ -69,7 +79,7 @@ public class EntityBox implements Entity {
 		for (EntityBox b : this.getBond()) {
 			if (!b.active) {
 				b.active = true;
-				b.graphics[2] = GraphicFactory.newBoxActive();
+				b.graphics[2] = GraphicFactory.ENTITY_BOX_ACTIVE;
 			}
 		}
 	}

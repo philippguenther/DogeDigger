@@ -39,7 +39,7 @@ public class Vec2i {
 	}
 	
 	
-	// STATIC
+	
 	public static Vec2i nil() {
 		return new Vec2i(0, 0);
 	}

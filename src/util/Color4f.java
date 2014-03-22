@@ -16,4 +16,8 @@ public class Color4f {
 	public Color4f (float _r, float _g, float _b) {
 		this(_r, _g, _b, 1f);
 	}
+	
+	public Color4f clone() {
+		return new Color4f(this.r, this.g, this.b, this.a);
+	}
 }

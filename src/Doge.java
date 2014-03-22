@@ -52,83 +52,83 @@ public class Doge {
 		this.deltaMove = Config.dogeDelayMove;
 		
 		this.graphicWaitingLeft = new Graphic[] {
-				GraphicFactory.newDogeBodyWaiting(),
-				GraphicFactory.newDogeHeadWaiting(),
+				GraphicFactory.DOGE_BODY_WAITING.clone(),
+				GraphicFactory.DOGE_HEAD_WAITING.clone(),
 				null,
 				null
 		};
 		this.graphicWaitingRight = new Graphic[] {
-				GraphicFactory.newDogeBodyWaiting(),
-				GraphicFactory.newDogeHeadWaiting(),
+				GraphicFactory.DOGE_BODY_WAITING.clone(),
+				GraphicFactory.DOGE_HEAD_WAITING.clone(),
 				null,
 				null
 		};
 		for (Graphic g : this.graphicWaitingRight) {
 			if (g != null)
-				g.flip();
+				g.flipX();
 		}
 		this.graphicWaitingUp = new Graphic[] {
-				GraphicFactory.newDogeBodyWaiting(),
-				GraphicFactory.newDogeHeadWaiting(),
+				GraphicFactory.DOGE_BODY_WAITING.clone(),
+				GraphicFactory.DOGE_HEAD_WAITING.clone(),
 				null,
 				null
 		};
 		this.graphicWaitingDown = new Graphic[] {
-				GraphicFactory.newDogeBodyWaiting(),
-				GraphicFactory.newDogeHeadWaiting(),
+				GraphicFactory.DOGE_BODY_WAITING.clone(),
+				GraphicFactory.DOGE_HEAD_WAITING.clone(),
 				null,
 				null
 		};
 		
 		this.graphicWalkingLeft = new Graphic[] {
-				GraphicFactory.newDogeBodyWalking(),
-				GraphicFactory.newDogeHeadWalking(),
+				GraphicFactory.DOGE_BODY_WALKING.clone(),
+				GraphicFactory.DOGE_HEAD_WALKING.clone(),
 				null,
 				null
 		};
 		this.graphicWalkingRight = new Graphic[] {
-				GraphicFactory.newDogeBodyWalking(),
-				GraphicFactory.newDogeHeadWalking(),
+				GraphicFactory.DOGE_BODY_WALKING.clone(),
+				GraphicFactory.DOGE_HEAD_WALKING.clone(),
 				null,
 				null
 		};
 		for (Graphic g : this.graphicWalkingRight) {
 			if (g != null)
-				g.flip();
+				g.flipX();
 		}
 		
 		this.graphicDiggingLeft = new Graphic[] {
-				GraphicFactory.newDogeBodyDiggingSide(),
-				GraphicFactory.newDogeHeadDiggingSide(),
+				GraphicFactory.DOGE_BODY_DIGGING_SIDE.clone(),
+				GraphicFactory.DOGE_HEAD_DIGGING_SIDE.clone(),
 				null,
 				null
 		};
 		this.graphicDiggingRight = new Graphic[] {
-				GraphicFactory.newDogeBodyDiggingSide(),
-				GraphicFactory.newDogeHeadDiggingSide(),
+				GraphicFactory.DOGE_BODY_DIGGING_SIDE.clone(),
+				GraphicFactory.DOGE_HEAD_DIGGING_SIDE.clone(),
 				null,
 				null
 		};
 		for (Graphic g : this.graphicDiggingRight) {
 			if (g != null)
-				g.flip();
+				g.flipX();
 		}
 		this.graphicDiggingUp = new Graphic[] {
-				GraphicFactory.newDogeBodyWaiting(),
-				GraphicFactory.newDogeHeadWaiting(),
+				GraphicFactory.DOGE_BODY_WAITING.clone(),
+				GraphicFactory.DOGE_HEAD_WAITING.clone(),
 				null,
 				null
 		};
 		this.graphicDiggingDown = new Graphic[] {
-				GraphicFactory.newDogeBodyDiggingDown(),
-				GraphicFactory.newDogeHeadDiggingDown(),
+				GraphicFactory.DOGE_BODY_DIGGING_DOWN.clone(),
+				GraphicFactory.DOGE_HEAD_DIGGING_DOWN.clone(),
 				null,
 				null
 		};
 
 		this.graphicDead = new Graphic[] {
-				GraphicFactory.newDogeBodyDead(),
-				GraphicFactory.newDogeHeadDead(),
+				GraphicFactory.DOGE_BODY_WAITING.clone(),
+				GraphicFactory.DOGE_HEAD_WAITING.clone(),
 				null,
 				null
 		};
@@ -212,7 +212,7 @@ public class Doge {
 					if (top != null) {
 						this.deltaDig = delta;
 						this.deltaMove = delta;
-						top.destroy();
+						top.takeHit();
 					}
 				} else if (this.state == DogeState.WAITING_RIGHT) {
 					// right
@@ -221,7 +221,7 @@ public class Doge {
 					if (right != null) {
 						this.deltaDig = delta;
 						this.deltaMove = delta;
-						right.destroy();
+						right.takeHit();
 					}
 					
 				} else if (this.state == DogeState.WAITING_DOWN) {
@@ -231,7 +231,7 @@ public class Doge {
 					if (down != null) {
 						this.deltaDig = delta;
 						this.deltaMove = delta;
-						down.destroy();
+						down.takeHit();
 					}
 					
 				} else if (this.state == DogeState.WAITING_LEFT) {
@@ -241,7 +241,7 @@ public class Doge {
 					if (left != null) {
 						this.deltaDig = delta;
 						this.deltaMove = delta;
-						left.destroy();
+						left.takeHit();
 					}
 				}
 			} else if (this.deltaMove > Config.dogeDelayMove && 

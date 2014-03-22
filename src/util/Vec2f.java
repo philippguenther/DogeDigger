@@ -37,10 +37,6 @@ public class Vec2f {
 	}
 	
 	
-	// STATIC
-	public static Vec2f nil() {
-		return new Vec2f(0f, 0f);
-	}
 	
 	public static Vec2f add(Vec2f a, Vec2f b) {
 		return new Vec2f(a.x + b.x, a.y + b.y);

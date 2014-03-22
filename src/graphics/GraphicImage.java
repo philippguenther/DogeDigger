@@ -20,8 +20,15 @@ public class GraphicImage implements Graphic {
 			1f,	// xEnd
 			1f	// yEnd
 	};
-	private boolean flipped = false;
 	private Vec2f offset = new Vec2f(0f, 0f);
+	private boolean flipped = false;
+	
+	private GraphicImage(GLImage _img, float[] _clipping, Vec2f _offset, boolean _flipped) {
+		this.img = _img;
+		this.clipping = _clipping;
+		this.offset = _offset;
+		this.flipped = _flipped;
+	}
 	
 	public GraphicImage (String _filename) {
 		this.img = new GLImage(_filename);
@@ -44,7 +51,7 @@ public class GraphicImage implements Graphic {
 	}
 	
 	@Override
-	public void flip() {
+	public void flipX() {
 		if (!this.flipped) {
 			this.flipped = true;
 			float xStart = this.clipping[0];
@@ -55,7 +62,7 @@ public class GraphicImage implements Graphic {
 	}
 	
 	@Override
-	public void unflip() {
+	public void unflipX() {
 		if (this.flipped) {
 			this.flipped = false;
 			float xStart = this.clipping[0];
@@ -109,6 +116,11 @@ public class GraphicImage implements Graphic {
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glDisable(GL11.GL_SRC_ALPHA);
+	}
+	
+	@Override
+	public Graphic clone() {
+		return new GraphicImage(this.img, this.clipping.clone(), this.offset.clone(), this.flipped);
 	}
 	
 	@Override
@@ -176,7 +188,7 @@ class GLImage {
 	}
 	
 	public void destroy() {
-		//TODO: clear image in OpenGL
+		//TODO clear image in OpenGL
 	}
 	
 }

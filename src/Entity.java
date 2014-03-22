@@ -5,6 +5,7 @@ public interface Entity {
 	public Vec2i getPosition();
 	public void setPosition(Vec2i _position);
 	
+	public void takeHit();
 	public void destroy();
 	
 	public void activate();

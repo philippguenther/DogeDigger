@@ -11,22 +11,29 @@ public class GraphicAnimation implements Graphic {
 	
 	private boolean disposable = false;
 	
+	private GraphicAnimation (Graphic[] _frames, int[] _delays, int _current, int _delta) {
+		this.frames = _frames;
+		this.delays = Arrays.copyOf(_delays, _frames.length);
+		this.current = _current;
+		this.delta = _delta;
+	}
+	
 	public GraphicAnimation (Graphic[] _frames, int[] _delays) {
 		this.frames = _frames;
 		this.delays = Arrays.copyOf(_delays, _frames.length);
 	}
 	
 	@Override
-	public void flip() {
+	public void flipX() {
 		for (Graphic g : this.frames) {
-			g.flip();
+			g.flipX();
 		}
 	}
 
 	@Override
-	public void unflip() {
+	public void unflipX() {
 		for (Graphic g : this.frames) {
-			g.unflip();
+			g.unflipX();
 		}
 	}
 	
@@ -55,6 +62,17 @@ public class GraphicAnimation implements Graphic {
 		}
 		
 		this.frames[this.current].render(delta);
+	}
+	
+	@Override
+	public Graphic clone() {
+		Graphic[] clonedFrames = new Graphic[this.frames.length];
+		int i = 0;
+		while (i < this.frames.length) {
+			clonedFrames[i] = this.frames[i].clone();
+			i++;
+		}
+		return new GraphicAnimation(clonedFrames, this.delays.clone(), this.current, this.delta);
 	}
 	
 	@Override

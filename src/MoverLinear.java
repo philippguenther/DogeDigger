@@ -33,7 +33,7 @@ public class MoverLinear implements Mover {
 			return d;
 		} else {
 			Vec2f d = this.todo.clone();
-			this.todo = Vec2f.nil();
+			this.todo = new Vec2f(0f, 0f);
 			return d;
 		}
 	}

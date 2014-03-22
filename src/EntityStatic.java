@@ -10,15 +10,17 @@ public class EntityStatic implements Entity {
 	private Level level;
 	
 	private Vec2i position;
-	private Vec2f offset = Vec2f.nil();
+	private Vec2f offset = new Vec2f(0f, 0f);
 	private Graphic graphic;
 	private Mover mover;
+	
+	private int hits;
 	
 	public EntityStatic(Level _level, Vec2i _position) {
 		this.level = _level;
 		
 		this.position = _position.clone();
-		this.graphic = GraphicFactory.newStatic();
+		this.graphic = GraphicFactory.ENTITY_STATIC;
 	}
 	
 	@Override
@@ -29,6 +31,13 @@ public class EntityStatic implements Entity {
 	@Override
 	public void setPosition(Vec2i _position) {
 		this.position = _position;
+	}
+	
+	@Override
+	public void takeHit() {
+		this.hits++;
+		if (this.hits > 3)
+			this.destroy();
 	}
 
 	@Override

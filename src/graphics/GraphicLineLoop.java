@@ -6,9 +6,9 @@ import util.Vec2f;
 
 
 public class GraphicLineLoop implements Graphic {
+	private Vec2f[] vertices;
 	private Color4f color;
 	private Vec2f offset = new Vec2f(0f, 0f);
-	private Vec2f[] vertices;
 
 	public GraphicLineLoop(Vec2f[] _vertices, Color4f _color) {
 		this.vertices = _vertices;
@@ -22,18 +22,18 @@ public class GraphicLineLoop implements Graphic {
 	}
 	
 	@Override
-	public void flip() {
-		
+	public void flipX() {
+		//TODO implement
 	}
 	
 	@Override
-	public void unflip() {
-		
+	public void unflipX() {
+		//TODO implement
 	}
 	
 	@Override
 	public void reset() {
-		
+		// nothing to reset here
 	}
 	
 	@Override
@@ -51,6 +51,11 @@ public class GraphicLineLoop implements Graphic {
 				GL11.glVertex2f(v.x + this.offset.x, v.y + this.offset.y);
 			}
 		GL11.glEnd();
+	}
+	
+	@Override
+	public Graphic clone() {
+		return new GraphicLineLoop(this.vertices.clone(), this.color.clone(), this.offset.clone());
 	}
 
 	@Override
