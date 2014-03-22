@@ -101,7 +101,7 @@ public class Level {
 			int x0 = (int) Math.floor(this.scroll.x);
 			int x1 = x0 + Config.windowBoxesX;
 			
-			int y0 = (int) Math.floor(this.scroll.y);
+			int y0 = (int) Math.floor(this.scroll.y) - 1;
 			int y1 = y0 + Config.windowBoxesY + 2;
 			
 			for (int x = x0; x < x1; x++) {

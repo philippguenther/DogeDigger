@@ -170,8 +170,7 @@ public class Doge {
 			// die
 			Entity deathEntity = this.level.get(this.position);
 			if (deathEntity != null) {
-				//this.stateNext = DogeState.DEAD;
-				System.out.println("u died");
+				this.stateNext = DogeState.DEAD;
 			}
 			
 			// activate
