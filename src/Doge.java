@@ -1,12 +1,9 @@
-import graphics.Graphic;
-
-import java.util.ArrayList;
-
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import util.Vec2f;
 import util.Vec2i;
+import graphics.Graphic;
 
 public class Doge {
 	private Level level;
@@ -184,9 +181,10 @@ public class Doge {
 			}
 			
 			// activate
-			ArrayList<Entity> activateList = this.level.getEntitiesInRadius(this.position, 1);
-			for (Entity activate : activateList) {
-				activate.activate();
+			Entity[] activateList = this.level.getEntitiesInRadius(this.position, 1);
+			for (Entity act : activateList) {
+				if (act != null)
+					act.activate();
 			}
 			
 			// check to fall

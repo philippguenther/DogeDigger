@@ -8,6 +8,7 @@ public class Config {
 	public final static int gameBoxesX = 7;
 	public final static int gameBoxesY = 9;
 	
+	public final static int levelMaxX = Config.gameBoxesX;
 	public final static int levelMaxY = 64;
 	public final static long levelSeed = 1l;
 	

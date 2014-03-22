@@ -43,18 +43,10 @@ public class EntityBox implements Entity {
 	
 	@Override
 	public void destroy() {
-		/*for (Graphic g : this.graphics)
-			g.destroy();*/
-		this.level.remove(this.position);
-		
 		// destroy connecting boxes of same type
-		ArrayList<Entity> list = this.level.getEntitiesConnected(this.position);
-		for (Entity e : list) {
-			if (e instanceof EntityBox) {
-				EntityBox b = (EntityBox) e;
-				if (b.getType() == this.type)
-					b.destroy();
-			}
+		ArrayList<EntityBox> list = this.getBond();
+		for (EntityBox b : list) {
+			this.level.remove(b.getPosition());
 		}
 	}
 	
@@ -69,21 +61,16 @@ public class EntityBox implements Entity {
 	
 	@Override
 	public void setPosition(Vec2i _position) {
-		this.level.remove(this);
 		this.position = _position;
-		this.level.insert(this);
 	}
 	
 	@Override
 	public void activate() {
-		if (!this.active) {
-			this.active = true;
-			this.graphics[2] = GraphicFactory.newBoxActive();
-		}
-		
-		for (EntityBox i : this.getBond(new ArrayList<EntityBox>())) {
-			if (!i.isActive())
-				i.activate();
+		for (EntityBox b : this.getBond()) {
+			if (!b.active) {
+				b.active = true;
+				b.graphics[2] = GraphicFactory.newBoxActive();
+			}
 		}
 	}
 	
@@ -124,11 +111,14 @@ public class EntityBox implements Entity {
 		return false;
 	}
 	
-	public ArrayList<EntityBox> getBond(ArrayList<EntityBox> bond) {
-		if (bond.indexOf(this) < 0)
-			bond.add(this);
-		
-		ArrayList<Entity> list = this.level.getEntitiesConnected(this.position);
+	public ArrayList<EntityBox> getBond() {
+		ArrayList<EntityBox> bond = new ArrayList<EntityBox>();
+		bond.add(this);
+		return this.getBond(bond);
+	}
+	
+	private ArrayList<EntityBox> getBond(ArrayList<EntityBox> bond) {
+		Entity[] list = this.level.getEntitiesConnected(this.position);
 		for (Entity e : list) {
 			if (e instanceof EntityBox) {
 				EntityBox b = (EntityBox) e;
@@ -154,37 +144,27 @@ public class EntityBox implements Entity {
 			}
 		} else {
 			
+			// offset must not be greater one
 			if (this.offset.x > 0.99) {
-				this.level.remove(this);
 				this.position.x += 1;
 				this.offset.x -= 1;
-				this.level.insert(this);
 			} else if (this.offset.x < -0.99) {
-				this.level.remove(this);
 				this.position.x -= 1;
 				this.offset.x += 1;
-				this.level.insert(this);
 			}
 			if (this.offset.y > 0.99) {
-				this.level.remove(this);
 				this.position.y += 1;
 				this.offset.y -= 1;
-				this.level.insert(this);
 			} else if (this.offset.y < -0.99) {
-				this.level.remove(this);
 				this.position.y -= 1;
 				this.offset.y += 1;
-				this.level.insert(this);
 			}
 			
-			if (this.active)
+			if (this.active) {
 				this.deltaDecay += delta;
-			
-			// check to fall
-			if (this.active && this.readyToFall()) {
-				ArrayList<EntityBox> bond = new ArrayList<EntityBox>();
-				bond = this.getBond(bond);
 				
+				// check to fall
+				ArrayList<EntityBox> bond = this.getBond();
 				boolean ready = true;
 				for (Entity i : bond) {
 					if (!i.readyToFall()) {
@@ -193,19 +173,20 @@ public class EntityBox implements Entity {
 					}
 				}
 				
-				EntityBox[] bondArray = new EntityBox[bond.size()];
-				bond.toArray(bondArray);
-				for (int i = bondArray.length; i > 0; i--) {
-					for (int j = 0; j < bondArray.length - 1; j++) {
-						if (bondArray[j].getPosition().y < bondArray[j + 1].getPosition().y) {
-							EntityBox tmp = bondArray[j];
-							bondArray[j] = bondArray[j + 1];
-							bondArray[j + 1] = tmp;
+				if (ready) {
+					// sort bond first by y coord so it looks much nicer
+					EntityBox[] bondArray = new EntityBox[bond.size()];
+					bond.toArray(bondArray);
+					for (int i = bondArray.length; i > 0; i--) {
+						for (int j = 0; j < bondArray.length - 1; j++) {
+							if (bondArray[j].getPosition().y < bondArray[j + 1].getPosition().y) {
+								EntityBox tmp = bondArray[j];
+								bondArray[j] = bondArray[j + 1];
+								bondArray[j + 1] = tmp;
+							}
 						}
 					}
-				}
-				
-				if (ready) {
+					
 					for (EntityBox eb : bondArray) {
 						eb.moveY(1);
 						eb.deltaDecay = delta;

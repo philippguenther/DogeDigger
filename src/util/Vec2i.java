@@ -9,6 +9,13 @@ public class Vec2i {
 		this.y = _y;
 	}
 	
+	public boolean equals(Vec2i a) {
+		if (this.x == a.x && this.y == a.y)
+			return true;
+		else
+			return false;
+	}
+	
 	public void add(Vec2i a) {
 		this.x += a.x;
 		this.y += a.y;
