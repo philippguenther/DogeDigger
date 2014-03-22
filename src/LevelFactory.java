@@ -14,17 +14,21 @@ public class LevelFactory {
 				if (rand.nextBoolean()) {
 					Entity ent;
 					
-					switch (rand.nextInt(5)) {
+					switch (rand.nextInt(9)) {
 					case 0:
+					case 1:
 						ent = new EntityBox(lvl, new Vec2i(x, y), EntityBoxType.RED);
 						break;
-					case 1:
+					case 2:
+					case 3:
 						ent = new EntityBox(lvl, new Vec2i(x, y), EntityBoxType.GREEN);
 						break;
-					case 2:
+					case 4:
+					case 5:
 						ent = new EntityBox(lvl, new Vec2i(x, y), EntityBoxType.BLUE);
 						break;
-					case 3:
+					case 6:
+					case 7:
 						ent = new EntityBox(lvl, new Vec2i(x, y), EntityBoxType.YELLOW);
 						break;
 					default:
