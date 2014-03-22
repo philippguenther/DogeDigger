@@ -74,16 +74,21 @@ public class GraphicImage implements Graphic {
 	
 	@Override
 	public void reset() {
-		
+		// nothing to do here
 	}
 	
 	@Override
 	public boolean disposable() {
 		return true;
 	}
+	
+	@Override
+	public void tick(int delta) {
+		// nothing to do here
+	}
 
 	@Override
-	public void render(int delta) {
+	public void render() {
 		GL11.glColor4f(1, 1, 1, 1); // transparent color for overlay
 		
 		// enable alpha blending

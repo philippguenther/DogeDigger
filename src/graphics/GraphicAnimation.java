@@ -48,20 +48,23 @@ public class GraphicAnimation implements Graphic {
 	public boolean disposable() {
 		return this.disposable;
 	}
-
+	
 	@Override
-	public void render(int delta) {
-		if (this.current == this.frames.length - 1) {
-			this.disposable = true;
-		}
-		
+	public void tick(int delta) {
 		this.delta += delta;
 		if (this.delta > this.delays[this.current]) {
 			this.current = (this.current + 1) % this.frames.length;
 			this.delta = 0;
 		}
+	}
+
+	@Override
+	public void render() {
+		if (this.current == this.frames.length - 1) {
+			this.disposable = true;
+		}
 		
-		this.frames[this.current].render(delta);
+		this.frames[this.current].render();
 	}
 	
 	@Override

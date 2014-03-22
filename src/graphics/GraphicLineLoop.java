@@ -40,9 +40,14 @@ public class GraphicLineLoop implements Graphic {
 	public boolean disposable() {
 		return true;
 	}
+	
+	@Override
+	public void tick(int delta) {
+		// nothing to do here
+	}
 
 	@Override
-	public void render(int delta) {
+	public void render() {
 		GL11.glColor4f(this.color.r, this.color.g, this.color.b, this.color.a);
 		GL11.glTranslatef(this.offset.x, this.offset.y, 0f);
 		GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);

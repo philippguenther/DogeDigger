@@ -94,7 +94,7 @@ public class Level {
 		this.doge.tick(delta);
 	}
 	
-	public void render(int delta) {
+	public void render() {
 		GL11.glPushMatrix();
 			GL11.glTranslatef(this.scroll.x, -this.scroll.y, 0f);
 			
@@ -108,11 +108,11 @@ public class Level {
 				for (int y = y0; y < y1; y++) {
 					Entity e = this.get(new Vec2i(x, y));
 					if (e != null)
-						e.render(delta);
+						e.render();
 				}
 			}
 			
-			this.doge.render(delta);
+			this.doge.render();
 		GL11.glPopMatrix();
 	}
 }

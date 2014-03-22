@@ -121,19 +121,6 @@ public class EntityBox implements Entity {
 		} else {
 			return false;
 		}
-		
-		
-		/*if (this.deltaDecay > Config.boxDecay) {
-			Entity bot = this.level.get(new Vec2i(this.position.x, this.position.y + 1));
-			if (bot == null)
-				return true;
-			if (bot instanceof EntityBox) {
-				EntityBox b = (EntityBox) bot;
-				if (b.getType() == this.type)
-					return true;
-			}
-		}
-		return false;*/
 	}
 	
 	public ArrayList<EntityBox> getBond() {
@@ -201,20 +188,7 @@ public class EntityBox implements Entity {
 				}
 				
 				if (ready) {
-					// sort bond first by y coord so it looks much nicer
-					EntityBox[] bondArray = new EntityBox[bond.size()];
-					bond.toArray(bondArray);
-					for (int i = bondArray.length; i > 0; i--) {
-						for (int j = 0; j < bondArray.length - 1; j++) {
-							if (bondArray[j].getPosition().y < bondArray[j + 1].getPosition().y) {
-								EntityBox tmp = bondArray[j];
-								bondArray[j] = bondArray[j + 1];
-								bondArray[j + 1] = tmp;
-							}
-						}
-					}
-					
-					for (EntityBox eb : bondArray) {
+					for (EntityBox eb : bond) {
 						eb.moveY(1);
 						eb.deltaDecay = delta;
 					}
@@ -225,12 +199,12 @@ public class EntityBox implements Entity {
 	}
 	
 	@Override
-	public void render(int delta) {
+	public void render() {
 		GL11.glPushMatrix();
 			GL11.glTranslatef(this.position.x + this.offset.x, this.position.y + this.offset.y, 0f);
 			for (Graphic g : this.graphics) {
 				if (g != null)
-					g.render(delta);
+					g.render();
 			}
 		GL11.glPopMatrix();
 	}

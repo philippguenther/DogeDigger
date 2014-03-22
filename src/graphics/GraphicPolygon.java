@@ -41,7 +41,13 @@ public class GraphicPolygon implements Graphic {
 		return true;
 	}
 	
-	public void render(int delta) {
+	@Override
+	public void tick(int delta) {
+		// nothing to do here
+	}
+	
+	@Override
+	public void render() {
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_DST_ALPHA);
 		

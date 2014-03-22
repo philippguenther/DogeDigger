@@ -102,10 +102,10 @@ public class EntityStatic implements Entity {
 	}
 
 	@Override
-	public void render(int delta) {
+	public void render() {
 		GL11.glPushMatrix();
 		GL11.glTranslatef(this.position.x, this.position.y, 0f);
-		this.graphic.render(delta);
+		this.graphic.render();
 	GL11.glPopMatrix();
 	}
 

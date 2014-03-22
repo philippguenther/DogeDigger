@@ -370,12 +370,12 @@ public class Doge {
 		}
 	}
 	
-	public void render(int delta) {
+	public void render() {
 		GL11.glPushMatrix();
 			GL11.glTranslatef(this.position.x + this.offset.x, this.position.y + this.offset.y, 0f);
 			for (Graphic g : this.graphics) {
 				if (g != null)
-					g.render(delta);
+					g.render();
 			}
 		GL11.glPopMatrix();
 	}

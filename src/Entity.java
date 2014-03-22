@@ -18,5 +18,5 @@ public interface Entity {
 	public void moveY(int _d);
 	
 	public void tick(int delta);
-	public void render(int delta);
+	public void render();
 }
