@@ -108,7 +108,22 @@ public class EntityBox implements Entity {
 	
 	@Override
 	public boolean readyToFall() {
-		if (this.deltaDecay > Config.boxDecay) {
+		Entity botEnt = this.level.get(new Vec2i(this.position.x, this.position.y + 1));
+		if (botEnt == null && this.deltaDecay > Config.boxDecay) {
+			return true;
+		} else if (botEnt instanceof EntityBox) {
+			EntityBox botBox = (EntityBox)botEnt;
+			if (botBox.getType() == this.type) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+		
+		
+		/*if (this.deltaDecay > Config.boxDecay) {
 			Entity bot = this.level.get(new Vec2i(this.position.x, this.position.y + 1));
 			if (bot == null)
 				return true;
@@ -118,7 +133,7 @@ public class EntityBox implements Entity {
 					return true;
 			}
 		}
-		return false;
+		return false;*/
 	}
 	
 	public ArrayList<EntityBox> getBond() {
