@@ -145,6 +145,10 @@ public class Doge {
 	}
 	
 	public void tick(int delta) {
+		for (Graphic g : this.graphics)
+			if (g != null)
+				g.tick(delta);
+		
 		// mover
 		if (this.mover != null) {
 			if (this.mover.disposable())

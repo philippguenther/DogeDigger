@@ -89,6 +89,8 @@ public class EntityStatic implements Entity {
 
 	@Override
 	public void tick(int delta) {
+		this.graphic.tick(delta);
+		
 		// check for mover
 		if (this.mover != null) {
 			if (this.mover.disposable()) {

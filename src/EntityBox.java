@@ -146,6 +146,10 @@ public class EntityBox implements Entity {
 	
 	@Override
 	public void tick(int delta) {
+		for (Graphic g : this.graphics)
+			if (g != null)
+				g.tick(delta);
+		
 		if (this.mover != null) {
 			if (this.mover.disposable()) {
 				// if mover is ready remove it

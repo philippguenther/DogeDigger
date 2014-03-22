@@ -54,16 +54,15 @@ public class GraphicAnimation implements Graphic {
 		this.delta += delta;
 		if (this.delta > this.delays[this.current]) {
 			this.current = (this.current + 1) % this.frames.length;
-			this.delta = 0;
+			this.delta = delta;
+		}
+		if (this.current == this.frames.length - 1) {
+			this.disposable = true;
 		}
 	}
 
 	@Override
 	public void render() {
-		if (this.current == this.frames.length - 1) {
-			this.disposable = true;
-		}
-		
 		this.frames[this.current].render();
 	}
 	
