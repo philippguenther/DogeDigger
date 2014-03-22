@@ -31,7 +31,7 @@ public class Game {
 
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
-		GL11.glOrtho(0, Config.gameBoxesX, Config.gameBoxesY, 0, 1, -1);
+		GL11.glOrtho(0, Config.windowBoxesX, Config.windowBoxesY, 0, 1, -1);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glDisable(GL11.GL_DEPTH_TEST); //it's a 2D game
 

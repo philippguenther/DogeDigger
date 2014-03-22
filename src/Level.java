@@ -55,6 +55,13 @@ public class Level {
 		return null;
 	}
 	
+	public Entity[] getRow(int y) {
+		Entity[] row = new Entity[Config.levelMaxX];
+		for (int x = 0; x < Config.levelMaxX; x++)
+			row[x] = this.get(new Vec2i(x, y));
+		return row;
+	}
+	
 	public Entity[] getEntitiesInRadius(Vec2i p, int r) {
 		Entity[] list = new Entity[1 + r * 8];
 		int i = 0;
@@ -77,7 +84,7 @@ public class Level {
 	}
 	
 	public void tick(int delta) {
-		this.scroll.y = this.doge.getPosition().y + this.doge.getOffset().y - Config.gameBoxesY / 2;
+		this.scroll.y = this.doge.getPosition().y + this.doge.getOffset().y - Config.windowBoxesY / 2;
 		
 		for (Entity[] es : this.entities)
 			for (Entity e : es)
@@ -92,10 +99,10 @@ public class Level {
 			GL11.glTranslatef(this.scroll.x, -this.scroll.y, 0f);
 			
 			int x0 = (int) Math.floor(this.scroll.x);
-			int x1 = x0 + Config.gameBoxesX;
+			int x1 = x0 + Config.windowBoxesX;
 			
 			int y0 = (int) Math.floor(this.scroll.y);
-			int y1 = y0 + Config.gameBoxesY + 2;
+			int y1 = y0 + Config.windowBoxesY + 2;
 			
 			for (int x = x0; x < x1; x++) {
 				for (int y = y0; y < y1; y++) {

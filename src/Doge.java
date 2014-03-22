@@ -144,11 +144,6 @@ public class Doge {
 		return this.offset;
 	}
 	
-	public void die() {
-		this.state = DogeState.DEAD;
-		System.out.println("DEATH!!!");
-	}
-	
 	public void tick(int delta) {
 		// mover
 		if (this.mover != null) {
@@ -175,16 +170,20 @@ public class Doge {
 			// die
 			Entity deathEntity = this.level.get(this.position);
 			if (deathEntity != null) {
-				//TODO color block that caused death
 				//this.stateNext = DogeState.DEAD;
-				this.die();
+				System.out.println("u died");
 			}
 			
 			// activate
-			Entity[] activateList = this.level.getEntitiesInRadius(this.position, 1);
-			for (Entity act : activateList) {
-				if (act != null)
-					act.activate();
+			Entity[] radius = this.level.getEntitiesInRadius(this.position, Config.dogeActivationRadius);
+			for (Entity rad : radius) {
+				if (rad != null)
+					rad.activate();
+			}
+			Entity[] row = this.level.getRow(this.position.y - 1);
+			for (Entity r : row) {
+				if (r != null)
+					r.activate();
 			}
 			
 			// check to fall
@@ -205,7 +204,48 @@ public class Doge {
 				}
 			}
 			
-			if (this.deltaMove > Config.dogeDelayMove && 
+			if (this.deltaDig > Config.dogeDelayDig && Keyboard.isKeyDown(Config.keyDig)) {
+				// dig
+				if (this.state == DogeState.WAITING_UP) {
+					// up
+					this.stateNext = DogeState.DIGGING_UP;
+					Entity top = this.level.get(new Vec2i(this.position.x, this.position.y - 1));
+					if (top != null) {
+						this.deltaDig = delta;
+						this.deltaMove = delta;
+						top.destroy();
+					}
+				} else if (this.state == DogeState.WAITING_RIGHT) {
+					// right
+					this.stateNext = DogeState.DIGGING_RIGHT;
+					Entity right = this.level.get(new Vec2i(this.position.x + 1, this.position.y));
+					if (right != null) {
+						this.deltaDig = delta;
+						this.deltaMove = delta;
+						right.destroy();
+					}
+					
+				} else if (this.state == DogeState.WAITING_DOWN) {
+					// down
+					this.stateNext = DogeState.DIGGING_DOWN;
+					Entity down = this.level.get(new Vec2i(this.position.x, this.position.y + 1));
+					if (down != null) {
+						this.deltaDig = delta;
+						this.deltaMove = delta;
+						down.destroy();
+					}
+					
+				} else if (this.state == DogeState.WAITING_LEFT) {
+					// left
+					this.stateNext = DogeState.DIGGING_LEFT;
+					Entity left = this.level.get(new Vec2i(this.position.x - 1, this.position.y));
+					if (left != null) {
+						this.deltaDig = delta;
+						this.deltaMove = delta;
+						left.destroy();
+					}
+				}
+			} else if (this.deltaMove > Config.dogeDelayMove && 
 					(Keyboard.isKeyDown(Config.keyLeft) || 
 					Keyboard.isKeyDown(Config.keyRight) || 
 					Keyboard.isKeyDown(Config.keyUp) || 
@@ -260,43 +300,6 @@ public class Doge {
 								this.mover = new MoverLinear(new Vec2f(-1f, -1f), 200);
 							}
 						}
-					}
-				}
-			} else if (this.deltaDig > Config.dogeDelayDig && Keyboard.isKeyDown(Config.keyDig)) {
-				// dig
-				if (this.state == DogeState.WAITING_UP) {
-					// up
-					this.stateNext = DogeState.DIGGING_UP;
-					Entity top = this.level.get(new Vec2i(this.position.x, this.position.y - 1));
-					if (top != null) {
-						this.deltaDig = delta;
-						top.destroy();
-					}
-				} else if (this.state == DogeState.WAITING_RIGHT) {
-					// right
-					this.stateNext = DogeState.DIGGING_RIGHT;
-					Entity right = this.level.get(new Vec2i(this.position.x + 1, this.position.y));
-					if (right != null) {
-						this.deltaDig = delta;
-						right.destroy();
-					}
-					
-				} else if (this.state == DogeState.WAITING_DOWN) {
-					// down
-					this.stateNext = DogeState.DIGGING_DOWN;
-					Entity down = this.level.get(new Vec2i(this.position.x, this.position.y + 1));
-					if (down != null) {
-						this.deltaDig = delta;
-						down.destroy();
-					}
-					
-				} else if (this.state == DogeState.WAITING_LEFT) {
-					// left
-					this.stateNext = DogeState.DIGGING_LEFT;
-					Entity left = this.level.get(new Vec2i(this.position.x - 1, this.position.y));
-					if (left != null) {
-						this.deltaDig = delta;
-						left.destroy();
 					}
 				}
 			} else if (animationDisposable){

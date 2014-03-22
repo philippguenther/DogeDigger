@@ -9,7 +9,7 @@ public class LevelFactory {
 		lvl.doge = new Doge(lvl, new Vec2i(3, 0));
 		
 		Random rand = new Random(seed);
-		for (int x = 0; x < Config.gameBoxesX; x++) {
+		for (int x = 0; x < Config.windowBoxesX; x++) {
 			for (int y = 0; y < Config.levelMaxY; y++) {
 				if (rand.nextBoolean()) {
 					Entity ent;
@@ -41,7 +41,7 @@ public class LevelFactory {
 		lvl.doge = new Doge(lvl, new Vec2i(3, 0));
 		
 		Random rand = new Random(seed);
-		for (int x = 0; x < Config.gameBoxesX; x++) {
+		for (int x = 0; x < Config.windowBoxesX; x++) {
 			for (int y = 2; y < Config.levelMaxY; y++) {
 				Entity ent;
 				
