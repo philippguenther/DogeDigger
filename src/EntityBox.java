@@ -171,7 +171,9 @@ public class EntityBox implements Entity {
 			}
 			
 			if (this.active) {
-				this.deltaDecay += delta;
+				
+				if (this.level.get(new Vec2i(this.position.x, this.position.y + 1)) == null)
+					this.deltaDecay += delta;
 				
 				// check to fall
 				ArrayList<EntityBox> bond = this.getBond();
