@@ -97,13 +97,13 @@ public class EntityBox implements Entity {
 	}
 	
 	@Override
-	public void moveX(int _d) {
-		this.mover = new MoverLinear(new Vec2f(Math.round(_d), 0f), Math.round(_d * Config.boxMove * (1 / this.level.getGravity())) );
-	}
-	
-	@Override
-	public void moveY(int _d) {
-		this.mover = new MoverLinear(new Vec2f(0f, Math.round(_d)), Math.round(_d * Config.boxMove * (1 / this.level.getGravity())) );
+	public void moveDown() {
+		this.mover = new MoverLinear(new Vec2f(0f, 1f), Math.round(1f * Config.boxMove * (1 / this.level.getGravity())) );
+		Entity top = this.level.get(new Vec2i(this.position.x, this.position.y - 1));
+		if (top != null && top instanceof EntityBox) {
+			EntityBox eb = (EntityBox) top;
+			eb.deltaDecay = Config.boxDecay;
+		}
 	}
 	
 	@Override
@@ -178,8 +178,10 @@ public class EntityBox implements Entity {
 			
 			if (this.active) {
 				
-				if (this.level.get(new Vec2i(this.position.x, this.position.y + 1)) == null)
+				Entity bot = this.level.get(new Vec2i(this.position.x, this.position.y + 1));
+				if (bot == null) {
 					this.deltaDecay += delta;
+				}
 				
 				// check to fall
 				ArrayList<EntityBox> bond = this.getBond();
@@ -193,7 +195,7 @@ public class EntityBox implements Entity {
 				
 				if (ready) {
 					for (EntityBox eb : bond) {
-						eb.moveY(1);
+						eb.moveDown();
 						eb.deltaDecay = delta;
 					}
 				}

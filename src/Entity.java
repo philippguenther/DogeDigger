@@ -14,8 +14,7 @@ public interface Entity {
 	
 	public boolean readyToFall();
 	
-	public void moveX(int _d);
-	public void moveY(int _d);
+	public void moveDown();
 	
 	public void tick(int delta);
 	public void render();

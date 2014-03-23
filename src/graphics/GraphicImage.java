@@ -23,7 +23,7 @@ public class GraphicImage implements Graphic {
 	private Vec2f offset = new Vec2f(0f, 0f);
 	private boolean flipped = false;
 	
-	private GraphicImage(GLImage _img, float[] _clipping, Vec2f _offset, boolean _flipped) {
+	public GraphicImage(GLImage _img, float[] _clipping, Vec2f _offset, boolean _flipped) {
 		this.img = _img;
 		this.clipping = _clipping;
 		this.offset = _offset;
@@ -102,7 +102,6 @@ public class GraphicImage implements Graphic {
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.img.getID());
 		GL11.glPushMatrix();
 			GL11.glTranslatef(this.offset.x, this.offset.y, 0f);
-	
 			GL11.glBegin(GL11.GL_QUADS);
 				GL11.glTexCoord2f(clipping[0], clipping[1]);
 				GL11.glVertex2f(0, 0);
