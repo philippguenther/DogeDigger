@@ -98,7 +98,7 @@ public class EntityBox implements Entity {
 	
 	@Override
 	public void moveDown() {
-		this.mover = new MoverLinear(new Vec2f(0f, 1f), Math.round(1f * Config.boxMove * (1 / this.level.getGravity())) );
+		this.mover = new MoverLinear(new Vec2f(0f, 1f), Math.round(Config.boxMove * (1 / this.level.getGravity())) );
 		Entity top = this.level.get(new Vec2i(this.position.x, this.position.y - 1));
 		if (top != null && top instanceof EntityBox) {
 			EntityBox eb = (EntityBox) top;
