@@ -48,19 +48,21 @@ public class GraphicPolygon implements Graphic {
 	
 	@Override
 	public void render() {
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_DST_ALPHA);
-		
-		GL11.glColor4f(this.color.r, this.color.g, this.color.b, this.color.a);
-		GL11.glTranslatef(this.offset.x, this.offset.y, 0f);
-		GL11.glPolygonMode(GL11.GL_FRONT, GL11.GL_FILL);
-		GL11.glBegin(GL11.GL_POLYGON);
-			for (Vec2f v : this.vertices) {
-				GL11.glVertex2f(v.x + this.offset.x, v.y + this.offset.y);
-			}
-		GL11.glEnd();
-		
-		GL11.glDisable(GL11.GL_BLEND);
+		GL11.glPushMatrix();
+			GL11.glEnable(GL11.GL_BLEND);
+			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_DST_ALPHA);
+			
+			GL11.glColor4f(this.color.r, this.color.g, this.color.b, this.color.a);
+			//GL11.glTranslatef(this.offset.x, this.offset.y, 0f);
+			GL11.glPolygonMode(GL11.GL_FRONT, GL11.GL_FILL);
+			GL11.glBegin(GL11.GL_POLYGON);
+				for (Vec2f v : this.vertices) {
+					GL11.glVertex2f(v.x + this.offset.x, v.y + this.offset.y);
+				}
+			GL11.glEnd();
+			
+			GL11.glDisable(GL11.GL_BLEND);
+		GL11.glPopMatrix();
 	}
 	
 	@Override

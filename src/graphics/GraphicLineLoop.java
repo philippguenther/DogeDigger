@@ -48,14 +48,16 @@ public class GraphicLineLoop implements Graphic {
 
 	@Override
 	public void render() {
-		GL11.glColor4f(this.color.r, this.color.g, this.color.b, this.color.a);
-		GL11.glTranslatef(this.offset.x, this.offset.y, 0f);
-		GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
-		GL11.glBegin(GL11.GL_LINE_LOOP);
-			for (Vec2f v : this.vertices) {
-				GL11.glVertex2f(v.x + this.offset.x, v.y + this.offset.y);
-			}
-		GL11.glEnd();
+		GL11.glPushMatrix();
+			GL11.glColor4f(this.color.r, this.color.g, this.color.b, this.color.a);
+			GL11.glTranslatef(this.offset.x, this.offset.y, 0f);
+			GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
+			GL11.glBegin(GL11.GL_LINE_LOOP);
+				for (Vec2f v : this.vertices) {
+					GL11.glVertex2f(v.x + this.offset.x, v.y + this.offset.y);
+				}
+			GL11.glEnd();
+		GL11.glPopMatrix();
 	}
 	
 	@Override
