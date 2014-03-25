@@ -11,7 +11,7 @@ public class Screen {
 	
 	public Screen(Button[] _buttons) {
 		this.buttons = _buttons;
-		this.delta = 0;
+		this.delta = 100;
 	}
 	
 	public String poll(int delta) {
@@ -33,7 +33,7 @@ public class Screen {
 					this.active++;
 				break;
 			}
-			this.delta = delta;
+			this.delta = 0;
 		}
 		return null;
 	}

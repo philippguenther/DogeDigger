@@ -44,38 +44,47 @@ public class Game {
 		GL11.glLoadIdentity();
 		GL11.glOrtho(0, Config.windowBoxesX, Config.windowBoxesY, 0, 1, -1);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
-		GL11.glDisable(GL11.GL_DEPTH_TEST); //it's a 2D game
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		// enable alpha blending
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		//enable alpha testing
+		GL11.glEnable(GL11.GL_ALPHA_TEST);
+		GL11.glAlphaFunc(GL11.GL_GREATER, 0f);
+		GL11.glClearColor(0f, 0f, 0f, 1f);
+					
+					
 		
 		// loading bitmap font
 		GraphicString.init();
 		
 		// setup menu
 		Vec2f[] v = new Vec2f[] {
-			new Vec2f(0f, 0f),
-			new Vec2f(5f, 0f),
-			new Vec2f(5f, 0.7f),
-			new Vec2f(0f, 0.7f)
-		};
-		Graphic[] startGraphics = new Graphic[] {
-			new GraphicPolygon(v, new Color4f(0.2f, 0.2f, 0.8f)),
-			new GraphicString("Game", 0.5f, new Vec2f(0.1f, 0.1f))
-		};
+				new Vec2f(0f, 0f),
+				new Vec2f(5f, 0f),
+				new Vec2f(5f, 0.7f),
+				new Vec2f(0f, 0.7f)
+			};
 		Graphic[] activeGraphics = new Graphic[] {
-			new GraphicPolygon(v, new Color4f(0.5f, 0.5f, 0.5f))
-		};
-		Button game = new Button("game", new Vec2f(1f, 1f), startGraphics, activeGraphics);
+				new GraphicPolygon(v, new Color4f(1f, 1f, 1f, 0.3f))
+			};
+		Graphic[] gameGraphics = new Graphic[] {
+				new GraphicPolygon(v, new Color4f(0f, 0f, 1f)),
+				new GraphicString("Game", 0.5f, new Vec2f(0.1f, 0.1f))
+			};
+		Button game = new Button("game", new Vec2f(1f, 1f), gameGraphics, activeGraphics);
 		Graphic[] restartGraphics = new Graphic[] {
-				new GraphicPolygon(v, new Color4f(0.2f, 0.2f, 0.8f)),
+				new GraphicPolygon(v, new Color4f(0f, 0f, 1f)),
 				new GraphicString("Restart", 0.5f, new Vec2f(0.1f, 0.1f))
 			};
 		Button restart = new Button("restart", new Vec2f(1f, 2f), restartGraphics, activeGraphics);
 		Graphic[] settingsGraphics = new Graphic[] {
-				new GraphicPolygon(v, new Color4f(0.2f, 0.2f, 0.8f)),
+				new GraphicPolygon(v, new Color4f(0f, 0f, 1f)),
 				new GraphicString("Settings", 0.5f, new Vec2f(0.1f, 0.1f))
 			};
 		Button settings = new Button("setting", new Vec2f(1f, 3f), settingsGraphics, activeGraphics);
 		Graphic[] quitGraphics = new Graphic[] {
-				new GraphicPolygon(v, new Color4f(0.2f, 0.2f, 0.8f)),
+				new GraphicPolygon(v, new Color4f(0f, 0f, 1f)),
 				new GraphicString("Quit", 0.5f, new Vec2f(0.1f, 0.1f))
 			};
 		Button quit = new Button("quit", new Vec2f(1f, 4f), quitGraphics, activeGraphics);
@@ -84,8 +93,15 @@ public class Game {
 				restart,
 				settings,
 				quit
-		};
+			};
 		Screen menu = new Screen(buttons);
+		Vec2f[] darkenv = new Vec2f[] {
+				new Vec2f(0f, 0f),
+				new Vec2f(Config.windowBoxesX, 0f),
+				new Vec2f(Config.windowBoxesX, Config.windowBoxesY),
+				new Vec2f(0f, Config.windowBoxesY)
+			};
+		GraphicPolygon darken = new GraphicPolygon(darkenv, new Color4f(0f, 0f, 0f, 1f));
 		
 		// setup level
 		this.level = new Level();
@@ -93,7 +109,7 @@ public class Game {
 		
 		GraphicString graphicFps = new GraphicString("0", 0.5f, new Vec2f(0.1f, 0.1f));
 		
-		while(!Display.isCloseRequested() && !Keyboard.isKeyDown(Config.keyQuit)) {
+		while(!Display.isCloseRequested()) {
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 			int delta = this.getDelta();
 			
@@ -111,6 +127,8 @@ public class Game {
 					this.state = GameState.LEVEL_LOAD;
 				else if (desc == "quit")
 					System.exit(0);
+				level.render();
+				darken.render();
 				menu.tick(delta);
 				menu.render();
 				graphicFps.render();
@@ -135,6 +153,7 @@ public class Game {
 				Display.sync(60);
 			}
 		}
+		Keyboard.destroy();
 		Display.destroy();
 	}
 

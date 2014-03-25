@@ -79,7 +79,7 @@ public class EntityBox implements Entity {
 		for (EntityBox b : this.getBond()) {
 			if (!b.active) {
 				b.active = true;
-				b.graphics[2] = GraphicFactory.ENTITY_BOX_ACTIVE;
+				//b.graphics[2] = GraphicFactory.ENTITY_BOX_ACTIVE;
 			}
 		}
 	}

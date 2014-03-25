@@ -17,9 +17,6 @@ public class Config {
 	public final static int keyLeft = Keyboard.KEY_A;
 	public final static int keyDig = Keyboard.KEY_SPACE;
 
-	public final static int keyReset = Keyboard.KEY_R;
-	public final static int keyQuit = Keyboard.KEY_Q;
-
 	public final static int dogeActivationRadius = 1;
 	public final static int dogeDelayMove = 0;
 	public final static int dogeDelayDig = 100;

@@ -6,8 +6,8 @@ import util.Vec2i;
 public class LevelFactory {
 	
 	public static void randomCheese(Level lvl, long seed) {
-		lvl.doge = new Doge(lvl, new Vec2i(3, 0));
-		
+		lvl.doge = new Doge(lvl, new Vec2i(3, 1));
+		lvl.scroll.y = lvl.doge.getPosition().y + lvl.doge.getOffset().y - Config.windowBoxesY / 2;
 		Random rand = new Random(seed);
 		for (int x = 0; x < Config.windowBoxesX; x++) {
 			for (int y = 0; y < Config.levelMaxY; y++) {
@@ -42,8 +42,8 @@ public class LevelFactory {
 	}
 	
 	public static void randomFull(Level lvl, long seed) {
-		lvl.doge = new Doge(lvl, new Vec2i(3, 0));
-		
+		lvl.doge = new Doge(lvl, new Vec2i(3, 1));
+		lvl.scroll.y = lvl.doge.getPosition().y + lvl.doge.getOffset().y - Config.windowBoxesY / 2;
 		Random rand = new Random(seed);
 		for (int x = 0; x < Config.windowBoxesX; x++) {
 			for (int y = 2; y < Config.levelMaxY; y++) {
