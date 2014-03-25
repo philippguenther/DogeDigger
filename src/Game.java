@@ -7,7 +7,6 @@ import gui.Screen;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
@@ -32,12 +31,15 @@ public class Game {
 
 	public void start() throws LWJGLException {
 		
-		// Window setup
+		// setup window
 		Display.setDisplayMode(new DisplayMode(Config.windowX, Config.windowY));
 		Display.create();
 		Display.setVSyncEnabled(true);
 		
-		// OpenGL setup
+		// setup keyboard
+		Keyboard.create();
+		
+		// setup OpenGL
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
 		GL11.glOrtho(0, Config.windowBoxesX, Config.windowBoxesY, 0, 1, -1);
@@ -56,20 +58,32 @@ public class Game {
 		};
 		Graphic[] startGraphics = new Graphic[] {
 			new GraphicPolygon(v, new Color4f(0.2f, 0.2f, 0.8f)),
-			new GraphicString("Start", 0.5f, new Vec2f(0.1f, 0.1f))
+			new GraphicString("Game", 0.5f, new Vec2f(0.1f, 0.1f))
 		};
 		Graphic[] activeGraphics = new Graphic[] {
 			new GraphicPolygon(v, new Color4f(0.5f, 0.5f, 0.5f))
 		};
-		Button start = new Button("start", new Vec2f(1f, 1f), startGraphics, activeGraphics);
+		Button game = new Button("game", new Vec2f(1f, 1f), startGraphics, activeGraphics);
+		Graphic[] restartGraphics = new Graphic[] {
+				new GraphicPolygon(v, new Color4f(0.2f, 0.2f, 0.8f)),
+				new GraphicString("Restart", 0.5f, new Vec2f(0.1f, 0.1f))
+			};
+		Button restart = new Button("restart", new Vec2f(1f, 2f), restartGraphics, activeGraphics);
 		Graphic[] settingsGraphics = new Graphic[] {
 				new GraphicPolygon(v, new Color4f(0.2f, 0.2f, 0.8f)),
 				new GraphicString("Settings", 0.5f, new Vec2f(0.1f, 0.1f))
 			};
-		Button settings = new Button("settings", new Vec2f(1f, 2f), settingsGraphics, activeGraphics);
+		Button settings = new Button("setting", new Vec2f(1f, 3f), settingsGraphics, activeGraphics);
+		Graphic[] quitGraphics = new Graphic[] {
+				new GraphicPolygon(v, new Color4f(0.2f, 0.2f, 0.8f)),
+				new GraphicString("Quit", 0.5f, new Vec2f(0.1f, 0.1f))
+			};
+		Button quit = new Button("quit", new Vec2f(1f, 4f), quitGraphics, activeGraphics);
 		Button[] buttons = new Button[] {
-				start,
-				settings
+				game,
+				restart,
+				settings,
+				quit
 		};
 		Screen menu = new Screen(buttons);
 		
@@ -90,32 +104,37 @@ public class Game {
 			
 			switch (this.state) {
 			case MENU:
-				String desc = menu.poll();
-				if (desc == "start")
+				String desc = menu.poll(delta);
+				if (desc == "game")
 					this.state = GameState.LEVEL_PLAY;
+				else if (desc == "restart")
+					this.state = GameState.LEVEL_LOAD;
+				else if (desc == "quit")
+					System.exit(0);
 				menu.tick(delta);
 				menu.render();
+				graphicFps.render();
+				Display.update();
+				Display.sync(30);
 				break;
 				
 			case LEVEL_LOAD:
+				this.level = new Level();
+				LevelFactory.randomFull(this.level, Config.levelSeed);
+				this.state = GameState.LEVEL_PLAY;
 				break;
 				
 			case LEVEL_PLAY:
-				if (Keyboard.isKeyDown(Keyboard.KEY_R)) {
-					this.level = new Level();
-					LevelFactory.randomFull(this.level, Config.levelSeed);
-				}
-				
+				if (Keyboard.isKeyDown(Keyboard.KEY_M))
+					this.state = GameState.MENU;
 				this.level.tick(delta);
 				this.level.render();
+				
+				graphicFps.render();
+				Display.update();
+				Display.sync(60);
 			}
-			
-			graphicFps.render();
-
-			Display.update();
-			Display.sync(60);
 		}
-		Mouse.destroy();
 		Display.destroy();
 	}
 

@@ -22,6 +22,7 @@ public class GraphicImage implements Graphic {
 	};
 	private Vec2f offset = new Vec2f(0f, 0f);
 	private boolean flipped = false;
+	private Vec2f scale = new Vec2f(1f, 1f);
 	
 	public GraphicImage(GLImage _img, float[] _clipping, Vec2f _offset, boolean _flipped) {
 		this.img = _img;
@@ -48,6 +49,10 @@ public class GraphicImage implements Graphic {
 		this.img = new GLImage(_filename);
 		this.offset = _offset;
 		this.clipping = Arrays.copyOf(_clipping, 4);
+	}
+	
+	public void setScale(Vec2f _scale) {
+		this.scale = _scale.clone();
 	}
 	
 	@Override
@@ -101,7 +106,8 @@ public class GraphicImage implements Graphic {
 			
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.img.getID());
-		
+			
+			GL11.glScalef(this.scale.x, this.scale.y, 1f);
 			GL11.glTranslatef(this.offset.x, this.offset.y, 0f);
 			GL11.glBegin(GL11.GL_QUADS);
 				GL11.glTexCoord2f(clipping[0], clipping[1]);

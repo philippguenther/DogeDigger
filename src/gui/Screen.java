@@ -7,25 +7,33 @@ public class Screen {
 	private Button[] buttons;
 	private int active;
 	
+	private int delta;
+	
 	public Screen(Button[] _buttons) {
 		this.buttons = _buttons;
+		this.delta = 0;
 	}
 	
-	public String poll() {
+	public String poll(int delta) {
+		this.delta += delta;
 		Keyboard.next();
-		switch (Keyboard.getEventKey()) {
-		case Keyboard.KEY_RETURN:
-			if (this.buttons[this.active] != null)
-				return this.buttons[this.active].getDesc();
-			break;
-		case Keyboard.KEY_UP:
-			if (this.active > 0)
-				this.active--;
-			break;
-		case Keyboard.KEY_DOWN:
-			if (this.active < this.buttons.length - 1)
-				this.active++;
-			break;
+		int key = Keyboard.getEventKey();
+		if (this.delta > 100 && Keyboard.getEventKeyState() && !Keyboard.isRepeatEvent()) {
+			switch (key) {
+			case Keyboard.KEY_RETURN:
+				if (this.buttons[this.active] != null)
+					return this.buttons[this.active].getDesc();
+				break;
+			case Keyboard.KEY_UP:
+				if (this.active > 0)
+					this.active--;
+				break;
+			case Keyboard.KEY_DOWN:
+				if (this.active < this.buttons.length - 1)
+					this.active++;
+				break;
+			}
+			this.delta = delta;
 		}
 		return null;
 	}
