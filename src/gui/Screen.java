@@ -16,7 +16,6 @@ public class Screen {
 	
 	public String poll(int delta) {
 		this.delta += delta;
-		Keyboard.next();
 		int key = Keyboard.getEventKey();
 		if (this.delta > 100 && Keyboard.getEventKeyState() && !Keyboard.isRepeatEvent()) {
 			switch (key) {

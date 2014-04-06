@@ -171,6 +171,7 @@ public class Game {
 				this.state = GameState.MENU;
 				break;
 			}
+			Keyboard.next();
 		}
 		Keyboard.destroy();
 		Display.destroy();
