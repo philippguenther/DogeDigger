@@ -91,7 +91,8 @@ public class Level {
 				if (e != null)
 					e.tick(delta);
 		
-		this.doge.tick(delta);
+		if (this.doge != null)
+			this.doge.tick(delta);
 	}
 	
 	public void render() {
@@ -112,7 +113,8 @@ public class Level {
 				}
 			}
 			
-			this.doge.render();
+			if (this.doge != null)
+				this.doge.render();
 		GL11.glPopMatrix();
 	}
 }

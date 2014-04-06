@@ -17,7 +17,8 @@ import util.Vec2f;
 enum GameState {
 	MENU,
 	LEVEL_LOAD,
-	LEVEL_PLAY
+	LEVEL_PLAY,
+	SETTINGS
 }
 
 public class Game {
@@ -52,8 +53,6 @@ public class Game {
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
 		GL11.glAlphaFunc(GL11.GL_GREATER, 0f);
 		GL11.glClearColor(0f, 0f, 0f, 1f);
-					
-					
 		
 		// loading bitmap font
 		GraphicString.init();
@@ -82,7 +81,7 @@ public class Game {
 				new GraphicPolygon(v, new Color4f(0f, 0f, 1f)),
 				new GraphicString("Settings", 0.5f, new Vec2f(0.1f, 0.1f))
 			};
-		Button settings = new Button("setting", new Vec2f(1f, 3f), settingsGraphics, activeGraphics);
+		Button settings = new Button("settings", new Vec2f(1f, 3f), settingsGraphics, activeGraphics);
 		Graphic[] quitGraphics = new Graphic[] {
 				new GraphicPolygon(v, new Color4f(0f, 0f, 1f)),
 				new GraphicString("Quit", 0.5f, new Vec2f(0.1f, 0.1f))
@@ -103,17 +102,15 @@ public class Game {
 			};
 		GraphicPolygon darken = new GraphicPolygon(darkenv, new Color4f(0f, 0f, 0f, 1f));
 		
-		// setup level
-		this.level = new Level();
-		LevelFactory.randomFull(this.level, Config.levelSeed);
-		
 		GraphicString graphicFps = new GraphicString("0", 0.5f, new Vec2f(0.1f, 0.1f));
 		
 		while(!Display.isCloseRequested()) {
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 			int delta = this.getDelta();
 			
-			int fps = 1000 / delta;
+			int fps = 0;
+			if (delta != 0)
+				fps = 1000 / delta;
 			if (this.lastFps - fps > 1)
 				graphicFps.setString(Integer.toString(fps));
 			this.lastFps = fps;
@@ -125,9 +122,12 @@ public class Game {
 					this.state = GameState.LEVEL_PLAY;
 				else if (desc == "restart")
 					this.state = GameState.LEVEL_LOAD;
+				else if (desc == "settings")
+					this.state = GameState.SETTINGS;
 				else if (desc == "quit")
 					System.exit(0);
-				level.render();
+				if (this.level != null)
+					level.render();
 				darken.render();
 				menu.tick(delta);
 				menu.render();
@@ -143,6 +143,10 @@ public class Game {
 				break;
 				
 			case LEVEL_PLAY:
+				if (this.level == null) {
+					this.state = GameState.LEVEL_LOAD;
+					break;
+				}
 				if (Keyboard.isKeyDown(Keyboard.KEY_M))
 					this.state = GameState.MENU;
 				this.level.tick(delta);
@@ -151,6 +155,21 @@ public class Game {
 				graphicFps.render();
 				Display.update();
 				Display.sync(60);
+				break;
+				
+			case SETTINGS:
+				/*this.level = new Level();
+				LevelFactory.settings(this.level);
+				if (Keyboard.isKeyDown(Keyboard.KEY_M))
+					this.state = GameState.MENU;
+				this.level.tick(delta);
+				this.level.render();*/
+				
+				graphicFps.render();
+				Display.update();
+				Display.sync(60);
+				this.state = GameState.MENU;
+				break;
 			}
 		}
 		Keyboard.destroy();
