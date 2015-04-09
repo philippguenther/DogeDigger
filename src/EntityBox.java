@@ -130,7 +130,7 @@ public class EntityBox implements Entity {
 	}
 	
 	private ArrayList<EntityBox> getBond(ArrayList<EntityBox> bond) {
-		Entity[] list = this.level.getEntitiesConnected(this.position);
+		Entity[] list = this.level.getVonNeumannNeighbors(this.position);
 		for (Entity e : list) {
 			if (e instanceof EntityBox) {
 				EntityBox b = (EntityBox) e;

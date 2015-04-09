@@ -62,7 +62,7 @@ public class Level {
 		return row;
 	}
 	
-	public Entity[] getEntitiesInRadius(Vec2i p, int r) {
+	public Entity[] getMooreNeighbors(Vec2i p, int r) {
 		Entity[] list = new Entity[1 + r * 8];
 		int i = 0;
 		for (int x = p.x - r; x <= p.x + r; x++) {
@@ -74,7 +74,7 @@ public class Level {
 		return list;
 	}
 	
-	public Entity[] getEntitiesConnected(Vec2i p) {
+	public Entity[] getVonNeumannNeighbors(Vec2i p) {
 		Entity[] list = new Entity[4];
 		list[0] = this.get(new Vec2i(p.x, p.y - 1));
 		list[1] = this.get(new Vec2i(p.x + 1, p.y));

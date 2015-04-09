@@ -178,7 +178,7 @@ public class Doge {
 			}
 			
 			// activate
-			Entity[] radius = this.level.getEntitiesInRadius(this.position, Config.dogeActivationRadius);
+			Entity[] radius = this.level.getMooreNeighbors(this.position, Config.dogeActivationRadius);
 			for (Entity rad : radius) {
 				if (rad != null)
 					rad.activate();
